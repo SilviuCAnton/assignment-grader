@@ -1,6 +1,7 @@
 package services;
 
 import domain.Assignment;
+import domain.validators.AssignmentValidator;
 import exceptions.ValidationException;
 import repositories.AssignmentFileRepository;
 import utils.Constants;
@@ -10,6 +11,10 @@ import utils.Constants;
  */
 public class AssignmentService {
     private AssignmentFileRepository assignmentFileRepository;
+
+    public AssignmentService(String fileName) {
+        this.assignmentFileRepository = new AssignmentFileRepository(new AssignmentValidator(), fileName);
+    }
 
     /**
      * stores an assignment in the repository
