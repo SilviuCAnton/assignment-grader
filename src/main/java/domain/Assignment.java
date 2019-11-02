@@ -122,5 +122,4 @@ public class Assignment extends Entity<Integer> {
                 startWeek + '/' +
                 deadlineWeek;
     }
-
 }

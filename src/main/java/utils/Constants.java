@@ -23,8 +23,8 @@ public class Constants {
 
 
     //App run scenario
-    public static LocalDate configDate = LocalDate.now();
+    //public static LocalDate configDate = LocalDate.now();
 
     //App test scenario
-    //public static LocalDate configDate = LocalDate.parse("30.10.2019", DATE_TIME_FORMATTER);
+    public static LocalDate configDate = LocalDate.parse("30.10.2019", DATE_TIME_FORMATTER);
 }
