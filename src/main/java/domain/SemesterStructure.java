@@ -53,7 +53,7 @@ public class SemesterStructure extends Entity<Integer> {
 
     /**
      * returns the holiday weeks as a pair of two dates
-     * @return holidayWeeks - Pair<LocalDate, LocalDate>
+     * @return holidayWeeks - pair of LocalDates - Pair
      */
     public Pair<LocalDate, LocalDate> getHolidayWeeks() {
         return holidayWeeks;
@@ -61,7 +61,7 @@ public class SemesterStructure extends Entity<Integer> {
 
     /**
      * sets the holiday weeks
-     * @param holidayWeeks - Pair<LocalDate, LocalDate>
+     * @param holidayWeeks - pair of LocalDates - Pair
      */
     public void setHolidayWeeks(Pair<LocalDate, LocalDate> holidayWeeks) {
         this.holidayWeeks = holidayWeeks;

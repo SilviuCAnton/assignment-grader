@@ -1,9 +1,10 @@
-package services;
+package services.service;
 
 import domain.Assignment;
 import domain.validators.AssignmentValidator;
 import exceptions.ValidationException;
 import repositories.AssignmentFileRepository;
+import services.config.ApplicationContext;
 import utils.Constants;
 
 /**
@@ -27,7 +28,7 @@ public class AssignmentService {
      */
     public String addAssignment(int id, String description, int deadlineWeek) throws ValidationException, IllegalArgumentException {
         String res;
-        Assignment assignment = assignmentFileRepository.save(new Assignment(id, description, deadlineWeek, Constants.yearStructure));
+        Assignment assignment = assignmentFileRepository.save(new Assignment(id, description, deadlineWeek, ApplicationContext.getYearStructure()));
         if (assignment != null) {
             res = "Assignment already exists: " + assignment.toString();
         } else {
@@ -47,7 +48,7 @@ public class AssignmentService {
      */
     public String updateAssignment(int id, String description, int deadlineWeek) throws ValidationException, IllegalArgumentException {
         String res;
-        Assignment assignment = assignmentFileRepository.update(new Assignment(id, description, deadlineWeek, Constants.yearStructure));
+        Assignment assignment = assignmentFileRepository.update(new Assignment(id, description, deadlineWeek, ApplicationContext.getYearStructure()));
         if (assignment != null) {
             res = "The assignment " + assignment.getDescription() + " has been updated.";
         } else {

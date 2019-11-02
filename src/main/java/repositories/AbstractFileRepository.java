@@ -21,7 +21,7 @@ public abstract class AbstractFileRepository<ID, E extends Entity<ID>> extends I
     private String fileName;
     AbstractFileRepository(Validator<E> validator, String fileName) {
         super(validator);
-        this.fileName = "data/" + fileName;
+        this.fileName = fileName;
         loadDataFromFile();
     }
 

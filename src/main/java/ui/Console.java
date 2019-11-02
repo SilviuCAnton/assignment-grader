@@ -1,8 +1,9 @@
 package ui;
 
 import exceptions.ValidationException;
-import services.AssignmentService;
-import services.StudentService;
+import services.config.ApplicationContext;
+import services.service.AssignmentService;
+import services.service.StudentService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,8 +18,8 @@ public class Console {
     private AssignmentService assignmentService;
 
     public Console() {
-        this.studentService = new StudentService("students.txt");
-        this.assignmentService = new AssignmentService("assignments.txt");
+        this.studentService = new StudentService(ApplicationContext.getProperties().getProperty("data.catalog.students"));
+        this.assignmentService = new AssignmentService(ApplicationContext.getProperties().getProperty("data.catalog.assignments"));
     }
 
     public void run() {
