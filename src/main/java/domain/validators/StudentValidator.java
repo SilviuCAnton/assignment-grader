@@ -35,6 +35,11 @@ public class StudentValidator implements Validator<Student> {
         if(student.getLastName().isEmpty()){
             error += "Last name cannot be null. ";
         }
+
+        if(student.getGroup() <= 100 || student.getGroup() > 999) {
+            error += "Group must be between 101 and 999";
+        }
+
         if(!error.isEmpty()){
             throw new InvalidStudentException(error);
         }

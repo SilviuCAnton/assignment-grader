@@ -14,9 +14,9 @@ class StudentTest {
 
     @BeforeEach
     void setUp() {
-        st1 = new Student("aaaa1111","st1", "st11", "st1@gm.com", "cord1");
-        st2 = new Student("aaaa1112","st2", "st22", "st2@gm.com", "cord2");
-        st3 = new Student("aaaa1111","st1", "st11", "st1@gm.com", "cord1");
+        st1 = new Student("aaaa1111","st1", "st11", 221, "st1@gm.com", "cord1");
+        st2 = new Student("aaaa1112","st2", "st22", 221, "st2@gm.com", "cord2");
+        st3 = new Student("aaaa1111","st1", "st11", 221, "st1@gm.com", "cord1");
     }
 
     @AfterEach
@@ -60,6 +60,17 @@ class StudentTest {
     }
 
     @Test
+    void getGroup() {
+        assertEquals(221, st1.getGroup());
+    }
+
+    @Test
+    void setGroup() {
+        st1.setGroup(223);
+        assertEquals(223, st1.getGroup());
+    }
+
+    @Test
     void testEquals() {
         assertEquals(st1, st3);
         assertNotEquals(st2, st1);
@@ -95,11 +106,13 @@ class StudentTest {
 
     @Test
     void testToString() {
-        assertEquals("id: aaaa1111|firstName: st1|lastName: st11|email: st1@gm.com|coordinator: cord1", st1.toString());
+        assertEquals("id: aaaa1111|firstName: st1|lastName: st11|group: 221|email: st1@gm.com|coordinator: cord1", st1.toString());
     }
 
     @Test
     void testToFileString() {
-        assertEquals("aaaa1111/st1/st11/st1@gm.com/cord1", st1.toFileString());
+        assertEquals("aaaa1111/st1/st11/221/st1@gm.com/cord1", st1.toFileString());
     }
+
+
 }

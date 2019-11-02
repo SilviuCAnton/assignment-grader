@@ -109,6 +109,7 @@ public class Console {
     private void addStudentUI() throws ValidationException, IllegalArgumentException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String id, firstName, lastName, email, coordinator;
+        int group;
         try {
             System.out.println("Id = ");
             id = bf.readLine();
@@ -116,11 +117,13 @@ public class Console {
             firstName = bf.readLine();
             System.out.println("Last name = ");
             lastName = bf.readLine();
+            System.out.println("Group = ");
+            group = Integer.parseInt(bf.readLine());
             System.out.println("Email = ");
             email = bf.readLine();
             System.out.println("Coordinator = ");
             coordinator = bf.readLine();
-            System.out.println(studentService.saveStudent(id, firstName, lastName, email, coordinator));
+            System.out.println(studentService.saveStudent(id, firstName, lastName, group, email, coordinator));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -129,6 +132,7 @@ public class Console {
     private void updateStudentUI() throws ValidationException, IllegalArgumentException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String id, firstName, lastName, email, coordinator;
+        int group;
         try {
             System.out.println("Id = ");
             id = bf.readLine();
@@ -136,11 +140,13 @@ public class Console {
             firstName = bf.readLine();
             System.out.println("Last name = ");
             lastName = bf.readLine();
+            System.out.println("Group = ");
+            group = Integer.parseInt(bf.readLine());
             System.out.println("Email = ");
             email = bf.readLine();
             System.out.println("Coordinator = ");
             coordinator = bf.readLine();
-            System.out.println(studentService.updateStudent(id, firstName, lastName, email, coordinator));
+            System.out.println(studentService.updateStudent(id, firstName, lastName, group, email, coordinator));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

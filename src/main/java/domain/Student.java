@@ -8,15 +8,33 @@ import java.util.Objects;
 public class Student extends Entity<String> {
     private String firstName;
     private String lastName;
+    private int group;
     private String email;
     private String coordinator;
 
-    public Student(String id, String firstName, String lastName, String email, String coordinator) {
+    public Student(String id, String firstName, String lastName, int group, String email, String coordinator) {
         this.setId(id);
         this.firstName = firstName;
         this.lastName = lastName;
+        this.group = group;
         this.email = email;
         this.coordinator = coordinator;
+    }
+
+    /**
+     * returns student's first group
+     * @return group - int
+     */
+    public int getGroup() {
+        return group;
+    }
+
+    /**
+     * sets student's first group
+     * @param group - int
+     */
+    public void setGroup(int group) {
+        this.group = group;
     }
 
     /**
@@ -61,11 +79,13 @@ public class Student extends Entity<String> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return Objects.equals(firstName, student.firstName) &&
+        return group == student.group &&
+                Objects.equals(firstName, student.firstName) &&
                 Objects.equals(lastName, student.lastName) &&
                 Objects.equals(email, student.email) &&
                 Objects.equals(coordinator, student.coordinator);
     }
+
 
     /**
      * returns student's hashcode
@@ -73,7 +93,7 @@ public class Student extends Entity<String> {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, email, coordinator);
+        return Objects.hash(firstName, lastName, group, email, coordinator);
     }
 
     /**
@@ -117,6 +137,7 @@ public class Student extends Entity<String> {
         return  "id: " + getId() + '|' +
                 "firstName: " + firstName + '|' +
                 "lastName: " + lastName + '|' +
+                "group: " + group + '|' +
                 "email: " + email + '|' +
                 "coordinator: " + coordinator;
     }
@@ -130,6 +151,7 @@ public class Student extends Entity<String> {
         return  getId() + '/' +
                 firstName + '/' +
                 lastName + '/' +
+                group + '/' +
                 email + '/' +
                 coordinator;
     }

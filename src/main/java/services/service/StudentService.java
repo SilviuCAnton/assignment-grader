@@ -42,9 +42,9 @@ public class StudentService {
      * @throws IllegalArgumentException if the student to be stored is null
      * @throws ValidationException - if the student is not valid
      */
-    public String saveStudent(String id, String firstName, String lastName, String email, String coordinator) throws IllegalArgumentException, ValidationException {
+    public String saveStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
         String result;
-        Student st = studentRepo.save(new Student(id, firstName, lastName, email, coordinator));
+        Student st = studentRepo.save(new Student(id, firstName, lastName, group, email, coordinator));
         if (st != null) {
             result = "Student already exists: " + st.toString();
         } else {
@@ -64,9 +64,9 @@ public class StudentService {
      * @throws IllegalArgumentException if the student to be updated is null
      * @throws ValidationException if the student is not valid
      */
-    public String updateStudent(String id, String firstName, String lastName, String email, String coordinator) throws IllegalArgumentException, ValidationException {
+    public String updateStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
         String result;
-        Student st = studentRepo.update(new Student(id, firstName, lastName, email, coordinator));
+        Student st = studentRepo.update(new Student(id, firstName, lastName, group, email, coordinator));
         if (st != null) {
             result = "The student " + st.getFirstName() + ' ' + st.getLastName() + " has been updated.";
         } else {
