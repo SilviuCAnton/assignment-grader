@@ -25,9 +25,6 @@ public class AssignmentValidator implements Validator<Assignment>{
             error += "Deadline week must take a value between 1 and 14. ";
         }
 
-        if(assignment.getDeadlineWeek() < assignment.getCurrentWeek())
-            error += "Deadline week cannot precede current week. ";
-
         if(!error.isEmpty()){
             throw new InvalidAssignmentException(error);
         }

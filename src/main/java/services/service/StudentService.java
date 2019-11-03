@@ -4,6 +4,10 @@ import domain.Student;
 import domain.validators.StudentValidator;
 import exceptions.ValidationException;
 import repositories.StudentFileRepository;
+import services.config.ApplicationContext;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Service for student operations
@@ -43,7 +47,21 @@ public class StudentService {
      * @throws ValidationException - if the student is not valid
      */
     public Student saveStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
-        return studentRepo.save(new Student(id, firstName, lastName, group, email, coordinator));
+        Student st = studentRepo.save(new Student(id, firstName, lastName, group, email, coordinator));
+
+        //Create json file with student id
+        if(st == null) {
+            File file = new File(ApplicationContext.getProperties().getProperty("data.catalog.feedbackPath") + id + ".json");
+            try {
+                if(!file.createNewFile()) {
+                    throw new IOException("File could not be created.");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return st;
     }
 
     /**

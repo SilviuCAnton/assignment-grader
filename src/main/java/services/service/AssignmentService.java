@@ -2,10 +2,10 @@ package services.service;
 
 import domain.Assignment;
 import domain.validators.AssignmentValidator;
+import exceptions.InvalidAssignmentException;
 import exceptions.ValidationException;
 import repositories.AssignmentFileRepository;
 import services.config.ApplicationContext;
-import utils.Constants;
 
 /**
  *
@@ -27,7 +27,7 @@ public class AssignmentService {
      * @throws IllegalArgumentException if the assignment is null
      */
     public Assignment addAssignment(int id, String description, int deadlineWeek) throws ValidationException, IllegalArgumentException {
-        return assignmentFileRepository.save(new Assignment(id, description, deadlineWeek, ApplicationContext.getYearStructure()));
+        return assignmentFileRepository.save(new Assignment(id, description, deadlineWeek));
     }
 
     /**
@@ -40,7 +40,9 @@ public class AssignmentService {
      * @throws IllegalArgumentException if the assignment is null
      */
     public Assignment updateAssignment(int id, String description, int deadlineWeek) throws ValidationException, IllegalArgumentException {
-        return assignmentFileRepository.update(new Assignment(id, description, deadlineWeek, ApplicationContext.getYearStructure()));
+        if(deadlineWeek < ApplicationContext.getYearStructure().getCurrentWeek())
+            throw new InvalidAssignmentException("Deadline date cannot precede current date!");
+        return assignmentFileRepository.update(new Assignment(id, description, deadlineWeek));
     }
 
     /**

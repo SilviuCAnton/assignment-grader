@@ -1,4 +1,5 @@
 aaaa1234/StudentA/LastA/221/sta@scs.ubbcluj.ro/Camelia Serban
 asdf1234/StudentTest/TestLast/223/tst@gmail.com/CoordTest
+qazx1234/TestJson/LastTest/223/test@scs.ubbcluj.ro/Coord test
 asir2446/Silviu/Anton/221/asir2446@scs.ubbcluj.ro/Camelia Serban
 bpir2356/Paul/Beltechi/221/bpir2356@scs.ubbcluj.ro/Camelia Serban

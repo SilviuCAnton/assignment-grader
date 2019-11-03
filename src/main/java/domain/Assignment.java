@@ -1,5 +1,7 @@
 package domain;
 
+import services.config.ApplicationContext;
+
 import java.util.Objects;
 
 /**
@@ -11,20 +13,11 @@ public class Assignment extends Entity<Integer> {
     private int startWeek;
     private int deadlineWeek;
 
-    public Assignment(int id, String description, int deadlineWeek, YearStructure yearStructure) {
+    public Assignment(int id, String description, int deadlineWeek) {
         this.setId(id);
         this.description = description;
-        this.yearStructure = yearStructure;
-        this.startWeek = this.yearStructure.getCurrentWeek();
+        this.startWeek = ApplicationContext.getYearStructure().getCurrentWeek();
         this.deadlineWeek = deadlineWeek;
-    }
-
-    /**
-     * returns the number of the current week of the years structure of the assignment
-     * @return weekNo - int
-     */
-    public int getCurrentWeek() {
-        return this.yearStructure.getCurrentWeek();
     }
 
     /**
