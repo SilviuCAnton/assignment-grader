@@ -17,6 +17,14 @@ public class AssignmentValidator implements Validator<Assignment>{
     public void validate(Assignment assignment) throws ValidationException {
         String error = "";
 
+        if(assignment.getId() < 1) {
+            error += "Id must be greater than 0. ";
+        }
+
+        if(assignment.getDescription().isEmpty()) {
+            error += "Description must not be empty. ";
+        }
+
         if(assignment.getStartWeek() >= assignment.getDeadlineWeek()) {
             error += "Start week cannot precede deadline week. ";
         }

@@ -1,5 +1,7 @@
 package domain;
 
+import java.util.Objects;
+
 public class FeedbackDTO {
     private String assignmentDescription, feedback;
     private float grade;
@@ -19,6 +21,23 @@ public class FeedbackDTO {
 
     public void setAssignmentDescription(String assignmentDescription) {
         this.assignmentDescription = assignmentDescription;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FeedbackDTO that = (FeedbackDTO) o;
+        return Float.compare(that.grade, grade) == 0 &&
+                submissionWeek == that.submissionWeek &&
+                deadlineWeek == that.deadlineWeek &&
+                Objects.equals(assignmentDescription, that.assignmentDescription) &&
+                Objects.equals(feedback, that.feedback);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(assignmentDescription, feedback, grade, submissionWeek, deadlineWeek);
     }
 
     public float getGrade() {
@@ -51,5 +70,14 @@ public class FeedbackDTO {
 
     public void setFeedback(String feedback) {
         this.feedback = feedback;
+    }
+
+    @Override
+    public String toString() {
+        return  "assignmentDescription: " + assignmentDescription + '|' +
+                "feedback: " + feedback + '|' +
+                "grade: " + grade + '|' +
+                "submissionWeek: " + submissionWeek + '|' +
+                "deadlineWeek: " + deadlineWeek;
     }
 }

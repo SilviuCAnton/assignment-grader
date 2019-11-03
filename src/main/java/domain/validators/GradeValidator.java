@@ -16,7 +16,7 @@ public class GradeValidator implements Validator<Grade> {
     @Override
     public void validate(Grade grade) throws ValidationException {
         String error = "";
-        if(grade.getId() == null){
+        if(grade.getId().getFirst().isEmpty()){
             error += "Grade id not valid. ";
         }
 
