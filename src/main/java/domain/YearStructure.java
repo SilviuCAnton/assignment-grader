@@ -1,5 +1,6 @@
 package domain;
 
+import services.config.ApplicationContext;
 import utils.Constants;
 import utils.Pair;
 
@@ -44,10 +45,11 @@ public class YearStructure extends Entity<Integer>{
      * @return currentWeekNumber - int
      */
     public Integer getCurrentWeek() {
-        LocalDate current = Constants.configDate;
+        LocalDate current = ApplicationContext.getCurrentLocalDate();
         int currentWeekNumber;
         SemesterStructure sem;
 
+        assert current != null;
         if(current.isBefore(sem2.getStartDate())){
             sem = sem1;
         } else {

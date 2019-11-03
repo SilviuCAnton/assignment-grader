@@ -8,7 +8,7 @@ import utils.Pair;
 import java.time.LocalDate;
 
 public class GradeFileRepository extends AbstractFileRepository<Pair<String,Integer>, Grade> {
-    GradeFileRepository(Validator<Grade> validator, String fileName) {
+    public GradeFileRepository(Validator<Grade> validator, String fileName) {
         super(validator, fileName);
     }
 
@@ -20,6 +20,8 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String,Inte
     @Override
     Grade parseEntity(String lineToParse) {
         String[] args = lineToParse.split("/");
-        return new Grade(args[0],Integer.parseInt(args[1]), LocalDate.parse(args[2], Constants.DATE_TIME_FORMATTER), Float.parseFloat(args[3]), args[4]);
+        Grade grade = new Grade(args[0],Integer.parseInt(args[1]), Float.parseFloat(args[3]), args[4]);
+        grade.setDate(LocalDate.parse(args[2], Constants.DATE_TIME_FORMATTER));
+        return grade;
     }
 }

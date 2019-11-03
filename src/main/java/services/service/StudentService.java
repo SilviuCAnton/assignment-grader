@@ -38,19 +38,12 @@ public class StudentService {
      * @param lastName - last name of the student - String
      * @param email - email of the student - String
      * @param coordinator - coordinator of the student - String
-     * @return the result of the storing operation - String
+     * @return the result of the storing operation - Student
      * @throws IllegalArgumentException if the student to be stored is null
      * @throws ValidationException - if the student is not valid
      */
-    public String saveStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
-        String result;
-        Student st = studentRepo.save(new Student(id, firstName, lastName, group, email, coordinator));
-        if (st != null) {
-            result = "Student already exists: " + st.toString();
-        } else {
-            result = "The student has been stored.";
-        }
-        return result;
+    public Student saveStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
+        return studentRepo.save(new Student(id, firstName, lastName, group, email, coordinator));
     }
 
     /**
@@ -60,63 +53,40 @@ public class StudentService {
      * @param lastName - last name of the student - String
      * @param email - email of the student - String
      * @param coordinator - coordinator of the student - String
-     * @return the result of the storing operation - String
+     * @return the result of the storing operation - Student
      * @throws IllegalArgumentException if the student to be updated is null
      * @throws ValidationException if the student is not valid
      */
-    public String updateStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
-        String result;
-        Student st = studentRepo.update(new Student(id, firstName, lastName, group, email, coordinator));
-        if (st != null) {
-            result = "The student " + st.getFirstName() + ' ' + st.getLastName() + " has been updated.";
-        } else {
-            result = "The student with the given id does not exist.";
-        }
-        return result;
+    public Student updateStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
+        return studentRepo.update(new Student(id, firstName, lastName, group, email, coordinator));
     }
 
     /**
      * finds a student in the repository
      * @param id - id of the student to be found - int
-     * @return the result of searchind the student - String
+     * @return the result of searchind the student - Student
      * @throws IllegalArgumentException if the id is null
      */
-    public String findStudent(String id) throws IllegalArgumentException{
-        String res;
-        Student st = studentRepo.findOne(id);
-        if (st != null) {
-            res = st.toString();
-        } else {
-            res = "The student with the given id does not exist.";
-        }
-        return res;
+    public Student findStudent(String id) throws IllegalArgumentException{
+        return studentRepo.findOne(id);
     }
 
     /**
      * returns all students
-     * @return student list - String
+     * @return student list - iterable of Student
      */
-    public String findAllStudents() {
-        StringBuilder sb = new StringBuilder();
-        studentRepo.findAll().forEach(x-> sb.append(x.toString()).append('\n'));
-        return sb.toString();
+    public Iterable<Student> findAllStudents() {
+        return studentRepo.findAll();
     }
 
     /**
      * deletes a student from the repository
      * @param id - id of the student to be deleted - int
-     * @return the result of the deletion operation - String
+     * @return the result of the deletion operation - Student
      * @throws IllegalArgumentException if the id is null
      */
-    public String deleteStudent(String id) throws IllegalArgumentException {
-        String res;
-        Student st = studentRepo.delete(id);
-        if (st != null) {
-            res = st.getFirstName() + " " + st.getLastName() + " has been removed.";
-        } else {
-            res ="The student with the given id does not exist.";
-        }
-        return res;
+    public Student deleteStudent(String id) throws IllegalArgumentException {
+        return studentRepo.delete(id);
     }
 
 }

@@ -1,8 +1,11 @@
 package ui;
 
+import domain.Assignment;
+import domain.Student;
 import exceptions.ValidationException;
 import services.config.ApplicationContext;
 import services.service.AssignmentService;
+import services.service.GradeService;
 import services.service.StudentService;
 
 import java.io.BufferedReader;
@@ -16,10 +19,12 @@ public class Console {
 
     private StudentService studentService;
     private AssignmentService assignmentService;
+    private GradeService gradeService;
 
     public Console() {
         this.studentService = new StudentService(ApplicationContext.getProperties().getProperty("data.catalog.students"));
         this.assignmentService = new AssignmentService(ApplicationContext.getProperties().getProperty("data.catalog.assignments"));
+        this.gradeService = new GradeService(this.studentService, this.assignmentService, ApplicationContext.getProperties().getProperty("data.catalog.grades"));
     }
 
     public void run() {
@@ -123,7 +128,12 @@ public class Console {
             email = bf.readLine();
             System.out.println("Coordinator = ");
             coordinator = bf.readLine();
-            System.out.println(studentService.saveStudent(id, firstName, lastName, group, email, coordinator));
+            Student st = studentService.saveStudent(id, firstName, lastName, group, email, coordinator);
+            if (st != null) {
+                System.out.println("Student already exists: " + st.toString());
+            } else {
+                System.out.println("The student has been stored.");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -146,7 +156,12 @@ public class Console {
             email = bf.readLine();
             System.out.println("Coordinator = ");
             coordinator = bf.readLine();
-            System.out.println(studentService.updateStudent(id, firstName, lastName, group, email, coordinator));
+            Student st = studentService.updateStudent(id, firstName, lastName, group, email, coordinator);
+            if (st != null) {
+                System.out.println("The student " + st.getFirstName() + ' ' + st.getLastName() + " has been updated.");
+            } else {
+                System.out.println("The student with the given id does not exist.");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -158,14 +173,19 @@ public class Console {
         try {
             System.out.print("Id = ");
             id = bf.readLine();
-            System.out.println(studentService.findStudent(id));
+            Student st = studentService.findStudent(id);
+            if (st != null) {
+                System.out.println(st.toString());
+            } else {
+                System.out.println("The student with the given id does not exist.");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     private void displayAllStudentsUI() {
-        System.out.println(studentService.findAllStudents());
+        studentService.findAllStudents().forEach(System.out::println);
     }
 
     private void deleteStudentUI() throws IllegalArgumentException {
@@ -174,7 +194,12 @@ public class Console {
         try {
             System.out.println("Id = ");
             id = bf.readLine();
-            System.out.println(studentService.deleteStudent(id));
+            Student st = studentService.deleteStudent(id);
+            if (st != null) {
+                System.out.println(st.getFirstName() + " " + st.getLastName() + " has been removed.");
+            } else {
+                System.out.println("The student with the given id does not exist.");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -191,7 +216,12 @@ public class Console {
             description = bf.readLine();
             System.out.println("Deadline week = ");
             deadlineWeek = Integer.parseInt(bf.readLine());
-            System.out.println(assignmentService.addAssignment(id, description, deadlineWeek));
+            Assignment assignment = assignmentService.addAssignment(id, description, deadlineWeek);
+            if (assignment != null) {
+                System.out.println("Assignment already exists: " + assignment.toString());
+            } else {
+                System.out.println("The assignment has been stored.");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -208,7 +238,12 @@ public class Console {
             description = bf.readLine();
             System.out.println("Deadline week = ");
             deadlineWeek = Integer.parseInt(bf.readLine());
-            System.out.println(assignmentService.updateAssignment(id, description, deadlineWeek));
+            Assignment assignment = assignmentService.updateAssignment(id, description, deadlineWeek);
+            if (assignment != null) {
+                System.out.println("The assignment " + assignment.getDescription() + " has been updated.");
+            } else {
+                System.out.println("The assignment with the given id does not exist.");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -220,14 +255,19 @@ public class Console {
         try {
             System.out.print("Id = ");
             id = Integer.parseInt(bf.readLine());
-            System.out.println(assignmentService.findAssignment(id));
+            Assignment assignment = assignmentService.findAssignment(id);
+            if (assignment != null) {
+                System.out.println(assignment.toString());
+            } else {
+                System.out.println("The assignment with the given id does not exist.");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     private void displayAllAssignmentsUI() {
-        System.out.println(assignmentService.findAllAssignments());
+        assignmentService.findAllAssignments().forEach(System.out::println);
     }
 
     private void deleteAssignmentUI() {
@@ -236,7 +276,12 @@ public class Console {
         try {
             System.out.println("Id = ");
             id = Integer.parseInt(bf.readLine());
-            System.out.println(assignmentService.deleteAssignment(id));
+            Assignment assignment = assignmentService.deleteAssignment(id);
+            if (assignment != null) {
+                System.out.println(assignment.getDescription() + " has been removed.");
+            } else {
+                System.out.println("The assignment with the given id does not exist.");
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -15,9 +15,9 @@ class GradeTest {
 
     @BeforeEach
     void setUp() {
-        g1 = new Grade("asir2446", 2, LocalDate.parse("22.09.2019", Constants.DATE_TIME_FORMATTER), 9.6f, "Camelia Serban");
-        g2 = new Grade("bpir2356", 1, LocalDate.parse("23.10.2019", Constants.DATE_TIME_FORMATTER), 8.5f, "Camelia Serban");
-        g3 = new Grade("asir2446", 2, LocalDate.parse("22.09.2019", Constants.DATE_TIME_FORMATTER), 9.6f, "Camelia Serban");
+        g1 = new Grade("asir2446", 2, 9.6f, "Camelia Serban");
+        g2 = new Grade("bpir2356", 1, 8.5f, "Camelia Serban");
+        g3 = new Grade("asir2446", 2, 9.6f, "Camelia Serban");
     }
 
     @AfterEach
@@ -54,7 +54,7 @@ class GradeTest {
 
     @Test
     void getDate() {
-        assertEquals(LocalDate.parse("22.09.2019", Constants.DATE_TIME_FORMATTER), g1.getDate());
+        assertEquals(LocalDate.parse("30.10.2019", Constants.DATE_TIME_FORMATTER), g1.getDate());
     }
 
     @Test
@@ -81,12 +81,12 @@ class GradeTest {
 
     @Test
     void testToFileString() {
-        assertEquals("asir2446/2/22.09.2019/9.6/Camelia Serban", g1.toFileString());
+        assertEquals("asir2446/2/30.10.2019/9.6/Camelia Serban", g1.toFileString());
     }
 
     @Test
     void testToString() {
-        assertEquals("studentId: asir2446|assignmentId: 2|date: 22.09.2019|value: 9.6|professor: Camelia Serban", g1.toString());
+        assertEquals("studentId: asir2446|assignmentId: 2|date: 30.10.2019|value: 9.6|professor: Camelia Serban", g1.toString());
     }
 
     @Test

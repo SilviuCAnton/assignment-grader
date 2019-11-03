@@ -1,5 +1,7 @@
 package domain;
 
+import services.config.ApplicationContext;
+import utils.Constants;
 import utils.Pair;
 
 import java.time.LocalDate;
@@ -13,8 +15,8 @@ public class Grade extends Entity<Pair<String, Integer>> {
     private float value;
     private String professor;
 
-    public Grade(String studentId, int assignmentId, LocalDate date, float value, String professor) {
-        this.date = date;
+    public Grade(String studentId, int assignmentId, float value, String professor) {
+        this.date = ApplicationContext.getCurrentLocalDate();
         this.value = value;
         this.professor = professor;
         this.setId(new Pair<>(studentId, assignmentId));
