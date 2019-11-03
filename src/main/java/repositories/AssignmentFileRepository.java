@@ -13,6 +13,11 @@ public class AssignmentFileRepository extends AbstractFileRepository<Integer, As
         super(validator, fileName);
     }
 
+    /**
+     * parses an assignment from a file string
+     * @param lineToParse - the assignment to be parsed - String
+     * @return assignment - Assignment
+     */
     @Override
     Assignment parseEntity(String lineToParse) {
         String[] args = lineToParse.split("/");

@@ -11,6 +11,11 @@ public class StudentFileRepository extends AbstractFileRepository<String, Studen
         super(validator, fileName);
     }
 
+    /**
+     * parses a student from a file string
+     * @param lineToParse - the student to be parsed - String
+     * @return student - Student
+     */
     @Override
     Student parseEntity(String lineToParse) {
         String[] args = lineToParse.split("/");

@@ -77,10 +77,8 @@ public class Pair<T, E> {
      */
     @Override
     public String toString() {
-        return "Pair{" +
-                "first=" + first +
-                ", second=" + second +
-                '}';
+        return  "first: " + first + '|' +
+                "second: " + second;
     }
 }
 
