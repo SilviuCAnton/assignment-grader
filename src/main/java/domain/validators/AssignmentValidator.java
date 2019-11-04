@@ -1,6 +1,6 @@
 package domain.validators;
 
-import domain.Assignment;
+import domain.entities.Assignment;
 import exceptions.InvalidAssignmentException;
 import exceptions.ValidationException;
 
@@ -26,7 +26,7 @@ public class AssignmentValidator implements Validator<Assignment>{
         }
 
         if(assignment.getStartWeek() >= assignment.getDeadlineWeek()) {
-            error += "Start week cannot precede deadline week. ";
+            error += "Start week cannot precede or be the same as deadline week. ";
         }
 
         if(assignment.getDeadlineWeek() < 1 || assignment.getDeadlineWeek() > 14) {

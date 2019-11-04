@@ -1,8 +1,9 @@
-package repositories;
+package repositories.memoryPersistence;
 
-import domain.Entity;
+import domain.entities.Entity;
 import domain.validators.Validator;
 import exceptions.ValidationException;
+import repositories.CrudRepository;
 
 import java.util.HashMap;
 import java.util.Map;

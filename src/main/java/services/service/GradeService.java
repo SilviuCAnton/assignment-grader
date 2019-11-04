@@ -2,13 +2,12 @@ package services.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import domain.Assignment;
-import domain.FeedbackDTO;
-import domain.Grade;
-import domain.Student;
-import domain.validators.GradeValidator;
+import domain.entities.Assignment;
+import domain.auxiliary.FeedbackDTO;
+import domain.entities.Grade;
+import domain.entities.Student;
 import exceptions.InvalidGradeException;
-import repositories.GradeFileRepository;
+import repositories.CrudRepository;
 import services.config.ApplicationContext;
 import utils.Pair;
 
@@ -29,12 +28,12 @@ import java.util.Collection;
 public class GradeService {
     private StudentService studentService;
     private AssignmentService assignmentService;
-    private GradeFileRepository gradeFileRepository;
+    private CrudRepository<Pair<String, Integer>, Grade> gradeRepository;
 
-    public GradeService(StudentService studentService, AssignmentService assignmentService, String fileName) {
+    public GradeService(StudentService studentService, AssignmentService assignmentService, CrudRepository<Pair<String, Integer>, Grade> gradeRepository) {
         this.studentService = studentService;
         this.assignmentService = assignmentService;
-        this.gradeFileRepository = new GradeFileRepository(new GradeValidator(), fileName);
+        this.gradeRepository = gradeRepository;
     }
 
     /**
@@ -69,8 +68,12 @@ public class GradeService {
             throw new IllegalArgumentException("The student does not exist.");
         }
 
+        if(assignment == null) {
+            throw new IllegalArgumentException("The assignment does not exist.");
+        }
+
         Grade grade = new Grade(studentId, assignmentId, value - penalty, professor);
-        Grade result = gradeFileRepository.save(grade);
+        Grade result = gradeRepository.save(grade);
 
         //Adding feedback in json file
         if(result == null){
@@ -113,7 +116,7 @@ public class GradeService {
      */
     public Grade removeGrade(String studentId, int assignmentId) {
         Pair<String, Integer> gradeId = new Pair<>(studentId, assignmentId);
-        return gradeFileRepository.delete(gradeId);
+        return gradeRepository.delete(gradeId);
     }
 
     /**
@@ -126,7 +129,7 @@ public class GradeService {
      */
     public Grade updateGrade(String studentId, int assignmentId, float value, String professor) {
         Grade grade = new Grade(studentId, assignmentId, value, professor);
-        return gradeFileRepository.update(grade);
+        return gradeRepository.update(grade);
     }
 
     /**
@@ -136,7 +139,7 @@ public class GradeService {
      * @return grade - Grade
      */
     public Grade findGrade(String studentId, int assignmentId) {
-        return gradeFileRepository.findOne(new Pair<>(studentId, assignmentId));
+        return gradeRepository.findOne(new Pair<>(studentId, assignmentId));
     }
 
     /**
@@ -144,7 +147,7 @@ public class GradeService {
      * @return grades - iterable of Grade
      */
     public Iterable<Grade> getAllGrades() {
-        return gradeFileRepository.findAll();
+        return gradeRepository.findAll();
     }
 
     public int getGradePenalty(int assignmentId) {

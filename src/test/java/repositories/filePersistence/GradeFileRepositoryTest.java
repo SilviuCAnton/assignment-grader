@@ -1,7 +1,6 @@
-package repositories;
+package repositories.filePersistence;
 
-import domain.Grade;
-import domain.Student;
+import domain.entities.Grade;
 import domain.validators.GradeValidator;
 import exceptions.InvalidGradeException;
 import org.junit.jupiter.api.AfterEach;

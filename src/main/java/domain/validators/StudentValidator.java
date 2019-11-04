@@ -1,6 +1,6 @@
 package domain.validators;
 
-import domain.Student;
+import domain.entities.Student;
 import exceptions.InvalidStudentException;
 import exceptions.ValidationException;
 

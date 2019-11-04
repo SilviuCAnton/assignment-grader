@@ -1,7 +1,7 @@
-package domain;
+package domain.auxiliary;
 
+import domain.entities.Entity;
 import services.config.ApplicationContext;
-import utils.Constants;
 import utils.Pair;
 
 import java.time.LocalDate;
@@ -10,7 +10,7 @@ import java.time.temporal.ChronoUnit;
 /**
  * The year structure at an university
  */
-public class YearStructure extends Entity<Integer>{
+public class YearStructure extends Entity<Integer> {
     private  int year;
     private  SemesterStructure sem1;
     private  SemesterStructure sem2;

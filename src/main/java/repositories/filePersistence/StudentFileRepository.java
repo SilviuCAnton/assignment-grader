@@ -1,6 +1,6 @@
-package repositories;
+package repositories.filePersistence;
 
-import domain.Student;
+import domain.entities.Student;
 import domain.validators.Validator;
 
 /**

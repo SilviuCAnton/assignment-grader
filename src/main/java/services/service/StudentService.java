@@ -1,9 +1,9 @@
 package services.service;
 
-import domain.Student;
-import domain.validators.StudentValidator;
+import domain.entities.Student;
 import exceptions.ValidationException;
-import repositories.StudentFileRepository;
+import repositories.CrudRepository;
+import repositories.filePersistence.StudentFileRepository;
 import services.config.ApplicationContext;
 
 import java.io.File;
@@ -13,17 +13,17 @@ import java.io.IOException;
  * Service for student operations
  */
 public class StudentService {
-    private StudentFileRepository studentRepo;
+    private CrudRepository<String, Student> studentRepo;
 
-    public StudentService(String fileName) {
-        this.studentRepo = new StudentFileRepository(new StudentValidator(), fileName);
+    public StudentService(CrudRepository<String, Student> studentRepo) {
+        this.studentRepo = studentRepo;
     }
 
     /**
      * returns the student repository
      * @return studentRepo - StudentFileRepository
      */
-    public StudentFileRepository getStudentRepo() {
+    public CrudRepository<String, Student> getStudentRepo() {
         return studentRepo;
     }
 

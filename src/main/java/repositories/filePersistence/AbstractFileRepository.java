@@ -1,8 +1,9 @@
-package repositories;
+package repositories.filePersistence;
 
-import domain.Entity;
+import domain.entities.Entity;
 import domain.validators.Validator;
 import exceptions.ValidationException;
+import repositories.memoryPersistence.InMemoryRepository;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -84,7 +85,7 @@ public abstract class AbstractFileRepository<ID, E extends Entity<ID>> extends I
     }
 
     @Override
-    public E update(E entity) throws IllegalArgumentException, ValidationException{
+    public E update(E entity) throws IllegalArgumentException, ValidationException {
         E result = super.update(entity);
         if(result == null) {
             return null;

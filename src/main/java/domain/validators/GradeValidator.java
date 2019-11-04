@@ -1,6 +1,6 @@
 package domain.validators;
 
-import domain.Grade;
+import domain.entities.Grade;
 import exceptions.InvalidGradeException;
 import exceptions.ValidationException;
 

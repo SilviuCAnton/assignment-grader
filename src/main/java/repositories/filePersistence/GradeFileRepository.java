@@ -1,6 +1,6 @@
-package repositories;
+package repositories.filePersistence;
 
-import domain.Grade;
+import domain.entities.Grade;
 import domain.validators.Validator;
 import utils.Constants;
 import utils.Pair;

@@ -1,7 +1,7 @@
 package services.config;
 
-import domain.SemesterStructure;
-import domain.YearStructure;
+import domain.auxiliary.SemesterStructure;
+import domain.auxiliary.YearStructure;
 import utils.Constants;
 import utils.Pair;
 

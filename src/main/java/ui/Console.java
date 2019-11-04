@@ -1,10 +1,9 @@
 package ui;
 
-import domain.Assignment;
-import domain.Grade;
-import domain.Student;
+import domain.entities.Assignment;
+import domain.entities.Grade;
+import domain.entities.Student;
 import exceptions.ValidationException;
-import services.config.ApplicationContext;
 import services.service.AssignmentService;
 import services.service.GradeService;
 import services.service.StudentService;
@@ -22,10 +21,10 @@ public class Console {
     private AssignmentService assignmentService;
     private GradeService gradeService;
 
-    public Console() {
-        this.studentService = new StudentService(ApplicationContext.getProperties().getProperty("data.catalog.students"));
-        this.assignmentService = new AssignmentService(ApplicationContext.getProperties().getProperty("data.catalog.assignments"));
-        this.gradeService = new GradeService(this.studentService, this.assignmentService, ApplicationContext.getProperties().getProperty("data.catalog.grades"));
+    public Console(StudentService studentService, AssignmentService assignmentService, GradeService gradeService) {
+        this.studentService = studentService;
+        this.assignmentService = assignmentService;
+        this.gradeService = gradeService;
     }
 
     public void run() {
@@ -264,16 +263,18 @@ public class Console {
 
     private void updateAssignmentUI() throws ValidationException {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-        int id, deadlineWeek;
+        int id, deadlineWeek, startWeek;
         String description;
         try {
             System.out.println("Id = ");
             id = Integer.parseInt(bf.readLine());
             System.out.println("Description = ");
             description = bf.readLine();
+            System.out.println("Start week = ");
+            startWeek = Integer.parseInt(bf.readLine());
             System.out.println("Deadline week = ");
             deadlineWeek = Integer.parseInt(bf.readLine());
-            Assignment assignment = assignmentService.updateAssignment(id, description, deadlineWeek);
+            Assignment assignment = assignmentService.updateAssignment(id, description, startWeek, deadlineWeek);
             if (assignment != null) {
                 System.out.println("The assignment " + assignment.getDescription() + " has been updated.");
             } else {
@@ -450,11 +451,11 @@ public class Console {
 
     private void displayAssignmentMenu() {
         System.out.println("Choose one of the following:");
-        System.out.println("1. Add a assignment");
-        System.out.println("2. Update a assignment");
-        System.out.println("3. Find a assignment");
+        System.out.println("1. Add an assignment");
+        System.out.println("2. Update an assignment");
+        System.out.println("3. Find an assignment");
         System.out.println("4. Display all assignments");
-        System.out.println("5. Delete a assignment");
+        System.out.println("5. Delete an assignment");
         System.out.println("Option: ");
     }
 

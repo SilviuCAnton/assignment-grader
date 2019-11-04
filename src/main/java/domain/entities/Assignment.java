@@ -1,4 +1,4 @@
-package domain;
+package domain.entities;
 
 import services.config.ApplicationContext;
 
@@ -8,7 +8,6 @@ import java.util.Objects;
  * An assignment at a discipline
  */
 public class Assignment extends Entity<Integer> {
-    private YearStructure yearStructure;
     private String description;
     private int startWeek;
     private int deadlineWeek;

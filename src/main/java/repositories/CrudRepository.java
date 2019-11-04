@@ -1,6 +1,6 @@
 package repositories;
 
-import domain.Entity;
+import domain.entities.Entity;
 import exceptions.ValidationException;
 
 /**

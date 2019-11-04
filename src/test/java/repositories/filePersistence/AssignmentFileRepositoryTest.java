@@ -1,6 +1,6 @@
-package repositories;
+package repositories.filePersistence;
 
-import domain.Assignment;
+import domain.entities.Assignment;
 import domain.validators.AssignmentValidator;
 import exceptions.InvalidAssignmentException;
 import org.junit.jupiter.api.AfterEach;

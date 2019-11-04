@@ -1,9 +1,5 @@
 package utils;
 
-import domain.SemesterStructure;
-import domain.YearStructure;
-
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**

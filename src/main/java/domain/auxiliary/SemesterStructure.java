@@ -1,5 +1,6 @@
-package domain;
+package domain.auxiliary;
 
+import domain.entities.Entity;
 import utils.Pair;
 
 import java.time.LocalDate;

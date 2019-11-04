@@ -1,7 +1,6 @@
-package domain;
+package domain.entities;
 
 import services.config.ApplicationContext;
-import utils.Constants;
 import utils.Pair;
 
 import java.time.LocalDate;

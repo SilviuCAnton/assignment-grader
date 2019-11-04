@@ -1,20 +1,19 @@
 package services.service;
 
-import domain.Assignment;
-import domain.validators.AssignmentValidator;
+import domain.entities.Assignment;
 import exceptions.InvalidAssignmentException;
 import exceptions.ValidationException;
-import repositories.AssignmentFileRepository;
+import repositories.CrudRepository;
 import services.config.ApplicationContext;
 
 /**
  *
  */
 public class AssignmentService {
-    private AssignmentFileRepository assignmentFileRepository;
+    private CrudRepository<Integer, Assignment> assignmentRepository;
 
-    public AssignmentService(String fileName) {
-        this.assignmentFileRepository = new AssignmentFileRepository(new AssignmentValidator(), fileName);
+    public AssignmentService(CrudRepository<Integer, Assignment> assignmentRepository) {
+        this.assignmentRepository = assignmentRepository;
     }
 
     /**
@@ -27,7 +26,7 @@ public class AssignmentService {
      * @throws IllegalArgumentException if the assignment is null
      */
     public Assignment addAssignment(int id, String description, int deadlineWeek) throws ValidationException, IllegalArgumentException {
-        return assignmentFileRepository.save(new Assignment(id, description, deadlineWeek));
+        return assignmentRepository.save(new Assignment(id, description, deadlineWeek));
     }
 
     /**
@@ -39,10 +38,12 @@ public class AssignmentService {
      * @throws ValidationException if the assignment is not valid
      * @throws IllegalArgumentException if the assignment is null
      */
-    public Assignment updateAssignment(int id, String description, int deadlineWeek) throws ValidationException, IllegalArgumentException {
+    public Assignment updateAssignment(int id, String description,int startWeek, int deadlineWeek) throws ValidationException, IllegalArgumentException {
         if(deadlineWeek < ApplicationContext.getYearStructure().getCurrentWeek())
             throw new InvalidAssignmentException("Deadline date cannot precede current date!");
-        return assignmentFileRepository.update(new Assignment(id, description, deadlineWeek));
+        Assignment assignment = new Assignment(id, description, deadlineWeek);
+        assignment.setStartWeek(startWeek);
+        return assignmentRepository.update(assignment);
     }
 
     /**
@@ -51,7 +52,7 @@ public class AssignmentService {
      * @return the result of the search operation - Assignment
      */
     public Assignment findAssignment(int id) {
-        return assignmentFileRepository.findOne(id);
+        return assignmentRepository.findOne(id);
     }
 
     /**
@@ -59,7 +60,7 @@ public class AssignmentService {
      * @return list of all assignments - iterable of assignments
      */
     public Iterable<Assignment> findAllAssignments() {
-        return assignmentFileRepository.findAll();
+        return assignmentRepository.findAll();
     }
 
     /**
@@ -68,6 +69,6 @@ public class AssignmentService {
      * @return the result of the deletion operation - Assignment
      */
     public Assignment deleteAssignment(int id) {
-        return assignmentFileRepository.delete(id);
+        return assignmentRepository.delete(id);
     }
 }
