@@ -10,15 +10,51 @@ import java.util.Objects;
  * Assignment grade entity
  */
 public class Grade extends Entity<Pair<String, Integer>> {
+    private Student student;
+    private Assignment assignment;
     private LocalDate date;
     private float value;
     private String professor;
 
-    public Grade(String studentId, int assignmentId, float value, String professor) {
+    public Grade(Student student, Assignment assignment, float value, String professor) {
+        this.student = student;
+        this.assignment = assignment;
         this.date = ApplicationContext.getCurrentLocalDate();
         this.value = value;
         this.professor = professor;
-        this.setId(new Pair<>(studentId, assignmentId));
+        this.setId(new Pair<>(student.getId(), assignment.getId()));
+    }
+
+    /**
+     * returns the student of the grade
+     * @return student - Student
+     */
+    public Student getStudent() {
+        return student;
+    }
+
+    /**
+     * sets the student of the Grade
+     * @param student - Student
+     */
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    /**
+     * returns the assignment of the grade
+     * @return assignment - Assignment
+     */
+    public Assignment getAssignment() {
+        return assignment;
+    }
+
+    /**
+     * sets the assignment of the grade
+     * @param assignment - Assignment
+     */
+    public void setAssignment(Assignment assignment) {
+        this.assignment = assignment;
     }
 
     /**

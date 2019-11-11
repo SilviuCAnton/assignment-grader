@@ -18,15 +18,13 @@ public class StudentDatabaseRepository implements CrudRepository<String, Student
     private StudentValidator studentValidator;
     private Connection connection;
 
-    public StudentDatabaseRepository(StudentValidator studentValidator) {
+    public StudentDatabaseRepository(StudentValidator studentValidator, String connectionString, String userName, String password) {
         this.studentValidator = studentValidator;
         this.connection = null;
         try {
             Class.forName("org.postgresql.Driver");
             this.connection = DriverManager
-                    .getConnection(ApplicationContext.getProperties().getProperty("data.db.connectionString"),
-                            ApplicationContext.getProperties().getProperty("data.db.userName"),
-                            ApplicationContext.getProperties().getProperty("data.db.password"));
+                    .getConnection(connectionString, userName, password);
         } catch (Exception e) {
             e.printStackTrace();
         }

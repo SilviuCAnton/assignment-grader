@@ -16,16 +16,13 @@ import java.util.List;
 public class AssignmentDatabaseRepository implements CrudRepository<Integer, Assignment> {
     private AssignmentValidator assignmentValidator;
     private Connection connection;
-
-    public AssignmentDatabaseRepository(AssignmentValidator assignmentValidator) {
+    public AssignmentDatabaseRepository(AssignmentValidator assignmentValidator, String connectionString, String userName, String password) {
         this.assignmentValidator = assignmentValidator;
         this.connection = null;
         try {
             Class.forName("org.postgresql.Driver");
             this.connection = DriverManager
-                    .getConnection(ApplicationContext.getProperties().getProperty("data.db.connectionString"),
-                            ApplicationContext.getProperties().getProperty("data.db.userName"),
-                            ApplicationContext.getProperties().getProperty("data.db.password"));
+                    .getConnection(connectionString, userName, password);
         } catch(Exception e) {
             e.printStackTrace();
         }

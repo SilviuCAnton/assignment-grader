@@ -13,12 +13,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GradeTest {
     private Grade g1,g2,g3;
+    private Student st1, st2;
+    private Assignment as1, as2;
 
     @BeforeEach
     void setUp() {
-        g1 = new Grade("asir2446", 2, 9.6f, "Camelia Serban");
-        g2 = new Grade("bpir2356", 1, 8.5f, "Camelia Serban");
-        g3 = new Grade("asir2446", 2, 9.6f, "Camelia Serban");
+        st1 = new Student("asir2446", "Silviu", "Anton", 221, "asir2446@scs.ubbcluj.ro", "Camelia Serban");
+        st2 = new Student("bpir2356", "Paul", "Beltechi", 221, "bpir2356@scs.ubbcluj.ro", "Camelia Serban");
+        as1 = new Assignment(1, "desc1", 6);
+        as2 = new Assignment(2, "desc2", 7);
+        g1 = new Grade(st1, as2, 9.6f, "Camelia Serban");
+        g2 = new Grade(st2, as1, 8.5f, "Camelia Serban");
+        g3 = new Grade(st1, as2, 9.6f, "Camelia Serban");
+
     }
 
     @AfterEach
@@ -94,5 +101,27 @@ class GradeTest {
     void setProfessor() {
         g1.setProfessor("Ana");
         assertEquals("Ana", g1.getProfessor());
+    }
+
+    @Test
+    void getStudent() {
+        assertEquals(st1, g1.getStudent());
+    }
+
+    @Test
+    void setStudent() {
+        g2.setStudent(st1);
+        assertEquals(st1, g2.getStudent());
+    }
+
+    @Test
+    void getAssignment() {
+        assertEquals(as2, g1.getAssignment());
+    }
+
+    @Test
+    void setAssignment() {
+        g1.setAssignment(as1);
+        assertEquals(as1, g1.getAssignment());
     }
 }

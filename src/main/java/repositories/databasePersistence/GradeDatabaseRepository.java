@@ -1,10 +1,12 @@
 package repositories.databasePersistence;
 
+import domain.entities.Assignment;
 import domain.entities.Grade;
+import domain.entities.Student;
 import domain.validators.GradeValidator;
 import exceptions.ValidationException;
 import repositories.CrudRepository;
-import services.config.ApplicationContext;
+import repositories.GradeRepository;
 import utils.Pair;
 
 import java.sql.*;
@@ -15,20 +17,22 @@ import java.util.List;
 /**
  * Repository for grade storage - database data persistence
  */
-public class GradeDatabaseRepository implements CrudRepository<Pair<String, Integer>, Grade> {
+public class GradeDatabaseRepository implements CrudRepository<Pair<String, Integer>, Grade>, GradeRepository {
 
     private GradeValidator gradeValidator;
     private Connection connection;
+    private CrudRepository<String, Student> studentRepo;
+    private CrudRepository<Integer, Assignment> assignmentRepo;
 
-    public GradeDatabaseRepository(GradeValidator gradeValidator) {
+    public GradeDatabaseRepository(GradeValidator gradeValidator, String connectionString, String userName, String password, CrudRepository<String, Student> studentRepo, CrudRepository<Integer, Assignment> assignmentRepo) {
+        this.studentRepo = studentRepo;
+        this.assignmentRepo = assignmentRepo;
         this.gradeValidator = gradeValidator;
         this.connection = null;
         try{
             Class.forName("org.postgresql.Driver");
             connection = DriverManager
-                    .getConnection(ApplicationContext.getProperties().getProperty("data.db.connectionString"),
-                            ApplicationContext.getProperties().getProperty("data.db.userName"),
-                            ApplicationContext.getProperties().getProperty("data.db.password"));
+                    .getConnection(connectionString, userName, password);
         } catch(Exception ex) {
             ex.printStackTrace();
         }
@@ -53,11 +57,13 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
                 return null;
             }
             studentId = resultSet.getString("studentId");
+            Student student = studentRepo.findOne(studentId);
             assignmentId = resultSet.getInt("assignmentId");
+            Assignment assignment = assignmentRepo.findOne(assignmentId);
             date = resultSet.getDate("date").toLocalDate();
             value = resultSet.getFloat("value");
             professor = resultSet.getString("professor");
-            Grade res = new Grade(studentId, assignmentId, value, professor);
+            Grade res = new Grade(student, assignment, value, professor);
             res.setDate(date);
             return res;
         } catch (SQLException e) {
@@ -81,11 +87,13 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
             ResultSet resultSet = stmt.executeQuery();
             while(resultSet.next()){
                 studentId = resultSet.getString("studentId");
+                Student student = studentRepo.findOne(studentId);
                 assignmentId = resultSet.getInt("assignmentId");
+                Assignment assignment = assignmentRepo.findOne(assignmentId);
                 date = resultSet.getDate("date").toLocalDate();
                 value = resultSet.getFloat("value");
                 professor = resultSet.getString("professor");
-                Grade grade = new Grade(studentId, assignmentId, value, professor);
+                Grade grade = new Grade(student, assignment, value, professor);
                 grade.setDate(date);
                 allGrades.add(grade);
             }
@@ -178,5 +186,39 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * returns the student repository
+     * @return studentRepo - Student Crud Repository
+     */
+    @Override
+    public CrudRepository<String, Student> getStudentRepo() {
+        return studentRepo;
+    }
+
+    /**
+     * sets the student repository
+     * @param studentRepo - Student Crud Repository
+     */
+    public void setStudentRepo(CrudRepository<String, Student> studentRepo) {
+        this.studentRepo = studentRepo;
+    }
+
+    /**
+     * returns the assignment repository
+     * @return assignmentRepo - Assignment Crud Repository
+     */
+    @Override
+    public CrudRepository<Integer, Assignment> getAssignmentRepo() {
+        return assignmentRepo;
+    }
+
+    /**
+     * sets the assignment repository
+     * @param assignmentRepo - Assignment Crud Repository
+     */
+    public void setAssignmentRepo(CrudRepository<Integer, Assignment> assignmentRepo) {
+        this.assignmentRepo = assignmentRepo;
     }
 }

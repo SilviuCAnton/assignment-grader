@@ -1,9 +1,17 @@
+import domain.entities.Assignment;
+import domain.entities.Student;
 import domain.validators.AssignmentValidator;
 import domain.validators.GradeValidator;
 import domain.validators.StudentValidator;
+import repositories.CrudRepository;
+import repositories.GradeRepository;
 import repositories.databasePersistence.AssignmentDatabaseRepository;
 import repositories.databasePersistence.GradeDatabaseRepository;
 import repositories.databasePersistence.StudentDatabaseRepository;
+import repositories.filePersistence.AssignmentFileRepository;
+import repositories.filePersistence.GradeFileRepository;
+import repositories.filePersistence.StudentFileRepository;
+import services.config.ApplicationContext;
 import services.service.AssignmentService;
 import services.service.GradeService;
 import services.service.StudentService;
@@ -11,14 +19,25 @@ import ui.Console;
 
 public class Main {
     public static void main(String[] args) {
-        //StudentService studentService = new StudentService(new StudentFileRepository(new StudentValidator(), ApplicationContext.getProperties().getProperty("data.catalog.students")));
-        StudentService studentService = new StudentService(new StudentDatabaseRepository(new StudentValidator()));
+        String dbConnectionString, dbUserName, dbPassword;
 
-        //AssignmentService assignmentService = new AssignmentService(new AssignmentFileRepository(new AssignmentValidator(), ApplicationContext.getProperties().getProperty("data.catalog.assignments")));
-        AssignmentService assignmentService = new AssignmentService(new AssignmentDatabaseRepository(new AssignmentValidator()));
+        dbConnectionString = ApplicationContext.getProperties().getProperty("data.db.connectionString");
+        dbUserName = ApplicationContext.getProperties().getProperty("data.db.userName");
+        dbPassword = ApplicationContext.getProperties().getProperty("data.db.password");
 
-        //GradeService gradeService = new GradeService(studentService, assignmentService, new GradeFileRepository(new GradeValidator(), ApplicationContext.getProperties().getProperty("data.catalog.grades")));
-        GradeService gradeService = new GradeService(studentService, assignmentService, new GradeDatabaseRepository(new GradeValidator()));
+        //CrudRepository<String, Student> studentRepo = new StudentFileRepository(new StudentValidator(), ApplicationContext.getProperties().getProperty("data.catalog.students"));
+        CrudRepository<String, Student> studentRepo = new StudentDatabaseRepository(new StudentValidator(), dbConnectionString, dbUserName, dbPassword);
+
+        //CrudRepository<Integer, Assignment> assignmentRepo = new AssignmentFileRepository(new AssignmentValidator(), ApplicationContext.getProperties().getProperty("data.catalog.assignments"));
+        CrudRepository<Integer, Assignment> assignmentRepo = new AssignmentDatabaseRepository(new AssignmentValidator(), dbConnectionString, dbUserName, dbPassword);
+
+        //GradeRepository gradeRepo = new GradeFileRepository(new GradeValidator(), ApplicationContext.getProperties().getProperty("data.catalog.grades"), studentRepo, assignmentRepo);
+        GradeRepository gradeRepo = new GradeDatabaseRepository(new GradeValidator(), dbConnectionString, dbUserName, dbPassword, studentRepo, assignmentRepo);
+
+        StudentService studentService = new StudentService(studentRepo);
+        AssignmentService assignmentService = new AssignmentService(assignmentRepo);
+
+        GradeService gradeService = new GradeService(gradeRepo);
 
         Console console = new Console(studentService, assignmentService, gradeService);
         console.run();

@@ -2,12 +2,12 @@ package services.service;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import domain.entities.Assignment;
 import domain.auxiliary.FeedbackDTO;
+import domain.entities.Assignment;
 import domain.entities.Grade;
 import domain.entities.Student;
 import exceptions.InvalidGradeException;
-import repositories.CrudRepository;
+import repositories.GradeRepository;
 import services.config.ApplicationContext;
 import utils.Pair;
 
@@ -26,13 +26,9 @@ import java.util.Collection;
  * Service for grade operations
  */
 public class GradeService {
-    private StudentService studentService;
-    private AssignmentService assignmentService;
-    private CrudRepository<Pair<String, Integer>, Grade> gradeRepository;
+    private GradeRepository gradeRepository;
 
-    public GradeService(StudentService studentService, AssignmentService assignmentService, CrudRepository<Pair<String, Integer>, Grade> gradeRepository) {
-        this.studentService = studentService;
-        this.assignmentService = assignmentService;
+    public GradeService(GradeRepository gradeRepository) {
         this.gradeRepository = gradeRepository;
     }
 
@@ -48,6 +44,7 @@ public class GradeService {
      */
     public Grade addGrade(String studentId, int assignmentId, float value, String professor, int numberWeeksLate, int penalty, boolean motivation, String feedback) {
 
+        float resultValue;
         Grade g = findGrade(studentId, assignmentId);
         if(g != null) {
             throw new InvalidGradeException("A grade already exists given to this student at this assignment.");
@@ -62,8 +59,8 @@ public class GradeService {
             throw new InvalidGradeException("You cannot grade this assignment. The student is more than 2 weeks late.");
         }
 
-        Assignment assignment = assignmentService.findAssignment(assignmentId);
-        Student student = studentService.findStudent(studentId);
+        Assignment assignment = gradeRepository.getAssignmentRepo().findOne(assignmentId);
+        Student student = gradeRepository.getStudentRepo().findOne(studentId);
         if(student == null) {
             throw new IllegalArgumentException("The student does not exist.");
         }
@@ -72,7 +69,13 @@ public class GradeService {
             throw new IllegalArgumentException("The assignment does not exist.");
         }
 
-        Grade grade = new Grade(studentId, assignmentId, value - penalty, professor);
+        resultValue = value - penalty;
+
+        if(resultValue < 1) {
+            resultValue = 1;
+        }
+
+        Grade grade = new Grade(student, assignment, resultValue, professor);
         Grade result = gradeRepository.save(grade);
 
         //Adding feedback in json file
@@ -128,7 +131,9 @@ public class GradeService {
      * @return result of update operation - Grade
      */
     public Grade updateGrade(String studentId, int assignmentId, float value, String professor) {
-        Grade grade = new Grade(studentId, assignmentId, value, professor);
+        Student student = gradeRepository.getStudentRepo().findOne(studentId);
+        Assignment assignment = gradeRepository.getAssignmentRepo().findOne(assignmentId);
+        Grade grade = new Grade(student, assignment, value, professor);
         return gradeRepository.update(grade);
     }
 
@@ -152,7 +157,7 @@ public class GradeService {
 
     public int getGradePenalty(int assignmentId) {
         int penalty = 0;
-        Assignment assignment = assignmentService.findAssignment(assignmentId);
+        Assignment assignment = gradeRepository.getAssignmentRepo().findOne(assignmentId);
         if(assignment == null) {
             throw new IllegalArgumentException("The assignment does not exist.");
         }
