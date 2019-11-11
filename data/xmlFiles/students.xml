@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<students>
+    <student id="asir2446">
+        <firstName>Silviu</firstName>
+        <lastName>Anton</lastName>
+        <group>221</group>
+        <email>silviu.c.anton@gmail.com</email>
+        <coordinator>Camelia Serban</coordinator>
+    </student>
+</students>

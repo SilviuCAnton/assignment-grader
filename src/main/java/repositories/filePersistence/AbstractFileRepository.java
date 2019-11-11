@@ -20,16 +20,18 @@ import java.util.stream.Stream;
  */
 public abstract class AbstractFileRepository<ID, E extends Entity<ID>> extends InMemoryRepository<ID, E> {
     private String fileName;
-    AbstractFileRepository(Validator<E> validator, String fileName) {
+    AbstractFileRepository(Validator<E> validator, String fileName, boolean loadData) {
         super(validator);
         this.fileName = fileName;
-        loadDataFromFile();
+        if(loadData){
+            loadDataFromFile();
+        }
     }
 
     /**
      * loads data in the repository from the file
      */
-    private void loadDataFromFile() {
+    void loadDataFromFile() {
         Path p = Paths.get(fileName);
         try {
             Stream<String> lines = Files.lines(p);

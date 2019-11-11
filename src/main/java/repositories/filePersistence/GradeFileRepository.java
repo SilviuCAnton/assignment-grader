@@ -19,9 +19,10 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String,Inte
     private CrudRepository<Integer, Assignment> assignmentRepo;
 
     public GradeFileRepository(Validator<Grade> validator, String fileName, CrudRepository<String, Student> studentRepo, CrudRepository<Integer, Assignment> assignmentRepo) {
-        super(validator, fileName);
+        super(validator, fileName, false);
         this.studentRepo = studentRepo;
         this.assignmentRepo = assignmentRepo;
+        loadDataFromFile();
     }
 
     /**
@@ -38,7 +39,6 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String,Inte
         grade.setDate(LocalDate.parse(args[2], Constants.DATE_TIME_FORMATTER));
         return grade;
     }
-
     /**
      * returns the student repository
      * @return studentRepo - Student Crud Repository

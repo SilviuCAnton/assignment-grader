@@ -8,7 +8,7 @@ import domain.validators.Validator;
  */
 public class StudentFileRepository extends AbstractFileRepository<String, Student> {
     public StudentFileRepository(Validator<Student> validator, String fileName) {
-        super(validator, fileName);
+        super(validator, fileName, true);
     }
 
     /**

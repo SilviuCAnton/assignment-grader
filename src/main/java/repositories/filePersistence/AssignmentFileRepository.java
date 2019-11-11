@@ -8,7 +8,7 @@ import domain.validators.AssignmentValidator;
  */
 public class AssignmentFileRepository extends AbstractFileRepository<Integer, Assignment> {
     public AssignmentFileRepository(AssignmentValidator validator, String fileName) {
-        super(validator, fileName);
+        super(validator, fileName, true);
     }
 
     /**
