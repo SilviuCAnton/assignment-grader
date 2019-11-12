@@ -4,7 +4,6 @@ import domain.entities.Student;
 import domain.validators.StudentValidator;
 import exceptions.ValidationException;
 import repositories.CrudRepository;
-import services.config.ApplicationContext;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -32,6 +31,7 @@ public class StudentDatabaseRepository implements CrudRepository<String, Student
 
     /**
      * finds a student in the repository
+     *
      * @param studentID - id of the student - String
      * @return the found student - Student, or null if the student was not found
      */
@@ -39,10 +39,10 @@ public class StudentDatabaseRepository implements CrudRepository<String, Student
     public Student findOne(String studentID) {
         String studentId, firstName, lastName, email, coordinator;
         int group;
-        try(PreparedStatement stmt = connection.prepareStatement("SELECT * FROM students WHERE studentid = ?;")) {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM students WHERE studentid = ?;")) {
             stmt.setString(1, studentID);
             ResultSet resultSet = stmt.executeQuery();
-            if(!resultSet.next()){
+            if (!resultSet.next()) {
                 return null;
             }
             studentId = resultSet.getString("studentId");
@@ -60,6 +60,7 @@ public class StudentDatabaseRepository implements CrudRepository<String, Student
 
     /**
      * returns a list of all students in the repository
+     *
      * @return allStudents - iterable of students
      */
     @Override
@@ -68,9 +69,9 @@ public class StudentDatabaseRepository implements CrudRepository<String, Student
         Student student;
         String studentId, firstName, lastName, email, coordinator;
         int group;
-        try(PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Students;")) {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Students;")) {
             ResultSet resultSet = stmt.executeQuery();
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 studentId = resultSet.getString("studentId");
                 firstName = resultSet.getString("firstName");
                 lastName = resultSet.getString("lastName");
@@ -89,22 +90,23 @@ public class StudentDatabaseRepository implements CrudRepository<String, Student
 
     /**
      * saves a student in the repository
+     *
      * @param student - the student to be saved - Student
      * @return null if the student was saved or foudStudent - Student if a student with the given id already exists
-     * @throws ValidationException if the student is not valid
+     * @throws ValidationException      if the student is not valid
      * @throws IllegalArgumentException if the student is null
      */
     @Override
     public Student save(Student student) throws ValidationException, IllegalArgumentException {
-        if(student == null) {
+        if (student == null) {
             throw new IllegalArgumentException("Student cannot be null!!");
         }
         studentValidator.validate(student);
         Student st = findOne(student.getId());
-        if(st != null) {
+        if (st != null) {
             return st;
         }
-        try(PreparedStatement stmt = connection.prepareStatement("INSERT INTO Students(studentId, firstName, lastName, groupId, email, coordinator) VALUES(?,?,?,?,?,?);")) {
+        try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO Students(studentId, firstName, lastName, groupId, email, coordinator) VALUES(?,?,?,?,?,?);")) {
             stmt.setString(1, student.getId());
             stmt.setString(2, student.getFirstName());
             stmt.setString(3, student.getLastName());
@@ -121,16 +123,17 @@ public class StudentDatabaseRepository implements CrudRepository<String, Student
 
     /**
      * removes a student from the repository
+     *
      * @param studentId - the id of the student to be removed - String
      * @return the removed student - Student, or null if the student with the given id does not exist
      */
     @Override
     public Student delete(String studentId) {
         Student student = findOne(studentId);
-        if(student == null) {
+        if (student == null) {
             return null;
         }
-        try(PreparedStatement stmt = connection.prepareStatement("DELETE FROM students WHERE studentid = ?;")) {
+        try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM students WHERE studentid = ?;")) {
             stmt.setString(1, studentId);
             stmt.executeUpdate();
             return student;
@@ -142,19 +145,20 @@ public class StudentDatabaseRepository implements CrudRepository<String, Student
 
     /**
      * updates a student in the repository
+     *
      * @param student - the new version of the student - Student
      * @return the old version of the student - Student, or null if a student with the given id does not exist
-     * @throws ValidationException if the new version of the student is not valid
+     * @throws ValidationException      if the new version of the student is not valid
      * @throws IllegalArgumentException if the new version of the student is null
      */
     @Override
     public Student update(Student student) throws ValidationException, IllegalArgumentException {
         studentValidator.validate(student);
         Student st = findOne(student.getId());
-        if(st == null) {
+        if (st == null) {
             return null;
         }
-        try(PreparedStatement stmt = connection.prepareStatement("UPDATE students SET firstname = ?, lastname = ?, groupid = ?, email = ?, coordinator = ? WHERE studentid = ?")) {
+        try (PreparedStatement stmt = connection.prepareStatement("UPDATE students SET firstname = ?, lastname = ?, groupid = ?, email = ?, coordinator = ? WHERE studentid = ?")) {
             stmt.setString(1, student.getFirstName());
             stmt.setString(2, student.getLastName());
             stmt.setInt(3, student.getGroup());

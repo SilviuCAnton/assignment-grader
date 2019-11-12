@@ -4,7 +4,6 @@ import domain.entities.Assignment;
 import domain.validators.AssignmentValidator;
 import exceptions.ValidationException;
 import repositories.CrudRepository;
-import services.config.ApplicationContext;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ import java.util.List;
 public class AssignmentDatabaseRepository implements CrudRepository<Integer, Assignment> {
     private AssignmentValidator assignmentValidator;
     private Connection connection;
+
     public AssignmentDatabaseRepository(AssignmentValidator assignmentValidator, String connectionString, String userName, String password) {
         this.assignmentValidator = assignmentValidator;
         this.connection = null;
@@ -23,13 +23,14 @@ public class AssignmentDatabaseRepository implements CrudRepository<Integer, Ass
             Class.forName("org.postgresql.Driver");
             this.connection = DriverManager
                     .getConnection(connectionString, userName, password);
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
      * finds an assignment in the repository
+     *
      * @param assignmentId - id of the assignment - int
      * @return the found assignment - Assignment, or null if the assignment was not found
      */
@@ -37,10 +38,10 @@ public class AssignmentDatabaseRepository implements CrudRepository<Integer, Ass
     public Assignment findOne(Integer assignmentId) {
         String assignmentDescription;
         int assgnId, deadlineWeek, startWeek;
-        try(PreparedStatement stmt = connection.prepareStatement("SELECT * FROM assignments WHERE assignmentid = ?;")) {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM assignments WHERE assignmentid = ?;")) {
             stmt.setInt(1, assignmentId);
             ResultSet resultSet = stmt.executeQuery();
-            if(!resultSet.next()){
+            if (!resultSet.next()) {
                 return null;
             }
             assgnId = resultSet.getInt("assignmentId");
@@ -59,6 +60,7 @@ public class AssignmentDatabaseRepository implements CrudRepository<Integer, Ass
 
     /**
      * returns a list of all assignments in the repository
+     *
      * @return allAssignments - iterable of assignments
      */
     @Override
@@ -67,9 +69,9 @@ public class AssignmentDatabaseRepository implements CrudRepository<Integer, Ass
         Assignment assignment;
         String assignmentDescription;
         int assgnId, deadlineWeek, startWeek;
-        try(PreparedStatement stmt = connection.prepareStatement("SELECT * FROM assignments;")) {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM assignments;")) {
             ResultSet resultSet = stmt.executeQuery();
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 assgnId = resultSet.getInt("assignmentId");
                 startWeek = resultSet.getInt("startWeek");
                 deadlineWeek = resultSet.getInt("deadlineWeek");
@@ -87,22 +89,23 @@ public class AssignmentDatabaseRepository implements CrudRepository<Integer, Ass
 
     /**
      * saves an assignment in the repository
+     *
      * @param assignment - the assignment to be saved - Assignment
      * @return null if the assignment was saved or foundAssignment - Assignment if an assignment with the given id already exists
-     * @throws ValidationException if the assignment is not valid
+     * @throws ValidationException      if the assignment is not valid
      * @throws IllegalArgumentException if the assignment is null
      */
     @Override
     public Assignment save(Assignment assignment) throws ValidationException, IllegalArgumentException {
-        if(assignment == null) {
+        if (assignment == null) {
             throw new IllegalArgumentException("Assignment cannot be null.");
         }
         assignmentValidator.validate(assignment);
         Assignment assgn = findOne(assignment.getId());
-        if(assgn != null) {
+        if (assgn != null) {
             return assgn;
         }
-        try(PreparedStatement stmt = connection.prepareStatement("INSERT INTO assignments(assignmentid, description, startweek, deadlineweek) VALUES(?,?,?,?);")) {
+        try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO assignments(assignmentid, description, startweek, deadlineweek) VALUES(?,?,?,?);")) {
             stmt.setInt(1, assignment.getId());
             stmt.setString(2, assignment.getDescription());
             stmt.setInt(3, assignment.getStartWeek());
@@ -117,16 +120,17 @@ public class AssignmentDatabaseRepository implements CrudRepository<Integer, Ass
 
     /**
      * removes an assignment from the repository
+     *
      * @param assignmentId - the id of the assignment to be removed - int
      * @return the removed assignment - Assignment, or null if the assignment with the given id does not exist
      */
     @Override
     public Assignment delete(Integer assignmentId) {
         Assignment assignment = findOne(assignmentId);
-        if(assignment == null) {
+        if (assignment == null) {
             return null;
         }
-        try(PreparedStatement stmt = connection.prepareStatement("DELETE FROM assignments WHERE assignmentid = ?;")) {
+        try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM assignments WHERE assignmentid = ?;")) {
             stmt.setInt(1, assignmentId);
             stmt.executeUpdate();
             return assignment;
@@ -138,22 +142,23 @@ public class AssignmentDatabaseRepository implements CrudRepository<Integer, Ass
 
     /**
      * updates an assignment in the repository
+     *
      * @param assignment - the new version of the assignment - Assignment
      * @return the old version of the assignment - Assignment, or null if an assignment with the given id does not exist
-     * @throws ValidationException if the new version of the assignment is not valid
+     * @throws ValidationException      if the new version of the assignment is not valid
      * @throws IllegalArgumentException if the new version of the assignment is null
      */
     @Override
     public Assignment update(Assignment assignment) throws ValidationException, IllegalArgumentException {
-        if(assignment == null) {
+        if (assignment == null) {
             throw new IllegalArgumentException("Assignment cannot be null.");
         }
         assignmentValidator.validate(assignment);
         Assignment assgn = findOne(assignment.getId());
-        if(assgn == null) {
+        if (assgn == null) {
             return null;
         }
-        try(PreparedStatement stmt = connection.prepareStatement("UPDATE assignments SET description = ?, startweek = ?, deadlineweek = ? WHERE assignmentid = ?")) {
+        try (PreparedStatement stmt = connection.prepareStatement("UPDATE assignments SET description = ?, startweek = ?, deadlineweek = ? WHERE assignmentid = ?")) {
             stmt.setString(1, assignment.getDescription());
             stmt.setInt(2, assignment.getStartWeek());
             stmt.setInt(3, assignment.getDeadlineWeek());

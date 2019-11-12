@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<grades>
+    <grade assignmentId="2" studentId="asir2446">
+        <date>12.11.2019</date>
+        <value>9.5</value>
+        <professor>Prof2</professor>
+    </grade>
+    <grade assignmentId="1" studentId="asir2446">
+        <date>12.11.2019</date>
+        <value>10.0</value>
+        <professor>Silviu</professor>
+    </grade>
+</grades>

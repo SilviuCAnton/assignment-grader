@@ -29,17 +29,18 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
         this.assignmentRepo = assignmentRepo;
         this.gradeValidator = gradeValidator;
         this.connection = null;
-        try{
+        try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager
                     .getConnection(connectionString, userName, password);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
     /**
      * finds a grade in the repository
+     *
      * @param gradeId - id of the grade - Pair of String and int
      * @return the found grade - Grade, or null if the grade was not found
      */
@@ -49,11 +50,11 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
         float value;
         LocalDate date;
         int assignmentId;
-        try(PreparedStatement stmt = connection.prepareStatement("SELECT * FROM grades WHERE studentid = ? AND assignmentid = ?;")) {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM grades WHERE studentid = ? AND assignmentid = ?;")) {
             stmt.setString(1, gradeId.getFirst());
             stmt.setInt(2, gradeId.getSecond());
             ResultSet resultSet = stmt.executeQuery();
-            if(!resultSet.next()){
+            if (!resultSet.next()) {
                 return null;
             }
             studentId = resultSet.getString("studentId");
@@ -74,6 +75,7 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
 
     /**
      * returns a list of all grades in the repository
+     *
      * @return allGrades - iterable of grades
      */
     @Override
@@ -83,9 +85,9 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
         float value;
         LocalDate date;
         int assignmentId;
-        try(PreparedStatement stmt = connection.prepareStatement("SELECT * FROM grades;")) {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM grades;")) {
             ResultSet resultSet = stmt.executeQuery();
-            while(resultSet.next()){
+            while (resultSet.next()) {
                 studentId = resultSet.getString("studentId");
                 Student student = studentRepo.findOne(studentId);
                 assignmentId = resultSet.getInt("assignmentId");
@@ -106,22 +108,23 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
 
     /**
      * saves a grade in the repository
+     *
      * @param grade - the grade to be saved - Grade
      * @return null if the grade was saved or foundGrade - Grade if a grade with the given id already exists
-     * @throws ValidationException if the grade is not valid
+     * @throws ValidationException      if the grade is not valid
      * @throws IllegalArgumentException if the grade is null
      */
     @Override
     public Grade save(Grade grade) throws ValidationException, IllegalArgumentException {
-        if(grade == null) {
+        if (grade == null) {
             throw new IllegalArgumentException("Grade cannot be null.");
         }
         gradeValidator.validate(grade);
         Grade gr = findOne(grade.getId());
-        if(gr != null) {
+        if (gr != null) {
             return gr;
         }
-        try(PreparedStatement stmt = connection.prepareStatement("INSERT INTO grades(studentid, assignmentid, date, value, professor) VALUES(?,?,?,?,?);")) {
+        try (PreparedStatement stmt = connection.prepareStatement("INSERT INTO grades(studentid, assignmentid, date, value, professor) VALUES(?,?,?,?,?);")) {
             stmt.setString(1, grade.getId().getFirst());
             stmt.setInt(2, grade.getId().getSecond());
             stmt.setDate(3, Date.valueOf(grade.getDate()));
@@ -137,16 +140,17 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
 
     /**
      * removes a grade from the repository
+     *
      * @param gradeId - the id of the grade to be removed - Pair of String and int
      * @return the removed grade - Grade, or null if the grade with the given id does not exist
      */
     @Override
     public Grade delete(Pair<String, Integer> gradeId) {
         Grade grade = findOne(gradeId);
-        if(grade == null) {
+        if (grade == null) {
             return null;
         }
-        try(PreparedStatement stmt = connection.prepareStatement("DELETE FROM grades WHERE studentid = ? AND assignmentid = ?;")) {
+        try (PreparedStatement stmt = connection.prepareStatement("DELETE FROM grades WHERE studentid = ? AND assignmentid = ?;")) {
             stmt.setString(1, gradeId.getFirst());
             stmt.setInt(2, gradeId.getSecond());
             stmt.executeUpdate();
@@ -159,22 +163,23 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
 
     /**
      * updates a grade in the repository
+     *
      * @param grade - the new version of the grade - Grade
      * @return the old version of the grade - Grade, or null if a grade with the given id does not exist
-     * @throws ValidationException if the new version of the grade is not valid
+     * @throws ValidationException      if the new version of the grade is not valid
      * @throws IllegalArgumentException if the new version of the grade is null
      */
     @Override
     public Grade update(Grade grade) throws ValidationException, IllegalArgumentException {
-        if(grade == null) {
+        if (grade == null) {
             throw new IllegalArgumentException("Grade cannot be null.");
         }
         gradeValidator.validate(grade);
         Grade gr = findOne(grade.getId());
-        if(gr == null) {
+        if (gr == null) {
             return null;
         }
-        try(PreparedStatement stmt = connection.prepareStatement("UPDATE grades SET date = ?, value = ?, professor = ? WHERE studentid = ? AND assignmentid = ?")) {
+        try (PreparedStatement stmt = connection.prepareStatement("UPDATE grades SET date = ?, value = ?, professor = ? WHERE studentid = ? AND assignmentid = ?")) {
             stmt.setDate(1, Date.valueOf(grade.getDate()));
             stmt.setFloat(2, grade.getValue());
             stmt.setString(3, grade.getProfessor());
@@ -190,6 +195,7 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
 
     /**
      * returns the student repository
+     *
      * @return studentRepo - Student Crud Repository
      */
     @Override
@@ -199,6 +205,7 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
 
     /**
      * sets the student repository
+     *
      * @param studentRepo - Student Crud Repository
      */
     public void setStudentRepo(CrudRepository<String, Student> studentRepo) {
@@ -207,6 +214,7 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
 
     /**
      * returns the assignment repository
+     *
      * @return assignmentRepo - Assignment Crud Repository
      */
     @Override
@@ -216,6 +224,7 @@ public class GradeDatabaseRepository implements CrudRepository<Pair<String, Inte
 
     /**
      * sets the assignment repository
+     *
      * @param assignmentRepo - Assignment Crud Repository
      */
     public void setAssignmentRepo(CrudRepository<Integer, Assignment> assignmentRepo) {

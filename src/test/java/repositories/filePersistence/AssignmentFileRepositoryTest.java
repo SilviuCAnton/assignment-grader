@@ -28,14 +28,14 @@ class AssignmentFileRepositoryTest {
     void setUp() {
         assignmentFileRepository = new AssignmentFileRepository(new AssignmentValidator(), ApplicationContext.getProperties().getProperty("data.test.catalog.assignments"));
         path = Paths.get(ApplicationContext.getProperties().getProperty("data.test.catalog.assignments"));
-        a1 = new Assignment(1,"desc1", 6);
+        a1 = new Assignment(1, "desc1", 6);
         a2 = new Assignment(2, "desc2", 7);
         assignmentFileRepository.save(a1);
     }
 
     @AfterEach
     void tearDown() {
-        try{
+        try {
             BufferedWriter bf = Files.newBufferedWriter(path, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -90,7 +90,7 @@ class AssignmentFileRepositoryTest {
 
     @Test
     void update() {
-        assignmentFileRepository.update(new Assignment(1,"descNew",6));
+        assignmentFileRepository.update(new Assignment(1, "descNew", 6));
         assertEquals(new Assignment(1, "descNew", 6), assignmentFileRepository.findOne(1));
         assertNull(assignmentFileRepository.update(new Assignment(5, "dsaf", 6)));
     }

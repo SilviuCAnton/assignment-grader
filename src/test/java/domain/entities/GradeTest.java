@@ -1,6 +1,5 @@
 package domain.entities;
 
-import domain.entities.Grade;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,17 +8,18 @@ import utils.Pair;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class GradeTest {
-    private Grade g1,g2,g3;
-    private Student st1, st2;
+    private Grade g1, g2, g3;
+    private Student st1;
     private Assignment as1, as2;
 
     @BeforeEach
     void setUp() {
         st1 = new Student("asir2446", "Silviu", "Anton", 221, "asir2446@scs.ubbcluj.ro", "Camelia Serban");
-        st2 = new Student("bpir2356", "Paul", "Beltechi", 221, "bpir2356@scs.ubbcluj.ro", "Camelia Serban");
+        Student st2 = new Student("bpir2356", "Paul", "Beltechi", 221, "bpir2356@scs.ubbcluj.ro", "Camelia Serban");
         as1 = new Assignment(1, "desc1", 6);
         as2 = new Assignment(2, "desc2", 7);
         g1 = new Grade(st1, as2, 9.6f, "Camelia Serban");
@@ -43,7 +43,7 @@ class GradeTest {
 
     @Test
     void setId() {
-        g1.setId(new Pair<>("aaaa1234",1));
+        g1.setId(new Pair<>("aaaa1234", 1));
         assertEquals("aaaa1234", g1.getId().getFirst());
         assertEquals(1, g1.getId().getSecond());
     }

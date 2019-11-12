@@ -23,6 +23,7 @@ public class Student extends Entity<String> {
 
     /**
      * returns student's first group
+     *
      * @return group - int
      */
     public int getGroup() {
@@ -31,6 +32,7 @@ public class Student extends Entity<String> {
 
     /**
      * sets student's first group
+     *
      * @param group - int
      */
     public void setGroup(int group) {
@@ -39,6 +41,7 @@ public class Student extends Entity<String> {
 
     /**
      * returns student's first name
+     *
      * @return firstName - String
      */
     public String getFirstName() {
@@ -47,6 +50,7 @@ public class Student extends Entity<String> {
 
     /**
      * sets student's first name
+     *
      * @param firstName - String
      */
     public void setFirstName(String firstName) {
@@ -55,6 +59,7 @@ public class Student extends Entity<String> {
 
     /**
      * returns student's last name
+     *
      * @return lastName - String
      */
     public String getLastName() {
@@ -63,6 +68,7 @@ public class Student extends Entity<String> {
 
     /**
      * sets student's last name
+     *
      * @param lastName - String
      */
     public void setLastName(String lastName) {
@@ -71,6 +77,7 @@ public class Student extends Entity<String> {
 
     /**
      * returns if two students are equal
+     *
      * @param o - Student, the other student
      * @return true if students are equal, false otherwise
      */
@@ -89,6 +96,7 @@ public class Student extends Entity<String> {
 
     /**
      * returns student's hashcode
+     *
      * @return hashcode - int
      */
     @Override
@@ -98,6 +106,7 @@ public class Student extends Entity<String> {
 
     /**
      * returns student's email
+     *
      * @return email - String
      */
     public String getEmail() {
@@ -106,6 +115,7 @@ public class Student extends Entity<String> {
 
     /**
      * sets the student's email
+     *
      * @param email - String
      */
     public void setEmail(String email) {
@@ -114,6 +124,7 @@ public class Student extends Entity<String> {
 
     /**
      * returns the student's coordinator
+     *
      * @return coordinator - String
      */
     public String getCoordinator() {
@@ -122,6 +133,7 @@ public class Student extends Entity<String> {
 
     /**
      * sets the student's coordinator
+     *
      * @param coordinator - String
      */
     public void setCoordinator(String coordinator) {
@@ -130,11 +142,12 @@ public class Student extends Entity<String> {
 
     /**
      * returns the string representation of a student
+     *
      * @return student representation - String
      */
     @Override
     public String toString() {
-        return  "id: " + getId() + '|' +
+        return "id: " + getId() + '|' +
                 "firstName: " + firstName + '|' +
                 "lastName: " + lastName + '|' +
                 "group: " + group + '|' +
@@ -144,11 +157,12 @@ public class Student extends Entity<String> {
 
     /**
      * returns the file string representation of a student
+     *
      * @return student representation - String
      */
     @Override
     public String toFileString() {
-        return  getId() + '/' +
+        return getId() + '/' +
                 firstName + '/' +
                 lastName + '/' +
                 group + '/' +

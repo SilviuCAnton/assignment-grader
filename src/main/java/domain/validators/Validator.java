@@ -4,6 +4,7 @@ import exceptions.ValidationException;
 
 /**
  * Interface for validating entities
+ *
  * @param <E> - type of the entity
  */
 public interface Validator<E> {

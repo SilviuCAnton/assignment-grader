@@ -1,11 +1,11 @@
 package domain.entities;
 
-import domain.entities.Student;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class StudentTest {
 
@@ -15,9 +15,9 @@ class StudentTest {
 
     @BeforeEach
     void setUp() {
-        st1 = new Student("aaaa1111","st1", "st11", 221, "st1@gm.com", "cord1");
-        st2 = new Student("aaaa1112","st2", "st22", 221, "st2@gm.com", "cord2");
-        st3 = new Student("aaaa1111","st1", "st11", 221, "st1@gm.com", "cord1");
+        st1 = new Student("aaaa1111", "st1", "st11", 221, "st1@gm.com", "cord1");
+        st2 = new Student("aaaa1112", "st2", "st22", 221, "st2@gm.com", "cord2");
+        st3 = new Student("aaaa1111", "st1", "st11", 221, "st1@gm.com", "cord1");
     }
 
     @AfterEach

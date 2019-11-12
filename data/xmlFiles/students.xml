@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <students>
+    <student id="acir2447">
+        <firstName>Claudiu</firstName>
+        <lastName>Apetroaei</lastName>
+        <group>221</group>
+        <email>acir2447@scs.ubbcluj.ro</email>
+        <coordinator>Camelia Serban</coordinator>
+    </student>
     <student id="asir2446">
         <firstName>Silviu</firstName>
         <lastName>Anton</lastName>

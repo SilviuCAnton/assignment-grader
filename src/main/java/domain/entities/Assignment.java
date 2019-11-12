@@ -15,12 +15,13 @@ public class Assignment extends Entity<Integer> {
     public Assignment(int id, String description, int deadlineWeek) {
         this.setId(id);
         this.description = description;
-        this.startWeek = ApplicationContext.getYearStructure().getCurrentWeek();
+        this.startWeek = ApplicationContext.getYearStructure().getCurrentWeek(ApplicationContext.getCurrentLocalDate());
         this.deadlineWeek = deadlineWeek;
     }
 
     /**
      * returns the assignment description
+     *
      * @return description - String
      */
     public String getDescription() {
@@ -29,6 +30,7 @@ public class Assignment extends Entity<Integer> {
 
     /**
      * sets the assignment description
+     *
      * @param description - String containing the new description
      */
     public void setDescription(String description) {
@@ -37,6 +39,7 @@ public class Assignment extends Entity<Integer> {
 
     /**
      * returns the start week of the assignment
+     *
      * @return startWeek - int
      */
     public int getStartWeek() {
@@ -45,6 +48,7 @@ public class Assignment extends Entity<Integer> {
 
     /**
      * sets the start week of the assignment
+     *
      * @param startWeek - int, the new deadlineWeek
      */
     public void setStartWeek(int startWeek) {
@@ -53,6 +57,7 @@ public class Assignment extends Entity<Integer> {
 
     /**
      * returns the deadline week of the assignment
+     *
      * @return deadlineWeek - int
      */
     public int getDeadlineWeek() {
@@ -61,6 +66,7 @@ public class Assignment extends Entity<Integer> {
 
     /**
      * sets the deadline week of the assignment
+     *
      * @param deadlineWeek - int, the new deadlineWeek
      */
     public void setDeadlineWeek(int deadlineWeek) {
@@ -69,6 +75,7 @@ public class Assignment extends Entity<Integer> {
 
     /**
      * retruns if two assignments are equal
+     *
      * @param o - the other assignment
      * @return true if assignments are equal, false otherwise
      */
@@ -84,6 +91,7 @@ public class Assignment extends Entity<Integer> {
 
     /**
      * returns the hashcode of a assignment
+     *
      * @return hashCode - int
      */
     @Override
@@ -93,11 +101,12 @@ public class Assignment extends Entity<Integer> {
 
     /**
      * returns the String representation of a assignment
+     *
      * @return assignment representation - String
      */
     @Override
     public String toString() {
-        return  "id: " + getId() + '|' +
+        return "id: " + getId() + '|' +
                 "description: " + description + '|' +
                 "startWeek: " + startWeek + '|' +
                 "deadlineWeek: " + deadlineWeek;
@@ -105,11 +114,12 @@ public class Assignment extends Entity<Integer> {
 
     /**
      * returns the file String representation of a assignment
+     *
      * @return assignment representation - String
      */
     @Override
     public String toFileString() {
-        return  getId() + "/" +
+        return getId() + "/" +
                 description + '/' +
                 startWeek + '/' +
                 deadlineWeek;

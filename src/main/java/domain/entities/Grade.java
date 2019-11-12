@@ -27,6 +27,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * returns the student of the grade
+     *
      * @return student - Student
      */
     public Student getStudent() {
@@ -35,6 +36,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * sets the student of the Grade
+     *
      * @param student - Student
      */
     public void setStudent(Student student) {
@@ -43,6 +45,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * returns the assignment of the grade
+     *
      * @return assignment - Assignment
      */
     public Assignment getAssignment() {
@@ -51,6 +54,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * sets the assignment of the grade
+     *
      * @param assignment - Assignment
      */
     public void setAssignment(Assignment assignment) {
@@ -59,6 +63,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * returns the date of the grade
+     *
      * @return date - LocalDate
      */
     public LocalDate getDate() {
@@ -67,6 +72,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * sets the date of the grade
+     *
      * @param date - LocalDate
      */
     public void setDate(LocalDate date) {
@@ -75,6 +81,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * returns the value of the grade
+     *
      * @return value - float
      */
     public float getValue() {
@@ -83,6 +90,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * sets the value of the grade
+     *
      * @param value - float
      */
     public void setValue(float value) {
@@ -91,6 +99,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * returns the professor that gave the grade
+     *
      * @return professor - String
      */
     public String getProfessor() {
@@ -99,6 +108,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * sets the professor that gave the grade
+     *
      * @param professor - String
      */
     public void setProfessor(String professor) {
@@ -107,6 +117,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * returns if two grades are equal or not
+     *
      * @param o - other grade - Grade
      * @return true if grades are equal, false otherwise
      */
@@ -122,6 +133,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * returns the hashcode of the grade
+     *
      * @return hashCode - int
      */
     @Override
@@ -131,21 +143,22 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * returns the fileString representation of the grade
+     *
      * @return gradeFileString - String
      */
     @Override
     public String toFileString() {
         String month = "";
         String day = "";
-        if(date.getMonthValue() < 10){
+        if (date.getMonthValue() < 10) {
             month += '0';
         }
-        if(date.getDayOfMonth() < 10) {
+        if (date.getDayOfMonth() < 10) {
             day += '0';
         }
         month += date.getMonthValue();
         day += date.getDayOfMonth();
-        return  getId().getFirst() + '/' +
+        return getId().getFirst() + '/' +
                 getId().getSecond() + '/' +
                 day + '.' + month + '.' + date.getYear() + '/' +
                 value + '/' +
@@ -154,21 +167,22 @@ public class Grade extends Entity<Pair<String, Integer>> {
 
     /**
      * returns the string representation of the grade
+     *
      * @return gradeString - String
      */
     @Override
     public String toString() {
         String month = "";
         String day = "";
-        if(date.getMonthValue() < 10){
+        if (date.getMonthValue() < 10) {
             month += '0';
         }
-        if(date.getDayOfMonth() < 10) {
+        if (date.getDayOfMonth() < 10) {
             day += '0';
         }
         month += date.getMonthValue();
         day += date.getDayOfMonth();
-        return  "studentId: " + getId().getFirst() + '|' +
+        return "studentId: " + getId().getFirst() + '|' +
                 "assignmentId: " + getId().getSecond() + '|' +
                 "date: " + day + '.' + month + '.' + date.getYear() + '|' +
                 "value: " + value + '|' +

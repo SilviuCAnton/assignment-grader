@@ -1,16 +1,16 @@
 package domain.auxiliary;
 
-import domain.auxiliary.SemesterStructure;
-import domain.auxiliary.YearStructure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import services.config.ApplicationContext;
 import utils.Constants;
 import utils.Pair;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class YearStructureTest {
 
@@ -50,7 +50,7 @@ class YearStructureTest {
 
     @Test
     void getCurrentWeek() {
-        assertEquals(5, yearStructure.getCurrentWeek());
+        assertEquals(5, yearStructure.getCurrentWeek(ApplicationContext.getCurrentLocalDate()));
     }
 
     @Test

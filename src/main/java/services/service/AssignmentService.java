@@ -18,11 +18,12 @@ public class AssignmentService {
 
     /**
      * stores an assignment in the repository
-     * @param id - id of the assignment - int
-     * @param description - description of the assignment - String
+     *
+     * @param id           - id of the assignment - int
+     * @param description  - description of the assignment - String
      * @param deadlineWeek - deadline week of the assignment - int
      * @return the result of the storing operation - Assignment
-     * @throws ValidationException if the assignment is not valid
+     * @throws ValidationException      if the assignment is not valid
      * @throws IllegalArgumentException if the assignment is null
      */
     public Assignment addAssignment(int id, String description, int deadlineWeek) throws ValidationException, IllegalArgumentException {
@@ -31,15 +32,16 @@ public class AssignmentService {
 
     /**
      * updates an assignment in the repository
-     * @param id - id of the assignment - int
-     * @param description - description of the assignment - String
+     *
+     * @param id           - id of the assignment - int
+     * @param description  - description of the assignment - String
      * @param deadlineWeek - deadline week of the assignment - int
      * @return the result of the updating operation - Assignment
-     * @throws ValidationException if the assignment is not valid
+     * @throws ValidationException      if the assignment is not valid
      * @throws IllegalArgumentException if the assignment is null
      */
-    public Assignment updateAssignment(int id, String description,int startWeek, int deadlineWeek) throws ValidationException, IllegalArgumentException {
-        if(deadlineWeek < ApplicationContext.getYearStructure().getCurrentWeek())
+    public Assignment updateAssignment(int id, String description, int startWeek, int deadlineWeek) throws ValidationException, IllegalArgumentException {
+        if (deadlineWeek < ApplicationContext.getYearStructure().getCurrentWeek(ApplicationContext.getCurrentLocalDate()))
             throw new InvalidAssignmentException("Deadline date cannot precede current date!");
         Assignment assignment = new Assignment(id, description, deadlineWeek);
         assignment.setStartWeek(startWeek);
@@ -48,6 +50,7 @@ public class AssignmentService {
 
     /**
      * finds an assignment in the repository
+     *
      * @param id - the id of the assignment - int
      * @return the result of the search operation - Assignment
      */
@@ -57,6 +60,7 @@ public class AssignmentService {
 
     /**
      * returns all assignments
+     *
      * @return list of all assignments - iterable of assignments
      */
     public Iterable<Assignment> findAllAssignments() {
@@ -65,6 +69,7 @@ public class AssignmentService {
 
     /**
      * deletes an assignment from the repository
+     *
      * @param id - id of the assignment - int
      * @return the result of the deletion operation - Assignment
      */

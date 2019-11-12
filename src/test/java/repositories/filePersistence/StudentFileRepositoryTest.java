@@ -55,37 +55,37 @@ class StudentFileRepositoryTest {
 
     @Test
     void saveBadId() {
-        Student badStudent = new Student("qa4","TestF","TestL",221, "test@gmail.com", "TestCord");
+        Student badStudent = new Student("qa4", "TestF", "TestL", 221, "test@gmail.com", "TestCord");
         assertThrows(InvalidStudentException.class, () -> studentFileRepository.save(badStudent));
     }
 
     @Test
     void saveBadFName() {
-        Student badStudent = new Student("qazx1234","","TestL",221, "test@gmail.com", "TestCord");
+        Student badStudent = new Student("qazx1234", "", "TestL", 221, "test@gmail.com", "TestCord");
         assertThrows(InvalidStudentException.class, () -> studentFileRepository.save(badStudent));
     }
 
     @Test
     void saveBadLName() {
-        Student badStudent = new Student("qazx1234","TestF","",221, "test@gmail.com", "TestCord");
+        Student badStudent = new Student("qazx1234", "TestF", "", 221, "test@gmail.com", "TestCord");
         assertThrows(InvalidStudentException.class, () -> studentFileRepository.save(badStudent));
     }
 
     @Test
     void saveBadGroup() {
-        Student badStudent = new Student("qazx1234","TestF","TestL",4, "test@gmail.com", "TestCord");
+        Student badStudent = new Student("qazx1234", "TestF", "TestL", 4, "test@gmail.com", "TestCord");
         assertThrows(InvalidStudentException.class, () -> studentFileRepository.save(badStudent));
     }
 
     @Test
     void saveBadEmail() {
-        Student badStudent = new Student("qazx1234","TestF","TestL",221, "test", "TestCord");
+        Student badStudent = new Student("qazx1234", "TestF", "TestL", 221, "test", "TestCord");
         assertThrows(InvalidStudentException.class, () -> studentFileRepository.save(badStudent));
     }
 
     @Test
     void saveBadCoord() {
-        Student badStudent = new Student("qazx1234","TestF","TestL",221, "test@gmail.com", "");
+        Student badStudent = new Student("qazx1234", "TestF", "TestL", 221, "test@gmail.com", "");
         assertThrows(InvalidStudentException.class, () -> studentFileRepository.save(badStudent));
     }
 

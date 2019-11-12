@@ -10,8 +10,9 @@ import java.util.Map;
 
 /**
  * Repository for memory data persistence
+ *
  * @param <ID> type of the id of the stored entities
- * @param <E> type of the stored entities
+ * @param <E>  type of the stored entities
  */
 public class InMemoryRepository<ID, E extends Entity<ID>> implements CrudRepository<ID, E> {
     private Map<ID, E> items;
@@ -31,7 +32,7 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements CrudReposit
      */
     @Override
     public E findOne(ID id) throws IllegalArgumentException {
-        if(id == null) {
+        if (id == null) {
             throw new IllegalArgumentException("Id cannot be null!!!");
         }
         return items.get(id);
@@ -54,7 +55,7 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements CrudReposit
      */
     @Override
     public E save(E entity) throws ValidationException, IllegalArgumentException {
-        if(entity == null) {
+        if (entity == null) {
             throw new IllegalArgumentException("Entity cannot be null!!!");
         }
         validator.validate(entity);
@@ -70,30 +71,27 @@ public class InMemoryRepository<ID, E extends Entity<ID>> implements CrudReposit
      */
     @Override
     public E delete(ID id) throws IllegalArgumentException {
-        if(id == null) {
+        if (id == null) {
             throw new IllegalArgumentException("Id cannot be null!!!");
         }
         return items.remove(id);
     }
 
     /**
-     * @param entity
-     *          entity must not be null
-     * @return  oldEntity - the previous version of the entity if the entity is updated,
-     *          otherwise returns null - (e.g id does not exist).
-     * @throws IllegalArgumentException
-     *          if the given entity is null.
-     * @throws ValidationException
-     *          if the entity is not valid.
+     * @param entity entity must not be null
+     * @return oldEntity - the previous version of the entity if the entity is updated,
+     * otherwise returns null - (e.g id does not exist).
+     * @throws IllegalArgumentException if the given entity is null.
+     * @throws ValidationException      if the entity is not valid.
      */
     @Override
     public E update(E entity) throws IllegalArgumentException, ValidationException {
-        if(entity == null){
+        if (entity == null) {
             throw new IllegalArgumentException("Entity cannot be null!!!");
         }
         validator.validate(entity);
         E oldEntity = items.get(entity.getId());
-        if(oldEntity != null){
+        if (oldEntity != null) {
             items.replace(entity.getId(), entity);
         }
         return oldEntity;

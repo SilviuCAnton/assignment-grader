@@ -74,7 +74,7 @@ public class FeedbackDTO {
 
     @Override
     public String toString() {
-        return  "assignmentDescription: " + assignmentDescription + '|' +
+        return "assignmentDescription: " + assignmentDescription + '|' +
                 "feedback: " + feedback + '|' +
                 "grade: " + grade + '|' +
                 "submissionWeek: " + submissionWeek + '|' +

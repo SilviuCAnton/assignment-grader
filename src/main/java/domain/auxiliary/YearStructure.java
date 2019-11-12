@@ -1,7 +1,6 @@
 package domain.auxiliary;
 
 import domain.entities.Entity;
-import services.config.ApplicationContext;
 import utils.Pair;
 
 import java.time.LocalDate;
@@ -11,9 +10,9 @@ import java.time.temporal.ChronoUnit;
  * The year structure at an university
  */
 public class YearStructure extends Entity<Integer> {
-    private  int year;
-    private  SemesterStructure sem1;
-    private  SemesterStructure sem2;
+    private int year;
+    private SemesterStructure sem1;
+    private SemesterStructure sem2;
 
     private static YearStructure instance;
 
@@ -24,13 +23,13 @@ public class YearStructure extends Entity<Integer> {
     }
 
     public static YearStructure getInstance() throws IllegalArgumentException {
-        if(instance == null)
+        if (instance == null)
             throw new IllegalArgumentException("Structura anului nu a fost inca instantiata.");
         return instance;
     }
 
     public static YearStructure getInstance(SemesterStructure sem1, SemesterStructure sem2) {
-        if(instance == null) {
+        if (instance == null) {
             instance = new YearStructure(sem1, sem2);
             return instance;
         }
@@ -42,15 +41,15 @@ public class YearStructure extends Entity<Integer> {
 
     /**
      * returns the current week number in the year structure
+     *
      * @return currentWeekNumber - int
      */
-    public Integer getCurrentWeek() {
-        LocalDate current = ApplicationContext.getCurrentLocalDate();
+    public Integer getCurrentWeek(LocalDate current) {
         int currentWeekNumber;
         SemesterStructure sem;
 
         assert current != null;
-        if(current.isBefore(sem2.getStartDate())){
+        if (current.isBefore(sem2.getStartDate())) {
             sem = sem1;
         } else {
             sem = sem2;
@@ -59,8 +58,8 @@ public class YearStructure extends Entity<Integer> {
         currentWeekNumber = (int) sem.getStartDate().until(current, ChronoUnit.WEEKS) + 1;
 
         Pair<LocalDate, LocalDate> holiday = sem.getHolidayWeeks();
-        if(current.isAfter(holiday.getSecond())){
-            currentWeekNumber -= holiday.getFirst().until(holiday.getSecond(),ChronoUnit.WEEKS) + 1;
+        if (current.isAfter(holiday.getSecond())) {
+            currentWeekNumber -= holiday.getFirst().until(holiday.getSecond(), ChronoUnit.WEEKS) + 1;
         }
 
         return currentWeekNumber;
@@ -68,6 +67,7 @@ public class YearStructure extends Entity<Integer> {
 
     /**
      * returns the year of the year structure
+     *
      * @return year - int
      */
     public int getYear() {
@@ -76,6 +76,7 @@ public class YearStructure extends Entity<Integer> {
 
     /**
      * sets the year of the year structure
+     *
      * @param year - int
      */
     public void setYear(int year) {
@@ -84,6 +85,7 @@ public class YearStructure extends Entity<Integer> {
 
     /**
      * returns the first semester structure
+     *
      * @return sem1 - SemesterStructure
      */
     public SemesterStructure getSem1() {
@@ -92,6 +94,7 @@ public class YearStructure extends Entity<Integer> {
 
     /**
      * sets the first semester structure
+     *
      * @param sem1 SemesterStructure
      */
     public void setSem1(SemesterStructure sem1) {
@@ -100,6 +103,7 @@ public class YearStructure extends Entity<Integer> {
 
     /**
      * returns the second semester structure
+     *
      * @return sem2 - SemesterStructure
      */
     public SemesterStructure getSem2() {
@@ -108,6 +112,7 @@ public class YearStructure extends Entity<Integer> {
 
     /**
      * sets the second semester structure
+     *
      * @param sem2 - SemesterStructure
      */
     public void setSem2(SemesterStructure sem2) {

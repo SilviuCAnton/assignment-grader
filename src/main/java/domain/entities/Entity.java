@@ -2,6 +2,7 @@ package domain.entities;
 
 /**
  * The base entity class
+ *
  * @param <ID> - the type of the entity's id
  */
 public class Entity<ID> {
@@ -9,6 +10,7 @@ public class Entity<ID> {
 
     /**
      * returns the id of the entity
+     *
      * @return id - ID
      */
     public ID getId() {
@@ -17,6 +19,7 @@ public class Entity<ID> {
 
     /**
      * sets the id of the entity
+     *
      * @param id - ID
      */
     public void setId(ID id) {
@@ -25,6 +28,7 @@ public class Entity<ID> {
 
     /**
      * returns the file string representation of the entity
+     *
      * @return fileString - String
      */
     public String toFileString() {

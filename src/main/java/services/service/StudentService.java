@@ -8,6 +8,9 @@ import services.config.ApplicationContext;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service for student operations
@@ -21,6 +24,7 @@ public class StudentService {
 
     /**
      * returns the student repository
+     *
      * @return studentRepo - StudentFileRepository
      */
     public CrudRepository<String, Student> getStudentRepo() {
@@ -29,6 +33,7 @@ public class StudentService {
 
     /**
      * sets the student repository
+     *
      * @param studentRepo - StudentFileRepository
      */
     public void setStudentRepo(StudentFileRepository studentRepo) {
@@ -37,23 +42,24 @@ public class StudentService {
 
     /**
      * saves a student in the repository
-     * @param id - id of the student - String
-     * @param firstName - first name of the student - String
-     * @param lastName - last name of the student - String
-     * @param email - email of the student - String
+     *
+     * @param id          - id of the student - String
+     * @param firstName   - first name of the student - String
+     * @param lastName    - last name of the student - String
+     * @param email       - email of the student - String
      * @param coordinator - coordinator of the student - String
      * @return the result of the storing operation - Student
      * @throws IllegalArgumentException if the student to be stored is null
-     * @throws ValidationException - if the student is not valid
+     * @throws ValidationException      - if the student is not valid
      */
     public Student saveStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
         Student st = studentRepo.save(new Student(id, firstName, lastName, group, email, coordinator));
 
         //Create json file with student id
-        if(st == null) {
+        if (st == null) {
             File file = new File(ApplicationContext.getProperties().getProperty("data.catalog.feedbackPath") + id + ".json");
             try {
-                if(!file.createNewFile()) {
+                if (!file.createNewFile()) {
                     throw new IOException("File could not be created.");
                 }
             } catch (IOException e) {
@@ -66,14 +72,15 @@ public class StudentService {
 
     /**
      * updates a student in the repository
-     * @param id - id of the student - String
-     * @param firstName - first name of the student - String
-     * @param lastName - last name of the student - String
-     * @param email - email of the student - String
+     *
+     * @param id          - id of the student - String
+     * @param firstName   - first name of the student - String
+     * @param lastName    - last name of the student - String
+     * @param email       - email of the student - String
      * @param coordinator - coordinator of the student - String
      * @return the result of the storing operation - Student
      * @throws IllegalArgumentException if the student to be updated is null
-     * @throws ValidationException if the student is not valid
+     * @throws ValidationException      if the student is not valid
      */
     public Student updateStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
         return studentRepo.update(new Student(id, firstName, lastName, group, email, coordinator));
@@ -81,16 +88,18 @@ public class StudentService {
 
     /**
      * finds a student in the repository
+     *
      * @param id - id of the student to be found - int
      * @return the result of searchind the student - Student
      * @throws IllegalArgumentException if the id is null
      */
-    public Student findStudent(String id) throws IllegalArgumentException{
+    public Student findStudent(String id) throws IllegalArgumentException {
         return studentRepo.findOne(id);
     }
 
     /**
      * returns all students
+     *
      * @return student list - iterable of Student
      */
     public Iterable<Student> findAllStudents() {
@@ -99,6 +108,7 @@ public class StudentService {
 
     /**
      * deletes a student from the repository
+     *
      * @param id - id of the student to be deleted - int
      * @return the result of the deletion operation - Student
      * @throws IllegalArgumentException if the id is null
@@ -107,4 +117,17 @@ public class StudentService {
         return studentRepo.delete(id);
     }
 
+    /**
+     * filters students by group
+     *
+     * @param group - the group to filter by - Int
+     * @return result - Iterable of Student
+     */
+    public Iterable<Student> filterStudentsByGroup(int group) {
+        List<Student> students = new ArrayList<>();
+        findAllStudents().forEach(students::add);
+        return students.stream()
+                .filter(x -> x.getGroup() == group)
+                .collect(Collectors.toList());
+    }
 }

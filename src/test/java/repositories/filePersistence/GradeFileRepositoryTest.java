@@ -118,9 +118,9 @@ class GradeFileRepositoryTest {
 
     @Test
     void update() {
-        gradeFileRepository.update(new Grade(st1, as1,6.5f, "newProf"));
-        assertEquals(new Grade(st1,as1,6.5f, "newProf"), gradeFileRepository.findOne(new Pair<>("asir2446", 1)));
-        assertNull(gradeFileRepository.update(new Grade(st1, as2,6.5f, "newProf")));
+        gradeFileRepository.update(new Grade(st1, as1, 6.5f, "newProf"));
+        assertEquals(new Grade(st1, as1, 6.5f, "newProf"), gradeFileRepository.findOne(new Pair<>("asir2446", 1)));
+        assertNull(gradeFileRepository.update(new Grade(st1, as2, 6.5f, "newProf")));
     }
 
     @Test

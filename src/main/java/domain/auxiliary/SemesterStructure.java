@@ -11,9 +11,9 @@ import java.time.LocalDate;
 public class SemesterStructure extends Entity<Integer> {
     private LocalDate startDate;
     private int numberOfWeeks;
-    private Pair<LocalDate,LocalDate> holidayWeeks;
+    private Pair<LocalDate, LocalDate> holidayWeeks;
 
-    public SemesterStructure(int id, LocalDate startDate, int numberOfWeeks, Pair<LocalDate,LocalDate> holidayWeeks) {
+    public SemesterStructure(int id, LocalDate startDate, int numberOfWeeks, Pair<LocalDate, LocalDate> holidayWeeks) {
         this.setId(id);
         this.startDate = startDate;
         this.numberOfWeeks = numberOfWeeks;
@@ -22,6 +22,7 @@ public class SemesterStructure extends Entity<Integer> {
 
     /**
      * returns the start date of the semester
+     *
      * @return startDate - LocalDate
      */
     public LocalDate getStartDate() {
@@ -30,6 +31,7 @@ public class SemesterStructure extends Entity<Integer> {
 
     /**
      * sets the start date of the semester
+     *
      * @param startDate - LocalDate
      */
     public void setStartDate(LocalDate startDate) {
@@ -38,6 +40,7 @@ public class SemesterStructure extends Entity<Integer> {
 
     /**
      * returns the number of weeks of the Semester
+     *
      * @return numberOfWeeks - int
      */
     public int getNumberOfWeeks() {
@@ -46,6 +49,7 @@ public class SemesterStructure extends Entity<Integer> {
 
     /**
      * sets the number of weeks of the semester
+     *
      * @param numberOfWeeks - int
      */
     public void setNumberOfWeeks(int numberOfWeeks) {
@@ -54,6 +58,7 @@ public class SemesterStructure extends Entity<Integer> {
 
     /**
      * returns the holiday weeks as a pair of two dates
+     *
      * @return holidayWeeks - pair of LocalDates - Pair
      */
     public Pair<LocalDate, LocalDate> getHolidayWeeks() {
@@ -62,6 +67,7 @@ public class SemesterStructure extends Entity<Integer> {
 
     /**
      * sets the holiday weeks
+     *
      * @param holidayWeeks - pair of LocalDates - Pair
      */
     public void setHolidayWeeks(Pair<LocalDate, LocalDate> holidayWeeks) {

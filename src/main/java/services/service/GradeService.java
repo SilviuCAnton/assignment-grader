@@ -1,7 +1,10 @@
 package services.service;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonWriter;
 import domain.auxiliary.FeedbackDTO;
 import domain.entities.Assignment;
 import domain.entities.Grade;
@@ -11,16 +14,16 @@ import repositories.GradeRepository;
 import services.config.ApplicationContext;
 import utils.Pair;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service for grade operations
@@ -34,44 +37,45 @@ public class GradeService {
 
     /**
      * stores a grade in the grade repository
-     * @param studentId - the id of the student - String
-     * @param assignmentId - the id of the assignment - int
-     * @param value - the value of the grade - float
-     * @param professor - the professor that gives the grade - String
+     *
+     * @param studentId       - the id of the student - String
+     * @param assignmentId    - the id of the assignment - int
+     * @param value           - the value of the grade - float
+     * @param professor       - the professor that gives the grade - String
      * @param numberWeeksLate - number of weeks late in giving the grade
-     * @param penalty - grade penalty - int
+     * @param penalty         - grade penalty - int
      * @return the result of the storing operation - Grade
      */
     public Grade addGrade(String studentId, int assignmentId, float value, String professor, int numberWeeksLate, int penalty, boolean motivation, String feedback) {
 
         float resultValue;
         Grade g = findGrade(studentId, assignmentId);
-        if(g != null) {
+        if (g != null) {
             throw new InvalidGradeException("A grade already exists given to this student at this assignment.");
         }
 
         penalty -= numberWeeksLate;
-        if(penalty < 0) {
+        if (penalty < 0) {
             penalty = 0;
         }
 
-        if(penalty > 3 || (!motivation && penalty > 2)) {
+        if (penalty > 3 || (!motivation && penalty > 2)) {
             throw new InvalidGradeException("You cannot grade this assignment. The student is more than 2 weeks late.");
         }
 
         Assignment assignment = gradeRepository.getAssignmentRepo().findOne(assignmentId);
         Student student = gradeRepository.getStudentRepo().findOne(studentId);
-        if(student == null) {
+        if (student == null) {
             throw new IllegalArgumentException("The student does not exist.");
         }
 
-        if(assignment == null) {
+        if (assignment == null) {
             throw new IllegalArgumentException("The assignment does not exist.");
         }
 
         resultValue = value - penalty;
 
-        if(resultValue < 1) {
+        if (resultValue < 1) {
             resultValue = 1;
         }
 
@@ -79,33 +83,35 @@ public class GradeService {
         Grade result = gradeRepository.save(grade);
 
         //Adding feedback in json file
-        if(result == null){
-            FeedbackDTO feedbackDTO = new FeedbackDTO(assignment.getDescription(), grade.getValue(), ApplicationContext.getYearStructure().getCurrentWeek(), assignment.getDeadlineWeek(), feedback);
-            Gson gson = new Gson();
+        if (result == null) {
+            FeedbackDTO feedbackDTO = new FeedbackDTO(assignment.getDescription(), grade.getValue(), ApplicationContext.getYearStructure().getCurrentWeek(ApplicationContext.getCurrentLocalDate()), assignment.getDeadlineWeek(), feedback);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
             Path path = Paths.get(ApplicationContext.getProperties().getProperty("data.catalog.feedbackPath") + studentId + ".json");
-            Collection<FeedbackDTO> feedbackDTOList;
-            String jsonString = "";
-            try(BufferedReader br = Files.newBufferedReader(path)) {
-                String jsonStrings = br.readLine();
-                Type targetType = new TypeToken<ArrayList<FeedbackDTO>>() {}.getType();
+            List<FeedbackDTO> feedbackDTOList = null;
+
+            String jsonStrings;
+            try {
+                jsonStrings = Files.lines(path).reduce("", (x, y) -> x + y);
+                Type targetType = new TypeToken<ArrayList<FeedbackDTO>>() {
+                }.getType();
                 feedbackDTOList = gson.fromJson(jsonStrings, targetType);
-                if(feedbackDTOList == null) {
+                if (feedbackDTOList == null) {
                     feedbackDTOList = new ArrayList<>();
                 }
                 feedbackDTOList.add(feedbackDTO);
-                jsonString = gson.toJson(feedbackDTOList);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            try(BufferedWriter bf = Files.newBufferedWriter(path, StandardOpenOption.TRUNCATE_EXISTING)) {
-                try {
-                    bf.write(jsonString);
-                    bf.newLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } catch (IOException e) { e.printStackTrace(); }
+
+            try (BufferedWriter bf = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+                JsonElement tree = gson.toJsonTree(feedbackDTOList);
+                JsonWriter jsonWriter = gson.newJsonWriter(bf);
+                jsonWriter.setLenient(true);
+                gson.toJson(tree, jsonWriter);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return result;
@@ -113,7 +119,8 @@ public class GradeService {
 
     /**
      * removes a grade from the grade repository
-     * @param studentId - id of the student - String
+     *
+     * @param studentId    - id of the student - String
      * @param assignmentId - id of the assignment - int
      * @return result of the deletion operation - Grade
      */
@@ -124,10 +131,11 @@ public class GradeService {
 
     /**
      * updates a grade in the grade repository
-     * @param studentId - the id of the student - String
+     *
+     * @param studentId    - the id of the student - String
      * @param assignmentId - the id of the assignment - int
-     * @param value - the value of the grade
-     * @param professor - the professor giving the grade
+     * @param value        - the value of the grade
+     * @param professor    - the professor giving the grade
      * @return result of update operation - Grade
      */
     public Grade updateGrade(String studentId, int assignmentId, float value, String professor) {
@@ -139,7 +147,8 @@ public class GradeService {
 
     /**
      * finds a grade in the grade repository
-     * @param studentId - id of the student
+     *
+     * @param studentId    - id of the student
      * @param assignmentId - id of the assignment
      * @return grade - Grade
      */
@@ -149,22 +158,77 @@ public class GradeService {
 
     /**
      * returns all grades
+     *
      * @return grades - iterable of Grade
      */
     public Iterable<Grade> getAllGrades() {
         return gradeRepository.findAll();
     }
 
+    /**
+     * returns the grade penalty
+     *
+     * @param assignmentId - the id of the assignment - int
+     * @return penalty - int
+     */
     public int getGradePenalty(int assignmentId) {
         int penalty = 0;
         Assignment assignment = gradeRepository.getAssignmentRepo().findOne(assignmentId);
-        if(assignment == null) {
+        if (assignment == null) {
             throw new IllegalArgumentException("The assignment does not exist.");
         }
-        if(ApplicationContext.getYearStructure().getCurrentWeek() > assignment.getDeadlineWeek()) {
-            penalty = ApplicationContext.getYearStructure().getCurrentWeek() - assignment.getDeadlineWeek();
+        if (ApplicationContext.getYearStructure().getCurrentWeek(ApplicationContext.getCurrentLocalDate()) > assignment.getDeadlineWeek()) {
+            penalty = ApplicationContext.getYearStructure().getCurrentWeek(ApplicationContext.getCurrentLocalDate()) - assignment.getDeadlineWeek();
         }
         return penalty;
+    }
+
+    /**
+     * filters students by submitted assignment
+     *
+     * @param assignmentId - int
+     * @return the filtered students - Iterable of Student
+     */
+    public Iterable<Student> filterStudentsBySubmission(int assignmentId) {
+        List<Grade> grades = new ArrayList<>();
+        getAllGrades().forEach(grades::add);
+        return grades.stream()
+                .filter(x -> x.getAssignment().getId() == assignmentId)
+                .map(Grade::getStudent)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * filters students by submitted assignment and professor
+     *
+     * @param assignmentId - int
+     * @param professor    - String
+     * @return the filtered students - Iterable of Student
+     */
+    public Iterable<Student> filterStudentsBySubmissionAndProfessor(int assignmentId, String professor) {
+        List<Grade> grades = new ArrayList<>();
+        getAllGrades().forEach(grades::add);
+        return grades.stream()
+                .filter(x -> x.getAssignment().getId() == assignmentId)
+                .filter(x -> professor.equals(x.getProfessor()))
+                .map(Grade::getStudent)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * filters grades by submitted assignment and submission week
+     *
+     * @param assignmentId - int
+     * @param weekNumber   - int
+     * @return the filtered grades - Iterable of Grade
+     */
+    public Iterable<Grade> filterGradesByAssignmentAndWeek(int assignmentId, int weekNumber) {
+        List<Grade> grades = new ArrayList<>();
+        getAllGrades().forEach(grades::add);
+        return grades.stream()
+                .filter(x -> x.getAssignment().getId() == assignmentId)
+                .filter(x -> ApplicationContext.getYearStructure().getCurrentWeek(x.getDate()) == weekNumber)
+                .collect(Collectors.toList());
     }
 
 }

@@ -16,6 +16,7 @@ public class StudentXMLRepository extends AbstractXMLRepository<String, Student>
 
     /**
      * parses a student from an XML node
+     *
      * @param node - the node to be parsed
      * @return student - Student
      */
@@ -33,8 +34,9 @@ public class StudentXMLRepository extends AbstractXMLRepository<String, Student>
 
     /**
      * creates a Node element form a student
+     *
      * @param document - the XML document object
-     * @param student - Student
+     * @param student  - Student
      * @return studentXML - the created Node
      */
     @Override

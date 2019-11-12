@@ -29,17 +29,19 @@ import java.nio.file.StandardOpenOption;
 
 /**
  * Abstract repository for XML file persistence
+ *
  * @param <ID> - type of the entities' id
- * @param <E> - type of the entities
+ * @param <E>  - type of the entities
  */
 public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends InMemoryRepository<ID, E> {
     private String fileName;
     private String tagName;
+
     AbstractXMLRepository(Validator<E> validator, String fileName, String tagName, boolean loadData) {
         super(validator);
         this.fileName = fileName;
         this.tagName = tagName;
-        if(loadData) {
+        if (loadData) {
             loadFromXMLFile();
         }
     }
@@ -58,10 +60,14 @@ public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends In
             for (int temp = 0; temp < nodeList.getLength(); temp++) {
                 Node nNode = nodeList.item(temp);
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    E entity = null;
                     try {
-                        E entity = readEntity(nNode);
+                        entity = readEntity(nNode);
+                    } catch (Exception ignored) {
+                    }
+                    if (entity != null) {
                         super.save(entity);
-                    } catch (Exception ignored) {}
+                    }
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -82,7 +88,7 @@ public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends In
             Document document = builder.newDocument();
             Element rootElement = document.createElement(tagName + 's');
             document.appendChild(rootElement);
-            super.findAll().forEach(x->{
+            super.findAll().forEach(x -> {
                 Element element = createElementFromEntity(document, x);
                 rootElement.appendChild(element);
             });
@@ -98,15 +104,16 @@ public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends In
 
     /**
      * saves an entity to the repository
+     *
      * @param entity entity must be not null
      * @return false if entity is saved and the entity if it already exists
-     * @throws ValidationException - if entity is not valid
+     * @throws ValidationException      - if entity is not valid
      * @throws IllegalArgumentException - if entity is null
      */
     @Override
     public E save(E entity) throws ValidationException, IllegalArgumentException {
         E result = super.save(entity);
-        if(result != null)
+        if (result != null)
             return result;
         updateXMLFile();
         return null;
@@ -114,6 +121,7 @@ public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends In
 
     /**
      * deletes entity from repository
+     *
      * @param id * id must be not null
      * @return the deleted entity or null if it does not exist
      * @throws IllegalArgumentException - if entity is null
@@ -121,7 +129,7 @@ public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends In
     @Override
     public E delete(ID id) throws IllegalArgumentException {
         E result = super.delete(id);
-        if(result == null) {
+        if (result == null) {
             return null;
         }
         updateXMLFile();
@@ -130,15 +138,16 @@ public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends In
 
     /**
      * updates an entity in the repository
+     *
      * @param entity - entity must not be null
      * @return the old version of the entity or null if the entity does not exist in the repository
      * @throws IllegalArgumentException - if entity is null
-     * @throws ValidationException - if entity is not valid
+     * @throws ValidationException      - if entity is not valid
      */
     @Override
     public E update(E entity) throws IllegalArgumentException, ValidationException {
         E result = super.update(entity);
-        if(result == null) {
+        if (result == null) {
             return null;
         }
         updateXMLFile();
@@ -147,10 +156,11 @@ public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends In
 
     /**
      * creates a node element
-     * @param doc - xml document object
+     *
+     * @param doc     - xml document object
      * @param element - parent element
-     * @param name - name of node
-     * @param value - value of node
+     * @param name    - name of node
+     * @param value   - value of node
      * @return Node - the resulted node
      */
     static Node createNodeElement(Document doc, Element element, String name, String value) {
@@ -161,6 +171,7 @@ public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends In
 
     /**
      * reads and parses entity from XML file
+     *
      * @param node - the node to be parsed
      * @return E - entity
      */
@@ -168,8 +179,9 @@ public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends In
 
     /**
      * creates a XML node from an entity
+     *
      * @param document - the XML document object
-     * @param entity - E
+     * @param entity   - E
      * @return Element - the resulted Node Element
      */
     abstract Element createElementFromEntity(Document document, E entity);

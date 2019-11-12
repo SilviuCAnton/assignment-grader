@@ -1,6 +1,5 @@
 package domain.entities;
 
-import domain.entities.Assignment;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +14,9 @@ class AssignmentTest {
 
     @BeforeEach
     void setUp() {
-        a1 = new Assignment(1,"tema 1", 6);
-        a2 = new Assignment(2,"tema 2", 5);
-        a3 = new Assignment(1,"tema 1", 6);
+        a1 = new Assignment(1, "tema 1", 6);
+        a2 = new Assignment(2, "tema 2", 5);
+        a3 = new Assignment(1, "tema 1", 6);
     }
 
     @AfterEach

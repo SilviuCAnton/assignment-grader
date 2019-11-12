@@ -33,12 +33,9 @@ public class ApplicationContext {
 
     public static LocalDate getCurrentLocalDate() {
         String scenario = PROPERTIES.getProperty("app.run.scenario");
-        switch (scenario) {
-            case "run":
-                return LocalDate.now();
-            case "test":
-                return LocalDate.parse("30.10.2019", Constants.DATE_TIME_FORMATTER);
+        if ("test".equals(scenario)) {
+            return LocalDate.parse("30.10.2019", Constants.DATE_TIME_FORMATTER);
         }
-        return null;
+        return LocalDate.now();
     }
 }

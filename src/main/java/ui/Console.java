@@ -9,8 +9,8 @@ import services.service.GradeService;
 import services.service.StudentService;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 /**
  * Class for the console user interface.
@@ -28,192 +28,180 @@ public class Console {
     }
 
     public void run() {
-        int option, option2;
+        String option, option2;
+        Scanner scanner = new Scanner(System.in);
+        label:
         while (true) {
             displayMainMenu();
-            BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             try {
-                option = Integer.parseInt(bf.readLine());
-
-                if (option == 1) {
-                    displayStudentMenu();
-                    try {
-                        option2 = Integer.parseInt(bf.readLine());
-                    } catch (IOException ex) {
-                        System.out.println("Option is not valid!");
-                        continue;
-                    }
-                    try {
-                        switch (option2) {
-                            case 1:
-                                addStudentUI();
-                                break;
-                            case 2:
-                                updateStudentUI();
-                                break;
-                            case 3:
-                                findStudentUI();
-                                break;
-                            case 4:
-                                displayAllStudentsUI();
-                                break;
-                            case 5:
-                                deleteStudentUI();
-                                break;
-                            default:
-                                System.out.println("There is no such option.");
-                                break;
+                option = scanner.nextLine();
+                switch (option) {
+                    case "1":
+                        displayStudentMenu();
+                        option2 = scanner.nextLine();
+                        try {
+                            switch (option2) {
+                                case "1":
+                                    addStudentUI(scanner);
+                                    break;
+                                case "2":
+                                    updateStudentUI(scanner);
+                                    break;
+                                case "3":
+                                    findStudentUI(scanner);
+                                    break;
+                                case "4":
+                                    displayAllStudentsUI();
+                                    break;
+                                case "5":
+                                    deleteStudentUI(scanner);
+                                    break;
+                                case "6":
+                                    filterStudentsByGroupUI(scanner);
+                                    break;
+                                default:
+                                    System.out.println("There is no such option.");
+                                    break;
+                            }
+                        } catch (ValidationException ex) {
+                            System.out.println(ex.getMessage());
                         }
-                    } catch (ValidationException ex) {
-                        System.out.println(ex.getMessage());
-                    }
-                } else if (option == 2) {
-                    displayAssignmentMenu();
-                    try {
-                        option2 = Integer.parseInt(bf.readLine());
-                    } catch (IOException ex) {
-                        System.out.println("Option is not valid!");
-                        continue;
-                    }
-                    try {
-                        switch (option2) {
-                            case 1:
-                                addAssignmentUI();
-                                break;
-                            case 2:
-                                updateAssignmentUI();
-                                break;
-                            case 3:
-                                findAssignmentUI();
-                                break;
-                            case 4:
-                                displayAllAssignmentsUI();
-                                break;
-                            case 5:
-                                deleteAssignmentUI();
-                                break;
-                            default:
-                                System.out.println("There is no such option.");
-                                break;
+                        break;
+                    case "2":
+                        displayAssignmentMenu();
+                        option2 = scanner.nextLine();
+                        try {
+                            switch (option2) {
+                                case "1":
+                                    addAssignmentUI(scanner);
+                                    break;
+                                case "2":
+                                    updateAssignmentUI(scanner);
+                                    break;
+                                case "3":
+                                    findAssignmentUI(scanner);
+                                    break;
+                                case "4":
+                                    displayAllAssignmentsUI();
+                                    break;
+                                case "5":
+                                    deleteAssignmentUI(scanner);
+                                    break;
+                                default:
+                                    System.out.println("There is no such option.");
+                                    break;
+                            }
+                        } catch (ValidationException | IllegalArgumentException ex) {
+                            System.out.println(ex.getMessage());
                         }
-                    } catch (ValidationException | IllegalArgumentException ex) {
-                        System.out.println(ex.getMessage());
-                    }
-                } else if(option == 3) {
-                    displayGradeMenu();
-                    try {
-                        option2 = Integer.parseInt(bf.readLine());
-                    } catch (IOException ex) {
-                        System.out.println("Option is not valid!");
-                        continue;
-                    }
-                    try {
-                        switch (option2) {
-                            case 1:
-                                addGradeUI();
-                                break;
-                            case 2:
-                                updateGradeUI();
-                                break;
-                            case 3:
-                                findGradeUI();
-                                break;
-                            case 4:
-                                displayAllGradesUI();
-                                break;
-                            case 5:
-                                deleteGradeUI();
-                                break;
-                            default:
-                                System.out.println("There is no such option.");
-                                break;
+                        break;
+                    case "3":
+                        displayGradeMenu();
+                        option2 = scanner.nextLine();
+                        try {
+                            switch (option2) {
+                                case "1":
+                                    addGradeUI(scanner);
+                                    break;
+                                case "2":
+                                    updateGradeUI(scanner);
+                                    break;
+                                case "3":
+                                    findGradeUI(scanner);
+                                    break;
+                                case "4":
+                                    displayAllGradesUI();
+                                    break;
+                                case "5":
+                                    deleteGradeUI(scanner);
+                                    break;
+                                case "6":
+                                    filterStudentsBySubmissionUI(scanner);
+                                    break;
+                                case "7":
+                                    filterStudentsBySubmissionAndProfessorUI(scanner);
+                                    break;
+                                case "8":
+                                    filterGradesByAssignmentAndWeekUI(scanner);
+                                    break;
+                                default:
+                                    System.out.println("There is no such option.");
+                                    break;
+                            }
+                        } catch (ValidationException | IllegalArgumentException ex) {
+                            System.out.println(ex.getMessage());
                         }
-                    } catch (ValidationException | IllegalArgumentException ex) {
-                        System.out.println(ex.getMessage());
-                    }
-                } else if (option == 0) {
-                    System.out.println("Closing application...");
-                    break;
-                } else {
-                    System.out.println("The option does not exist...");
+                        break;
+                    case "0":
+                        System.out.println("Closing application...");
+                        scanner.close();
+                        break label;
+                    default:
+                        System.out.println("The option does not exist...");
+                        break;
                 }
-            } catch (IOException | NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 System.out.println("Option is not valid!");
             }
         }
     }
 
     //Student operations UI methods ------------------------------------------------------------------------------------------------------------
-    private void addStudentUI() throws ValidationException, IllegalArgumentException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void addStudentUI(Scanner scanner) throws ValidationException, IllegalArgumentException {
         String id, firstName, lastName, email, coordinator;
         int group;
-        try {
-            System.out.println("Id = ");
-            id = bf.readLine();
-            System.out.println("First name = ");
-            firstName = bf.readLine();
-            System.out.println("Last name = ");
-            lastName = bf.readLine();
-            System.out.println("Group = ");
-            group = Integer.parseInt(bf.readLine());
-            System.out.println("Email = ");
-            email = bf.readLine();
-            System.out.println("Coordinator = ");
-            coordinator = bf.readLine();
-            Student st = studentService.saveStudent(id, firstName, lastName, group, email, coordinator);
-            if (st != null) {
-                System.out.println("Student already exists: " + st.toString());
-            } else {
-                System.out.println("The student has been stored.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Id = ");
+        id = scanner.nextLine();
+        System.out.println("First name = ");
+        firstName = scanner.nextLine();
+        System.out.println("Last name = ");
+        lastName = scanner.nextLine();
+        System.out.println("Group = ");
+        group = Integer.parseInt(scanner.nextLine());
+        System.out.println("Email = ");
+        email = scanner.nextLine();
+        System.out.println("Coordinator = ");
+        coordinator = scanner.nextLine();
+        Student st = studentService.saveStudent(id, firstName, lastName, group, email, coordinator);
+        if (st != null) {
+            System.out.println("Student already exists: " + st.toString());
+        } else {
+            System.out.println("The student has been stored.");
         }
     }
 
-    private void updateStudentUI() throws ValidationException, IllegalArgumentException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void updateStudentUI(Scanner scanner) throws ValidationException, IllegalArgumentException {
         String id, firstName, lastName, email, coordinator;
         int group;
-        try {
-            System.out.println("Id = ");
-            id = bf.readLine();
-            System.out.println("First name = ");
-            firstName = bf.readLine();
-            System.out.println("Last name = ");
-            lastName = bf.readLine();
-            System.out.println("Group = ");
-            group = Integer.parseInt(bf.readLine());
-            System.out.println("Email = ");
-            email = bf.readLine();
-            System.out.println("Coordinator = ");
-            coordinator = bf.readLine();
-            Student st = studentService.updateStudent(id, firstName, lastName, group, email, coordinator);
-            if (st != null) {
-                System.out.println("The student " + st.getFirstName() + ' ' + st.getLastName() + " has been updated.");
-            } else {
-                System.out.println("The student with the given id does not exist.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Id = ");
+        id = scanner.nextLine();
+        System.out.println("First name = ");
+        firstName = scanner.nextLine();
+        System.out.println("Last name = ");
+        lastName = scanner.nextLine();
+        System.out.println("Group = ");
+        group = Integer.parseInt(scanner.nextLine());
+        System.out.println("Email = ");
+        email = scanner.nextLine();
+        System.out.println("Coordinator = ");
+        coordinator = scanner.nextLine();
+        Student st = studentService.updateStudent(id, firstName, lastName, group, email, coordinator);
+        if (st != null) {
+            System.out.println("The student " + st.getFirstName() + ' ' + st.getLastName() + " has been updated.");
+        } else {
+            System.out.println("The student with the given id does not exist.");
         }
     }
 
-    private void findStudentUI() throws IllegalArgumentException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void findStudentUI(Scanner scanner) throws IllegalArgumentException {
         String id;
-        try {
-            System.out.println("Id = ");
-            id = bf.readLine();
-            Student st = studentService.findStudent(id);
-            if (st != null) {
-                System.out.println(st.toString());
-            } else {
-                System.out.println("The student with the given id does not exist.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Id = ");
+        id = scanner.nextLine();
+        Student st = studentService.findStudent(id);
+        if (st != null) {
+            System.out.println(st.toString());
+        } else {
+            System.out.println("The student with the given id does not exist.");
         }
     }
 
@@ -221,84 +209,71 @@ public class Console {
         studentService.findAllStudents().forEach(System.out::println);
     }
 
-    private void deleteStudentUI() throws IllegalArgumentException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void deleteStudentUI(Scanner scanner) throws IllegalArgumentException {
         String id;
-        try {
-            System.out.println("Id = ");
-            id = bf.readLine();
-            Student st = studentService.deleteStudent(id);
-            if (st != null) {
-                System.out.println(st.getFirstName() + " " + st.getLastName() + " has been removed.");
-            } else {
-                System.out.println("The student with the given id does not exist.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Id = ");
+        id = scanner.nextLine();
+        Student st = studentService.deleteStudent(id);
+        if (st != null) {
+            System.out.println(st.getFirstName() + " " + st.getLastName() + " has been removed.");
+        } else {
+            System.out.println("The student with the given id does not exist.");
         }
+    }
+
+    private void filterStudentsByGroupUI(Scanner scanner) {
+        int group;
+        System.out.println("Group = ");
+        group = Integer.parseInt(scanner.nextLine());
+        studentService.filterStudentsByGroup(group).forEach(System.out::println);
     }
 
     //Assignment operations UI methods --------------------------------------------------------------------------------------------
-    private void addAssignmentUI() throws ValidationException, IllegalArgumentException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void addAssignmentUI(Scanner scanner) throws ValidationException, IllegalArgumentException {
         int id, deadlineWeek;
         String description;
-        try {
-            System.out.println("Id = ");
-            id = Integer.parseInt(bf.readLine());
-            System.out.println("Description = ");
-            description = bf.readLine();
-            System.out.println("Deadline week = ");
-            deadlineWeek = Integer.parseInt(bf.readLine());
-            Assignment assignment = assignmentService.addAssignment(id, description, deadlineWeek);
-            if (assignment != null) {
-                System.out.println("Assignment already exists: " + assignment.toString());
-            } else {
-                System.out.println("The assignment has been stored.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Id = ");
+        id = Integer.parseInt(scanner.nextLine());
+        System.out.println("Description = ");
+        description = scanner.nextLine();
+        System.out.println("Deadline week = ");
+        deadlineWeek = Integer.parseInt(scanner.nextLine());
+        Assignment assignment = assignmentService.addAssignment(id, description, deadlineWeek);
+        if (assignment != null) {
+            System.out.println("Assignment already exists: " + assignment.toString());
+        } else {
+            System.out.println("The assignment has been stored.");
         }
     }
 
-    private void updateAssignmentUI() throws ValidationException {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void updateAssignmentUI(Scanner scanner) throws ValidationException {
         int id, deadlineWeek, startWeek;
         String description;
-        try {
-            System.out.println("Id = ");
-            id = Integer.parseInt(bf.readLine());
-            System.out.println("Description = ");
-            description = bf.readLine();
-            System.out.println("Start week = ");
-            startWeek = Integer.parseInt(bf.readLine());
-            System.out.println("Deadline week = ");
-            deadlineWeek = Integer.parseInt(bf.readLine());
-            Assignment assignment = assignmentService.updateAssignment(id, description, startWeek, deadlineWeek);
-            if (assignment != null) {
-                System.out.println("The assignment " + assignment.getDescription() + " has been updated.");
-            } else {
-                System.out.println("The assignment with the given id does not exist.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Id = ");
+        id = Integer.parseInt(scanner.nextLine());
+        System.out.println("Description = ");
+        description = scanner.nextLine();
+        System.out.println("Start week = ");
+        startWeek = Integer.parseInt(scanner.nextLine());
+        System.out.println("Deadline week = ");
+        deadlineWeek = Integer.parseInt(scanner.nextLine());
+        Assignment assignment = assignmentService.updateAssignment(id, description, startWeek, deadlineWeek);
+        if (assignment != null) {
+            System.out.println("The assignment " + assignment.getDescription() + " has been updated.");
+        } else {
+            System.out.println("The assignment with the given id does not exist.");
         }
     }
 
-    private void findAssignmentUI() {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void findAssignmentUI(Scanner scanner) {
         int id;
-        try {
-            System.out.println("Id = ");
-            id = Integer.parseInt(bf.readLine());
-            Assignment assignment = assignmentService.findAssignment(id);
-            if (assignment != null) {
-                System.out.println(assignment.toString());
-            } else {
-                System.out.println("The assignment with the given id does not exist.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Id = ");
+        id = Integer.parseInt(scanner.nextLine());
+        Assignment assignment = assignmentService.findAssignment(id);
+        if (assignment != null) {
+            System.out.println(assignment.toString());
+        } else {
+            System.out.println("The assignment with the given id does not exist.");
         }
     }
 
@@ -306,136 +281,140 @@ public class Console {
         assignmentService.findAllAssignments().forEach(System.out::println);
     }
 
-    private void deleteAssignmentUI() {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void deleteAssignmentUI(Scanner scanner) {
         int id;
-        try {
-            System.out.println("Id = ");
-            id = Integer.parseInt(bf.readLine());
-            Assignment assignment = assignmentService.deleteAssignment(id);
-            if (assignment != null) {
-                System.out.println(assignment.getDescription() + " has been removed.");
-            } else {
-                System.out.println("The assignment with the given id does not exist.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Id = ");
+        id = Integer.parseInt(scanner.nextLine());
+        Assignment assignment = assignmentService.deleteAssignment(id);
+        if (assignment != null) {
+            System.out.println(assignment.getDescription() + " has been removed.");
+        } else {
+            System.out.println("The assignment with the given id does not exist.");
         }
     }
 
     //Grade operations UI methods -----------------------------------------------------------------------------------------------------
-    private void addGradeUI() {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void addGradeUI(Scanner scanner) {
         String studentId, professor, feedback;
         int assignmentId, nOfWeeksLate = 0, penalty;
         float value;
         boolean motivation = false;
-        try{
-            System.out.println("Student id = ");
-            studentId = bf.readLine();
-            System.out.println("Assignment id = ");
-            assignmentId = Integer.parseInt(bf.readLine());
-            System.out.println("Professor name = ");
-            professor = bf.readLine();
+        System.out.println("Student id = ");
+        studentId = scanner.nextLine();
+        System.out.println("Assignment id = ");
+        assignmentId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Professor name = ");
+        professor = scanner.nextLine();
 
-            penalty = gradeService.getGradePenalty(assignmentId);
-            if(penalty > 0) {
-                System.out.println("The deadline has passed! A penalty was applied. Max grade: " + (10 - penalty));
-                System.out.println("Are you late in giving the grade? Weeks late: ");
-                nOfWeeksLate = Integer.parseInt(bf.readLine());
+        penalty = gradeService.getGradePenalty(assignmentId);
+        if (penalty > 0) {
+            System.out.println("The deadline has passed! A penalty was applied. Max grade: " + (10 - penalty));
+            System.out.println("Are you late in giving the grade? Weeks late: ");
+            nOfWeeksLate = Integer.parseInt(scanner.nextLine());
+        }
+
+        if (penalty - nOfWeeksLate > 2) {
+            System.out.println("The student is more than 2 weeks late. Does he have a motivation? (y/n)");
+            if (scanner.nextLine().equals("y")) {
+                motivation = true;
             }
+        }
 
-            if(penalty - nOfWeeksLate > 2) {
-                System.out.println("The student is more than 2 weeks late. Does he have a motivation? (y/n)");
-                if(bf.readLine().equals("y")) {
-                    motivation = true;
-                }
-            }
+        System.out.println("Grade = ");
+        value = Float.parseFloat(scanner.nextLine());
 
-            System.out.println("Grade = ");
-            value = Float.parseFloat(bf.readLine());
+        System.out.println("Feedback = ");
+        feedback = scanner.nextLine();
 
-            System.out.println("Feedback = ");
-            feedback = bf.readLine();
-
-            Grade grade = gradeService.addGrade(studentId, assignmentId, value, professor, nOfWeeksLate, penalty, motivation, feedback);
-            if (grade != null) {
-                System.out.println("Grade already exists: " + grade.toString());
-            } else {
-                System.out.println("The grade has been stored.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        Grade grade = gradeService.addGrade(studentId, assignmentId, value, professor, nOfWeeksLate, penalty, motivation, feedback);
+        if (grade != null) {
+            System.out.println("Grade already exists: " + grade.toString());
+        } else {
+            System.out.println("The grade has been stored.");
         }
     }
 
-    private void updateGradeUI() {
+    private void updateGradeUI(Scanner scanner) {
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String studentId, professor;
         int assignmentId;
         float value;
-        try {
-            System.out.println("Student id = ");
-            studentId = bf.readLine();
-            System.out.println("Assignment id = ");
-            assignmentId = Integer.parseInt(bf.readLine());
-            System.out.println("Value = ");
-            value = Float.parseFloat(bf.readLine());
-            System.out.println("Professor name = ");
-            professor = bf.readLine();
-            Grade grade = gradeService.updateGrade(studentId, assignmentId, value, professor);
-            if (grade != null) {
-                System.out.println("The grade " + grade.getId() + " has been updated.");
-            } else {
-                System.out.println("The grade with the given id does not exist.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Student id = ");
+        studentId = scanner.nextLine();
+        System.out.println("Assignment id = ");
+        assignmentId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Value = ");
+        value = Float.parseFloat(scanner.nextLine());
+        System.out.println("Professor name = ");
+        professor = scanner.nextLine();
+        Grade grade = gradeService.updateGrade(studentId, assignmentId, value, professor);
+        if (grade != null) {
+            System.out.println("The grade " + grade.getId() + " has been updated.");
+        } else {
+            System.out.println("The grade with the given id does not exist.");
         }
     }
 
-    private void findGradeUI() {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void findGradeUI(Scanner scanner) {
         String studentId;
         int assignmentId;
-        try{
-            System.out.println("Student id: ");
-            studentId = bf.readLine();
-            System.out.println("Assignment id: ");
-            assignmentId = Integer.parseInt(bf.readLine());
-            Grade grade = gradeService.findGrade(studentId, assignmentId);
-            if (grade != null) {
-                System.out.println(grade.toString());
-            } else {
-                System.out.println("The grade with the given id does not exist.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Student id: ");
+        studentId = scanner.nextLine();
+        System.out.println("Assignment id: ");
+        assignmentId = Integer.parseInt(scanner.nextLine());
+        Grade grade = gradeService.findGrade(studentId, assignmentId);
+        if (grade != null) {
+            System.out.println(grade.toString());
+        } else {
+            System.out.println("The grade with the given id does not exist.");
         }
+
     }
 
     private void displayAllGradesUI() {
         gradeService.getAllGrades().forEach(System.out::println);
     }
 
-    private void deleteGradeUI() {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+    private void deleteGradeUI(Scanner scanner) {
         String studentId;
         int assignmentId;
-        try {
-            System.out.println("Student id = ");
-            studentId = bf.readLine();
-            System.out.println("Assignment id = ");
-            assignmentId = Integer.parseInt(bf.readLine());
-            Grade grade = gradeService.removeGrade(studentId, assignmentId);
-            if (grade != null) {
-                System.out.println(grade.getId() + " has been removed.");
-            } else {
-                System.out.println("The grade with the given id does not exist.");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        System.out.println("Student id = ");
+        studentId = scanner.nextLine();
+        System.out.println("Assignment id = ");
+        assignmentId = Integer.parseInt(scanner.nextLine());
+        Grade grade = gradeService.removeGrade(studentId, assignmentId);
+        if (grade != null) {
+            System.out.println(grade.getId() + " has been removed.");
+        } else {
+            System.out.println("The grade with the given id does not exist.");
         }
+    }
+
+    private void filterStudentsBySubmissionUI(Scanner scanner) {
+        int assignmentId;
+        System.out.println("Assignment id = ");
+        assignmentId = Integer.parseInt(scanner.nextLine());
+        gradeService.filterStudentsBySubmission(assignmentId).forEach(System.out::println);
+    }
+
+    private void filterStudentsBySubmissionAndProfessorUI(Scanner scanner) {
+        int assignmentId;
+        String professor;
+        System.out.println("Assignment id = ");
+        assignmentId = Integer.parseInt(scanner.nextLine());
+        System.out.println("Professor = ");
+        professor = scanner.nextLine();
+        gradeService.filterStudentsBySubmissionAndProfessor(assignmentId, professor).forEach(System.out::println);
+    }
+
+    private void filterGradesByAssignmentAndWeekUI(Scanner scanner) {
+        int assignmentId;
+        int week;
+        System.out.println("Assignment id = ");
+        assignmentId = Integer.parseInt(scanner.nextLine());
+        System.out.println("week = ");
+        week = Integer.parseInt(scanner.nextLine());
+        gradeService.filterGradesByAssignmentAndWeek(assignmentId, week).forEach(System.out::println);
     }
 
     //Menu display methods -----------------------------------------------------------------------------------------------------------
@@ -446,6 +425,7 @@ public class Console {
         System.out.println("3. Find a student");
         System.out.println("4. Display all students");
         System.out.println("5. Delete a student");
+        System.out.println("6. Filter students by group");
         System.out.println("Option: ");
     }
 
@@ -466,6 +446,9 @@ public class Console {
         System.out.println("3. Find a grade");
         System.out.println("4. Display all grades");
         System.out.println("5. Delete a grade");
+        System.out.println("6. Show all students with submitted assignment");
+        System.out.println("7. Show all students with submitted assignment to a professor");
+        System.out.println("8. Show all grades given to an assignment in a given week");
         System.out.println("Option: ");
     }
 

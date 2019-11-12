@@ -5,8 +5,9 @@ import exceptions.ValidationException;
 
 /**
  * CRUD operations repository interface
+ *
  * @param <ID> - type E must have an attribute of type ID
- * @param <E> - type of entities saved in repository
+ * @param <E>  - type of entities saved in repository
  */
 public interface CrudRepository<ID, E extends Entity<ID>> {
     /**
@@ -42,14 +43,11 @@ public interface CrudRepository<ID, E extends Entity<ID>> {
     E delete(ID id);
 
     /**
-     * @param entity
-     *          entity must not be null
+     * @param entity entity must not be null
      * @return null - if the entity is updated,
-     *          otherwise returns the entity - (e.g id does not exist).
-     * @throws IllegalArgumentException
-     *          if the given entity is null.
-     * @throws ValidationException
-     *          if the entity is not valid.
+     * otherwise returns the entity - (e.g id does not exist).
+     * @throws IllegalArgumentException if the given entity is null.
+     * @throws ValidationException      if the entity is not valid.
      */
     E update(E entity);
 }

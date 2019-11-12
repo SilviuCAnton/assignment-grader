@@ -14,7 +14,7 @@ import java.time.LocalDate;
 /**
  * Repository for grades - file data persistence
  */
-public class GradeFileRepository extends AbstractFileRepository<Pair<String,Integer>, Grade> implements GradeRepository {
+public class GradeFileRepository extends AbstractFileRepository<Pair<String, Integer>, Grade> implements GradeRepository {
     private CrudRepository<String, Student> studentRepo;
     private CrudRepository<Integer, Assignment> assignmentRepo;
 
@@ -22,11 +22,12 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String,Inte
         super(validator, fileName, false);
         this.studentRepo = studentRepo;
         this.assignmentRepo = assignmentRepo;
-        loadDataFromFile();
+        super.loadDataFromFile();
     }
 
     /**
      * parses a grade from a file string
+     *
      * @param lineToParse - the grade to be parsed - String
      * @return grade - Grade
      */
@@ -39,8 +40,10 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String,Inte
         grade.setDate(LocalDate.parse(args[2], Constants.DATE_TIME_FORMATTER));
         return grade;
     }
+
     /**
      * returns the student repository
+     *
      * @return studentRepo - Student Crud Repository
      */
     @Override
@@ -50,6 +53,7 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String,Inte
 
     /**
      * sets the student repository
+     *
      * @param studentRepo - Student Crud Repository
      */
     public void setStudentRepo(CrudRepository<String, Student> studentRepo) {
@@ -58,6 +62,7 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String,Inte
 
     /**
      * returns the assignment repository
+     *
      * @return assignmentRepo - Assignment Crud Repository
      */
     @Override
@@ -67,6 +72,7 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String,Inte
 
     /**
      * sets the assignment repository
+     *
      * @param assignmentRepo - Assignment Crud Repository
      */
     public void setAssignmentRepo(CrudRepository<Integer, Assignment> assignmentRepo) {
