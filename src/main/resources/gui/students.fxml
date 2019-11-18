@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="563.0"
+            prefWidth="1102.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.StudentCrudController">
+    <Pane prefHeight="139.0" prefWidth="1102.0" style="-fx-background-color: #2D75E8;" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Label layoutX="73.0" layoutY="30.0" text="Students" textFill="WHITE">
+            <font>
+                <Font size="48.0"/>
+            </font>
+        </Label>
+        <Label layoutX="79.0" layoutY="91.0" text="Assignment Grader " textFill="WHITE">
+            <font>
+                <Font size="13.0"/>
+            </font>
+        </Label>
+    </Pane>
+    <TableView layoutX="20.0" layoutY="192.0" prefHeight="349.0" prefWidth="1066.0" fx:id="studentTable"
+               stylesheets="@../stylesheets/main.css" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20.0"
+               AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="192.0">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+        <columns>
+            <TableColumn prefWidth="75.0" text="Student Id" fx:id="studentIdCol"/>
+            <TableColumn prefWidth="75.0" text="First Name" fx:id="studentFirstNameCol"/>
+            <TableColumn prefWidth="75.0" text="Last Name" fx:id="studentLastNameCol"/>
+            <TableColumn prefWidth="75.0" text="Group" fx:id="studentGroupCol"/>
+            <TableColumn prefWidth="75.0" text="Email" fx:id="studentEmailCol"/>
+            <TableColumn prefWidth="100.0" text="Coordinator" fx:id="studentCoordinatorCol"/>
+        </columns>
+    </TableView>
+
+    <GridPane fx:id="operationsPane" visible="false" hgap="3" vgap="3" prefWidth="1066.0" prefHeight="100"
+              AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="16.0">
+        <TextField fx:id="idTextField" style="-fx-border-color: #2D75E8;" prefWidth="75.0"
+                   GridPane.columnIndex="0"/>
+        <TextField fx:id="fNameTextField" style="-fx-border-color: #2D75E8;" prefWidth="75.0"
+                   GridPane.columnIndex="1"/>
+        <TextField fx:id="lNameTextField" style="-fx-border-color: #2D75E8;" prefWidth="75.0"
+                   GridPane.columnIndex="2"/>
+        <TextField fx:id="groupTextField" style="-fx-border-color: #2D75E8;" prefWidth="75.0"
+                   GridPane.columnIndex="3"/>
+        <TextField fx:id="emailTextField" style="-fx-border-color: #2D75E8;" prefWidth="75.0"
+                   GridPane.columnIndex="4"/>
+        <TextField fx:id="coordinatorTextField" style="-fx-border-color: #2D75E8;" prefWidth="75.0"
+                   GridPane.columnIndex="5"/>
+
+        <Label text="Id" prefWidth="75.0" GridPane.columnIndex="0" GridPane.rowIndex="1" alignment="CENTER"/>
+        <Label text="First Name" prefWidth="75.0" GridPane.columnIndex="1" GridPane.rowIndex="1"
+               alignment="CENTER"/>
+        <Label text="Last Name" prefWidth="75.0" GridPane.columnIndex="2" GridPane.rowIndex="1" alignment="CENTER"/>
+        <Label text="Group" prefWidth="75.0" GridPane.columnIndex="3" GridPane.rowIndex="1" alignment="CENTER"/>
+        <Label text="Email" prefWidth="75.0" GridPane.columnIndex="4" GridPane.rowIndex="1" alignment="CENTER"/>
+        <Label text="Coordinator" prefWidth="75.0" GridPane.columnIndex="5" GridPane.rowIndex="1"
+               alignment="CENTER"/>
+
+        <Button fx:id="submitButton" onAction="#handleSubmitButton" GridPane.rowIndex="2" GridPane.columnIndex="3"
+                GridPane.columnSpan="2" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false"
+                layoutX="350" style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="120.0"
+                stylesheets="@../stylesheets/main.css"/>
+        <Button text="Cancel" onAction="#handleCancelButton" GridPane.rowIndex="2" GridPane.columnIndex="1"
+                GridPane.columnSpan="2" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false"
+                layoutX="350" style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="120.0"
+                stylesheets="@../stylesheets/main.css"/>
+
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
+        </columnConstraints>
+
+        <rowConstraints>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER" vgrow="ALWAYS"/>
+        </rowConstraints>
+    </GridPane>
+    <Pane layoutX="20.0" layoutY="159.0" prefHeight="33.0" prefWidth="322.0">
+        <TextField fx:id="searchField" prefHeight="25.0" prefWidth="322.0" style="-fx-border-color: #2D75E8;"/>
+        <FontAwesomeIconView fill="#2d75e8" glyphName="SEARCH" layoutX="302.0" layoutY="18.0"/>
+        <Button fx:id="addStudentButton" onAction="#handleButtonsClick" text="Add Student" contentDisplay="TOP"
+                mnemonicParsing="false" layoutX="350" style="-fx-border-color: #2D75E8" prefHeight="25.0"
+                prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
+        <Button fx:id="updateStudentButton" onAction="#handleButtonsClick" text="Update Student"
+                contentDisplay="TOP" mnemonicParsing="false" layoutX="475" style="-fx-border-color: #2D75E8"
+                prefHeight="25.0" prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
+        <Button fx:id="removeStudentButton" onAction="#handleButtonsClick" text="Remove Student"
+                contentDisplay="TOP" mnemonicParsing="false" layoutX="600" style="-fx-border-color: #2D75E8"
+                prefHeight="25.0" prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
+        <Label fx:id="operationResultLabel" style="-fx-text-fill: green" layoutX="750" prefHeight="25.0"/>
+    </Pane>
+</AnchorPane>

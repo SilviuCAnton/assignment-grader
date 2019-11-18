@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <students>
+    <student id="aaaa1234">
+        <firstName>StudentA</firstName>
+        <lastName>LastA</lastName>
+        <group>222</group>
+        <email>sta@gmail.com</email>
+        <coordinator>CoordA</coordinator>
+    </student>
     <student id="acir2447">
         <firstName>Claudiu</firstName>
         <lastName>Apetroaei</lastName>
@@ -12,6 +19,13 @@
         <lastName>Anton</lastName>
         <group>221</group>
         <email>silviu.c.anton@gmail.com</email>
+        <coordinator>Camelia Serban</coordinator>
+    </student>
+    <student id="bpir2457">
+        <firstName>Paul</firstName>
+        <lastName>Beltechi</lastName>
+        <group>222</group>
+        <email>pbeltechi@gmail.com</email>
         <coordinator>Camelia Serban</coordinator>
     </student>
 </students>

@@ -162,7 +162,7 @@ public class Console {
         email = scanner.nextLine();
         System.out.println("Coordinator = ");
         coordinator = scanner.nextLine();
-        Student st = studentService.saveStudent(id, firstName, lastName, group, email, coordinator);
+        Student st = studentService.saveStudent(new Student(id, firstName, lastName, group, email, coordinator));
         if (st != null) {
             System.out.println("Student already exists: " + st.toString());
         } else {
@@ -185,7 +185,7 @@ public class Console {
         email = scanner.nextLine();
         System.out.println("Coordinator = ");
         coordinator = scanner.nextLine();
-        Student st = studentService.updateStudent(id, firstName, lastName, group, email, coordinator);
+        Student st = studentService.updateStudent(new Student(id, firstName, lastName, group, email, coordinator));
         if (st != null) {
             System.out.println("The student " + st.getFirstName() + ' ' + st.getLastName() + " has been updated.");
         } else {

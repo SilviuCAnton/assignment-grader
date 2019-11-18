@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
 group 'com.silviucanton'
@@ -9,15 +11,28 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url  "https://dl.bintray.com/jerady/maven"
+    }
 }
 
 dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+    implementation "de.jensd:fontawesomefx-fontawesome:4.7.0-11"
+    compile 'de.jensd:fontawesomefx-commons:11.0'
+
     implementation 'com.google.code.gson:gson:2.8.6'
     compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
+
+    compile 'io.github.typhon0:AnimateFX:1.2.1'
 }
 
 test {
     useJUnitPlatform()
+}
+
+javafx {
+    version = "13"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }

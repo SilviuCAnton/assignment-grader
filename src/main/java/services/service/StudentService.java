@@ -43,21 +43,17 @@ public class StudentService {
     /**
      * saves a student in the repository
      *
-     * @param id          - id of the student - String
-     * @param firstName   - first name of the student - String
-     * @param lastName    - last name of the student - String
-     * @param email       - email of the student - String
-     * @param coordinator - coordinator of the student - String
+     * @param student - the student to be saved - Student
      * @return the result of the storing operation - Student
      * @throws IllegalArgumentException if the student to be stored is null
      * @throws ValidationException      - if the student is not valid
      */
-    public Student saveStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
-        Student st = studentRepo.save(new Student(id, firstName, lastName, group, email, coordinator));
+    public Student saveStudent(Student student) throws IllegalArgumentException, ValidationException {
+        Student st = studentRepo.save(student);
 
         //Create json file with student id
         if (st == null) {
-            File file = new File(ApplicationContext.getProperties().getProperty("data.catalog.feedbackPath") + id + ".json");
+            File file = new File(ApplicationContext.getProperties().getProperty("data.catalog.feedbackPath") + student.getId() + ".json");
             try {
                 if (!file.createNewFile()) {
                     throw new IOException("File could not be created.");
@@ -73,17 +69,12 @@ public class StudentService {
     /**
      * updates a student in the repository
      *
-     * @param id          - id of the student - String
-     * @param firstName   - first name of the student - String
-     * @param lastName    - last name of the student - String
-     * @param email       - email of the student - String
-     * @param coordinator - coordinator of the student - String
-     * @return the result of the storing operation - Student
+     * @param student - the student to be updated - Student
      * @throws IllegalArgumentException if the student to be updated is null
      * @throws ValidationException      if the student is not valid
      */
-    public Student updateStudent(String id, String firstName, String lastName, int group, String email, String coordinator) throws IllegalArgumentException, ValidationException {
-        return studentRepo.update(new Student(id, firstName, lastName, group, email, coordinator));
+    public Student updateStudent(Student student) throws IllegalArgumentException, ValidationException {
+        return studentRepo.update(student);
     }
 
     /**
