@@ -61,10 +61,11 @@ class GradeServiceTest {
         List<Student> students = new ArrayList<>();
         gradeService.filterStudentsBySubmission(1).forEach(students::add);
         assertEquals(2, students.size());
-        students = new ArrayList<>();
-        gradeService.filterStudentsBySubmission(2).forEach(students::add);
-        assertEquals(1, students.size());
-        students = new ArrayList<>();
+    }
+
+    @Test
+    void filterStudentsBySubmissionNoResult() {
+        List<Student> students = new ArrayList<>();
         gradeService.filterStudentsBySubmission(4).forEach(students::add);
         assertEquals(0, students.size());
     }
@@ -74,12 +75,13 @@ class GradeServiceTest {
         List<Student> students = new ArrayList<>();
         gradeService.filterStudentsBySubmissionAndProfessor(1, "Silviu").forEach(students::add);
         assertEquals(2, students.size());
-        students = new ArrayList<>();
+    }
+
+    @Test
+    void filterStudentsBySubmissionAndProfessorNoResult() {
+        List<Student> students = new ArrayList<>();
         gradeService.filterStudentsBySubmissionAndProfessor(2, "Dana").forEach(students::add);
         assertEquals(0, students.size());
-        students = new ArrayList<>();
-        gradeService.filterStudentsBySubmissionAndProfessor(2, "Silviu").forEach(students::add);
-        assertEquals(1, students.size());
     }
 
     @Test
@@ -87,10 +89,11 @@ class GradeServiceTest {
         List<Grade> grades = new ArrayList<>();
         gradeService.filterGradesByAssignmentAndWeek(1,5).forEach(grades::add);
         assertEquals(2, grades.size());
-        grades = new ArrayList<>();
-        gradeService.filterGradesByAssignmentAndWeek(3,2).forEach(grades::add);
-        assertEquals(1, grades.size());
-        grades = new ArrayList<>();
+    }
+
+    @Test
+    void filterGradesByAssignmentAndWeekNoResult() {
+        List<Grade> grades = new ArrayList<>();
         gradeService.filterGradesByAssignmentAndWeek(1,8).forEach(grades::add);
         assertEquals(0, grades.size());
     }

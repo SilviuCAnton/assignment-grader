@@ -1,38 +1,37 @@
 package controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import services.config.ApplicationContext;
 import services.service.AssignmentService;
 import services.service.GradeService;
+import services.service.Service;
 import services.service.StudentService;
 
 import java.io.IOException;
 
-public class HomeController {
+public class HomeController implements ServiceController {
 
     private StudentService studentService;
     private AssignmentService assignmentService;
     private GradeService gradeService;
 
-
-
     @FXML
-    private Button btnStudents;
+    private Button btnStudents, btnAssignments;
 
 
     @FXML
     private void handleButtonClicks(javafx.event.ActionEvent mouseEvent) {
 
         if (mouseEvent.getSource() == btnStudents) {
-            loadStage("/gui/students.fxml");
+            loadStage(ApplicationContext.getProperties().getProperty("model.view.students"), studentService);
+        } else if(mouseEvent.getSource() == btnAssignments) {
+            loadStage(ApplicationContext.getProperties().getProperty("model.view.assignments"), assignmentService);
         }
 
     }
@@ -49,13 +48,13 @@ public class HomeController {
         this.gradeService = gradeService;
     }
 
-    private void loadStage(String fxml) {
+    private void loadStage(String fxml, Service service) {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource(fxml));
             Parent root = loader.load();
-            StudentCrudController controller = loader.getController();
-            controller.initialize(studentService);
+            ServiceController controller =  loader.getController();
+            controller.initialize(service);
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             //stage.getIcons().add(new Image("/home/icons/icon.png"));

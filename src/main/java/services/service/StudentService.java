@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Service for student operations
  */
-public class StudentService {
+public class StudentService implements Service {
     private CrudRepository<String, Student> studentRepo;
 
     public StudentService(CrudRepository<String, Student> studentRepo) {

@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  * Service for grade operations
  */
-public class GradeService {
+public class GradeService implements Service {
     private GradeRepository gradeRepository;
 
     public GradeService(GradeRepository gradeRepository) {

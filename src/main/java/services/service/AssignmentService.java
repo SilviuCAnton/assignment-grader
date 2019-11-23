@@ -9,7 +9,7 @@ import services.config.ApplicationContext;
 /**
  *
  */
-public class AssignmentService {
+public class AssignmentService implements Service {
     private CrudRepository<Integer, Assignment> assignmentRepository;
 
     public AssignmentService(CrudRepository<Integer, Assignment> assignmentRepository) {

@@ -9,13 +9,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import services.service.Service;
 import services.service.StudentService;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class StudentCrudController {
+public class StudentController implements ServiceController{
 
     @FXML
     private TableView<Student> studentTable;
@@ -39,18 +43,11 @@ public class StudentCrudController {
         this.studentService = studentService;
     }
 
-    public StudentCrudController() {
+    public StudentController() {
     }
 
-    void initialize(StudentService studentService) {
-        this.studentService = studentService;
-        loadTable();
-    }
-
-    private void loadTable() {
-        ArrayList<Student> studentArrayList = new ArrayList<>();
-        studentService.findAllStudents().forEach(studentArrayList::add);
-        students = FXCollections.observableArrayList(studentArrayList);
+    @FXML
+    public void initialize(){
         studentIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         studentFirstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         studentLastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -58,6 +55,19 @@ public class StudentCrudController {
         studentEmailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
         studentCoordinatorCol.setCellValueFactory(new PropertyValueFactory<>("coordinator"));
         studentTable.setItems(students);
+    }
+
+    @Override
+    public void initialize(Service studentService) {
+        initialize();
+        this.studentService = (StudentService) studentService;
+        List<Student> studentList = new ArrayList<>();
+        ((StudentService) studentService).findAllStudents().forEach(studentList::add);
+        loadTable(studentList);
+    }
+
+    private void loadTable(List studentList) {
+        students = FXCollections.observableArrayList(studentList);
     }
 
     public void handleButtonsClick(ActionEvent actionEvent) {
@@ -88,7 +98,9 @@ public class StudentCrudController {
             try{
                 Student student = studentTable.getSelectionModel().getSelectedItem();
                 studentService.deleteStudent(student.getId());
-                loadTable();
+                List<Student> studentList = new ArrayList<>();
+                studentService.findAllStudents().forEach(studentList::add);
+                loadTable(studentList);
                 operationResultLabel.setText("The student has been removed.");
             } catch(IllegalArgumentException | ValidationException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
@@ -106,9 +118,18 @@ public class StudentCrudController {
                         Integer.parseInt(groupTextField.getText()),
                         emailTextField.getText(),
                         coordinatorTextField.getText());
-                studentService.saveStudent(student);
-                loadTable();
-                operationResultLabel.setText("The student has been saved.");
+                Student st = studentService.saveStudent(student);
+                if(st == null){
+                    List<Student> studentList = new ArrayList<>();
+                    studentService.findAllStudents().forEach(studentList::add);
+                    loadTable(studentList);
+                    operationResultLabel.setStyle("-fx-text-fill: green");
+                    operationResultLabel.setText("The student has been saved.");
+                } else {
+                    operationResultLabel.setStyle("-fx-text-fill: red");
+                    operationResultLabel.setText("A student already exists with given Id.");
+                }
+
             } catch (ValidationException | IllegalArgumentException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
                 alert.showAndWait();
@@ -125,7 +146,10 @@ public class StudentCrudController {
                         emailTextField.getText(),
                         coordinatorTextField.getText());
                 studentService.updateStudent(student);
-                loadTable();
+                List<Student> studentList = new ArrayList<>();
+                studentService.findAllStudents().forEach(studentList::add);
+                loadTable(studentList);
+                operationResultLabel.setStyle("-fx-text-fill: green");
                 operationResultLabel.setText("The student has been updated.");
             } catch (ValidationException | IllegalArgumentException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
@@ -142,14 +166,15 @@ public class StudentCrudController {
     }
 
     private void displayOperationsPane() {
-        RubberBand slideOutUp = new RubberBand();
-        slideOutUp.setNode(studentTable);
+        Pulse rubberBand = new Pulse();
+        rubberBand.setNode(studentTable);
         AnchorPane.setBottomAnchor(studentTable, 120.0);
-        slideOutUp.play();
+        rubberBand.play();
 
-        FadeInUp fadeIn = new FadeInUp();
+        BounceInUp fadeIn = new BounceInUp();
         operationsPane.setVisible(true);
         fadeIn.setNode(operationsPane);
+     //   fadeIn.setSpeed(0.2);
         fadeIn.play();
 
         searchField.setMouseTransparent(true);
@@ -160,6 +185,12 @@ public class StudentCrudController {
     }
 
     private void hideOperationsPane() {
+        idTextField.setText("");
+        fNameTextField.setText("");
+        lNameTextField.setText("");
+        groupTextField.setText("");
+        emailTextField.setText("");
+        coordinatorTextField.setText("");
         searchField.setMouseTransparent(false);
         addStudentButton.setMouseTransparent(false);
         removeStudentButton.setMouseTransparent(false);
@@ -176,4 +207,13 @@ public class StudentCrudController {
     }
 
 
+    public void handleSearch(KeyEvent keyEvent) {
+        String text = searchField.getText().toLowerCase();
+        List<Student> students = new ArrayList<>();
+        studentService.findAllStudents().forEach(students::add);
+        students = students.stream()
+                .filter(x-> x.getFirstName().toLowerCase().contains(text) || x.getLastName().toLowerCase().contains(text))
+                .collect(Collectors.toList());
+        loadTable(students);
+    }
 }

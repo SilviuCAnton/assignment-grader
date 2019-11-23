@@ -3,7 +3,7 @@
     <student id="aaaa1234">
         <firstName>StudentA</firstName>
         <lastName>LastA</lastName>
-        <group>222</group>
+        <group>223</group>
         <email>sta@gmail.com</email>
         <coordinator>CoordA</coordinator>
     </student>

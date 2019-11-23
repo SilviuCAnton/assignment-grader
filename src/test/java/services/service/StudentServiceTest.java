@@ -33,12 +33,15 @@ class StudentServiceTest {
 
     @Test
     void filterStudentsByGroup() {
-        int count = 0;
         List<Student> res = new ArrayList<>();
         studentService.filterStudentsByGroup(221).forEach(res::add);
         assertEquals(3, res.size());
-        res = new ArrayList<>();
-        studentService.filterStudentsByGroup(223).forEach(res::add);
-        assertEquals(1, res.size());
+    }
+
+    @Test
+    void filterStudentsByGroupNoResult() {
+        List<Student> res = new ArrayList<>();
+        studentService.filterStudentsByGroup(224).forEach(res::add);
+        assertEquals(0, res.size());
     }
 }
