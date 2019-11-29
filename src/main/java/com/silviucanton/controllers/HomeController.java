@@ -12,9 +12,12 @@ import com.silviucanton.services.service.AssignmentService;
 import com.silviucanton.services.service.GradeService;
 import com.silviucanton.services.service.Service;
 import com.silviucanton.services.service.StudentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class HomeController implements ServiceController {
 
     private StudentService studentService;
@@ -36,14 +39,17 @@ public class HomeController implements ServiceController {
 
     }
 
+    @Autowired
     public void setStudentService(StudentService studentService) {
         this.studentService = studentService;
     }
 
+    @Autowired
     public void setAssignmentService(AssignmentService assignmentService) {
         this.assignmentService = assignmentService;
     }
 
+    @Autowired
     public void setGradeService(GradeService gradeService) {
         this.gradeService = gradeService;
     }
