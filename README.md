@@ -5,7 +5,7 @@ Java programming language
 
 ## What I Learned
 * Fundamentals of the Java programming language
-* Object Oriented Programming concepts - Encapsulation, Inheritance, Polymorphism
+* Object Oriented Programming concepts (Encapsulation, Inheritance, Polymorphism) and best practices
 * Generics
 * Reflexion
 * Java streams
@@ -13,6 +13,6 @@ Java programming language
 * Spring core object instantiation via dependency injection
 * App configuration via config files
 * CRUD operations using memory, text files, xml files and databases (PostgreSQL)
-* Observer, Adaptaer, Template, Decorator, Factory, Singleton desing patterns
+* Observer, Adapter, Template, Decorator, Factory, Singleton design patterns
 * Gradle project management
 * Unit testing - JUnit 5
