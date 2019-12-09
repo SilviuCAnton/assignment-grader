@@ -4,8 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="563.0"
-            prefWidth="1102.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0"
+            prefWidth="1192.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.silviucanton.controllers.StudentController">
     <Pane prefHeight="139.0" prefWidth="1102.0" style="-fx-background-color: linear-gradient(from 10% 10% to 60% 60%, #2D75E8, #0033cc);" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -87,13 +87,13 @@
     <Pane layoutX="20.0" layoutY="159.0" prefHeight="33.0" prefWidth="322.0">
         <TextField fx:id="searchField" onKeyTyped="#handleSearch" prefHeight="25.0" prefWidth="322.0" style="-fx-border-color: #2D75E8;"/>
         <FontAwesomeIconView fill="#2d75e8" glyphName="SEARCH" layoutX="302.0" layoutY="18.0"/>
-        <Button fx:id="addStudentButton" onAction="#handleButtonsClick" text="Add Student" contentDisplay="TOP"
+        <Button fx:id="addStudentButton" onAction="#handleAddButton" text="Add Student" contentDisplay="TOP"
                 mnemonicParsing="false" layoutX="350" style="-fx-border-color: #2D75E8" prefHeight="25.0"
                 prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
-        <Button fx:id="updateStudentButton" onAction="#handleButtonsClick" text="Update Student"
+        <Button fx:id="updateStudentButton" onAction="#handleUpdateButton" text="Update Student"
                 contentDisplay="TOP" mnemonicParsing="false" layoutX="475" style="-fx-border-color: #2D75E8"
                 prefHeight="25.0" prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
-        <Button fx:id="removeStudentButton" onAction="#handleButtonsClick" text="Remove Student"
+        <Button fx:id="removeStudentButton" onAction="#handleRemoveButton" text="Remove Student"
                 contentDisplay="TOP" mnemonicParsing="false" layoutX="600" style="-fx-border-color: #2D75E8"
                 prefHeight="25.0" prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
         <Label fx:id="operationResultLabel" style="-fx-text-fill: green" layoutX="750" prefHeight="25.0"/>

@@ -4,10 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="618.0"
-            prefWidth="943.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/9.0.1"
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0"
+            prefWidth="1192.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/9.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.silviucanton.controllers.HomeController">
-    <Pane prefHeight="173.0" prefWidth="980.0" style="-fx-background-color: linear-gradient(from 10% 10% to 60% 60%, #2D75E8, #0033cc);" AnchorPane.leftAnchor="0.0"
+    <Pane prefHeight="173.0" prefWidth="980.0"
+          style="-fx-background-color: linear-gradient(from 10% 10% to 60% 60%, #2D75E8, #0033cc);"
+          AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label layoutX="130.0" layoutY="44.0" text="Assignment Grader" textFill="WHITE">
             <font>
@@ -38,14 +40,14 @@
                 <FontAwesomeIconView fill="#2d75e8" glyphName="HOME" size="50"/>
             </graphic>
         </Button>
-        <Button fx:id="btnStudents" onAction="#handleButtonClicks" contentDisplay="TOP" mnemonicParsing="false"
+        <Button onAction="#handleStudentsButton" contentDisplay="TOP" mnemonicParsing="false"
                 prefHeight="181.0" prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Students"
                 GridPane.columnIndex="1">
             <graphic>
                 <FontAwesomeIconView fill="#2d75e8" glyphName="GROUP" size="50"/>
             </graphic>
         </Button>
-        <Button fx:id="btnAssignments" onAction="#handleButtonClicks" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button onAction="#handleAssignmentsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
                 prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Assignments"
                 GridPane.columnIndex="2">
             <graphic>
@@ -65,7 +67,8 @@
                 <FontAwesomeIconView fill="#2d75e8" glyphName="EXCHANGE" size="50"/>
             </graphic>
         </Button>
-        <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0" prefWidth="242.0"
+        <Button onAction="#handleGradesButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+                prefWidth="242.0"
                 stylesheets="@../stylesheets/main.css" text="Grades" GridPane.rowIndex="1">
             <graphic>
                 <FontAwesomeIconView fill="#2d75e8" glyphName="EDIT" size="50"/>

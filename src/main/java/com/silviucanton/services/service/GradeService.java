@@ -64,11 +64,14 @@ public class GradeService implements Service, Observable<GradeService> {
         }
 
         penalty -= numberWeeksLate;
+        if(motivation) {
+            penalty -= 1;
+        }
         if (penalty < 0) {
             penalty = 0;
         }
 
-        if (penalty > 3 || (!motivation && penalty > 2)) {
+        if (penalty > 2) {
             throw new InvalidGradeException("You cannot grade this assignment. The student is more than 2 weeks late.");
         }
 
@@ -89,6 +92,7 @@ public class GradeService implements Service, Observable<GradeService> {
         }
 
         Grade grade = new Grade(student, assignment, resultValue, professor);
+        grade.setDate(grade.getDate().minusWeeks(numberWeeksLate));
         Grade result = gradeRepository.save(grade);
 
         //Adding feedback in json file
@@ -122,7 +126,7 @@ public class GradeService implements Service, Observable<GradeService> {
                 e.printStackTrace();
             }
         }
-
+        notifyObservers();
         return result;
     }
 
@@ -135,6 +139,7 @@ public class GradeService implements Service, Observable<GradeService> {
      */
     public Grade removeGrade(String studentId, int assignmentId) {
         Pair<String, Integer> gradeId = new Pair<>(studentId, assignmentId);
+        notifyObservers();
         return gradeRepository.delete(gradeId);
     }
 
@@ -151,6 +156,8 @@ public class GradeService implements Service, Observable<GradeService> {
         Student student = gradeRepository.getStudentRepo().findOne(studentId);
         Assignment assignment = gradeRepository.getAssignmentRepo().findOne(assignmentId);
         Grade grade = new Grade(student, assignment, value, professor);
+        Grade res = gradeRepository.update(grade);
+        notifyObservers();
         return gradeRepository.update(grade);
     }
 
@@ -174,6 +181,18 @@ public class GradeService implements Service, Observable<GradeService> {
         List<Grade> grades = new ArrayList<>();
         gradeRepository.findAll().forEach(grades::add);
         return grades;
+    }
+
+    public List<Student> getStudents() {
+        List<Student> students = new ArrayList<>();
+        gradeRepository.getStudentRepo().findAll().forEach(students::add);
+        return students;
+    }
+
+    public List<Assignment> getAssignments() {
+        List<Assignment> assignments = new ArrayList<>();
+        gradeRepository.getAssignmentRepo().findAll().forEach(assignments::add);
+        return assignments;
     }
 
     /**

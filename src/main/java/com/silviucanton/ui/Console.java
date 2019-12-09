@@ -238,7 +238,7 @@ public class Console {
         description = scanner.nextLine();
         System.out.println("Deadline week = ");
         deadlineWeek = Integer.parseInt(scanner.nextLine());
-        Assignment assignment = assignmentService.addAssignment(id, description, deadlineWeek);
+        Assignment assignment = assignmentService.addAssignment(new Assignment(id, description, deadlineWeek));
         if (assignment != null) {
             System.out.println("Assignment already exists: " + assignment.toString());
         } else {
@@ -257,7 +257,9 @@ public class Console {
         startWeek = Integer.parseInt(scanner.nextLine());
         System.out.println("Deadline week = ");
         deadlineWeek = Integer.parseInt(scanner.nextLine());
-        Assignment assignment = assignmentService.updateAssignment(id, description, startWeek, deadlineWeek);
+        Assignment toUpdate = new Assignment(id, description, deadlineWeek);
+        toUpdate.setStartWeek(startWeek);
+        Assignment assignment = assignmentService.updateAssignment(toUpdate);
         if (assignment != null) {
             System.out.println("The assignment " + assignment.getDescription() + " has been updated.");
         } else {

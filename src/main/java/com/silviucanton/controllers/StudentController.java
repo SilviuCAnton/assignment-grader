@@ -39,7 +39,6 @@ public class StudentController implements ServiceController, Observer<StudentSer
     private Button addStudentButton, updateStudentButton, removeStudentButton, submitButton;
 
     private StudentService studentService;
-    private ObservableList<Student> students;
 
     public void setStudentService(StudentService studentService) {
         this.studentService.removeObserver(this);
@@ -53,11 +52,11 @@ public class StudentController implements ServiceController, Observer<StudentSer
     public void initialize(Service studentService) {
         this.studentService = (StudentService) studentService;
         this.studentService.addObserver(this);
-        loadTable(this.studentService.findAllStudents());
+        update(this.studentService);
     }
 
     private void loadTable(List<Student> studentList) {
-        students = FXCollections.observableArrayList(studentList);
+        ObservableList<Student> students = FXCollections.observableArrayList(studentList);
         studentIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         studentFirstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         studentLastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -65,42 +64,6 @@ public class StudentController implements ServiceController, Observer<StudentSer
         studentEmailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
         studentCoordinatorCol.setCellValueFactory(new PropertyValueFactory<>("coordinator"));
         studentTable.setItems(students);
-    }
-
-    public void handleButtonsClick(ActionEvent actionEvent) {
-        if (actionEvent.getSource() == addStudentButton) {
-            submitButton.setText("Add");
-            displayOperationsPane();
-        } else if (actionEvent.getSource() == updateStudentButton) {
-            if (studentTable.getSelectionModel().getSelectedItem() == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "A student must be selected in order to be updated!", ButtonType.OK);
-                alert.showAndWait();
-                return;
-            }
-            Student student = studentTable.getSelectionModel().getSelectedItem();
-            idTextField.setText(student.getId());
-            fNameTextField.setText(student.getFirstName());
-            lNameTextField.setText(student.getLastName());
-            groupTextField.setText(String.valueOf(student.getGroup()));
-            emailTextField.setText(student.getEmail());
-            coordinatorTextField.setText(student.getCoordinator());
-            submitButton.setText("Update");
-            displayOperationsPane();
-        } else if (actionEvent.getSource() == removeStudentButton) {
-            if (studentTable.getSelectionModel().getSelectedItem() == null) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, "A student must be selected in order to be deleted!", ButtonType.OK);
-                alert.showAndWait();
-                return;
-            }
-            try {
-                Student student = studentTable.getSelectionModel().getSelectedItem();
-                studentService.deleteStudent(student.getId());
-                operationResultLabel.setText("The student has been removed.");
-            } catch (IllegalArgumentException | ValidationException ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
-                alert.showAndWait();
-            }
-        }
     }
 
     public void handleSubmitButton(ActionEvent actionEvent) {
@@ -114,12 +77,11 @@ public class StudentController implements ServiceController, Observer<StudentSer
                         coordinatorTextField.getText());
                 studentService.saveStudent(student);
                 operationResultLabel.setText("The student has been saved.");
+                hideOperationsPane();
+                submitButton.setText("");
             } catch (ValidationException | IllegalArgumentException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
                 alert.showAndWait();
-            } finally {
-                hideOperationsPane();
-                submitButton.setText("");
             }
         } else if (submitButton.getText().equals("Update")) {
             try {
@@ -131,12 +93,11 @@ public class StudentController implements ServiceController, Observer<StudentSer
                         coordinatorTextField.getText());
                 studentService.updateStudent(student);
                 operationResultLabel.setText("The student has been updated.");
+                hideOperationsPane();
+                submitButton.setText("");
             } catch (ValidationException | IllegalArgumentException ex) {
                 Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
                 alert.showAndWait();
-            } finally {
-                hideOperationsPane();
-                submitButton.setText("");
             }
         }
     }
@@ -169,6 +130,12 @@ public class StudentController implements ServiceController, Observer<StudentSer
         removeStudentButton.setMouseTransparent(false);
         updateStudentButton.setMouseTransparent(false);
         studentTable.setMouseTransparent(false);
+        idTextField.setText("");
+        fNameTextField.setText("");
+        lNameTextField.setText("");
+        emailTextField.setText("");
+        groupTextField.setText("");
+        coordinatorTextField.setText("");
         FadeOutDown fadeOutDown = new FadeOutDown();
         fadeOutDown.setNode(operationsPane);
         fadeOutDown.play();
@@ -191,5 +158,43 @@ public class StudentController implements ServiceController, Observer<StudentSer
     @Override
     public void update(StudentService studentService) {
         loadTable(studentService.findAllStudents());
+    }
+
+    public void handleAddButton(ActionEvent actionEvent) {
+        submitButton.setText("Add");
+        displayOperationsPane();
+    }
+
+    public void handleUpdateButton(ActionEvent actionEvent) {
+        if (studentTable.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "A student must be selected in order to be updated!", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+        Student student = studentTable.getSelectionModel().getSelectedItem();
+        idTextField.setText(student.getId());
+        fNameTextField.setText(student.getFirstName());
+        lNameTextField.setText(student.getLastName());
+        groupTextField.setText(String.valueOf(student.getGroup()));
+        emailTextField.setText(student.getEmail());
+        coordinatorTextField.setText(student.getCoordinator());
+        submitButton.setText("Update");
+        displayOperationsPane();
+    }
+
+    public void handleRemoveButton(ActionEvent actionEvent) {
+        if (studentTable.getSelectionModel().getSelectedItem() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "A student must be selected in order to be deleted!", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+        try {
+            Student student = studentTable.getSelectionModel().getSelectedItem();
+            studentService.deleteStudent(student.getId());
+            operationResultLabel.setText("The student has been removed.");
+        } catch (IllegalArgumentException | ValidationException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+            alert.showAndWait();
+        }
     }
 }

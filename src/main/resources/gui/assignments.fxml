@@ -4,10 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="563.0"
-            prefWidth="1102.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0"
+            prefWidth="1192.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.silviucanton.controllers.AssignmentController">
-    <Pane prefHeight="139.0" prefWidth="1102.0" style="-fx-background-color: linear-gradient(from 10% 10% to 60% 60%, #2D75E8, #0033cc);" AnchorPane.leftAnchor="0.0"
+    <Pane prefHeight="139.0" prefWidth="1102.0"
+          style="-fx-background-color: linear-gradient(from 10% 10% to 60% 60%, #2D75E8, #0033cc);"
+          AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label layoutX="73.0" layoutY="30.0" text="Assignments" textFill="WHITE">
             <font>
@@ -45,26 +47,27 @@
         <TextField fx:id="deadlineWeekTextField" style="-fx-border-color: #2D75E8;" prefWidth="75.0"
                    GridPane.columnIndex="3"/>
 
-        <Label text="Id" prefWidth="75.0" GridPane.columnIndex="0" GridPane.rowIndex="1" alignment="CENTER"/>
-        <Label text="Description" prefWidth="75.0" GridPane.columnIndex="1" GridPane.rowIndex="1"
+        <Label text="Id" prefWidth="120.0" GridPane.columnIndex="0" GridPane.rowIndex="1" alignment="CENTER"/>
+        <Label text="Description" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1"
                alignment="CENTER"/>
-        <Label text="Start week" prefWidth="75.0" GridPane.columnIndex="2" GridPane.rowIndex="1" alignment="CENTER"/>
-        <Label text="Deadline week" prefWidth="75.0" GridPane.columnIndex="3" GridPane.rowIndex="1" alignment="CENTER"/>
+        <Label text="Start week" prefWidth="120.0" GridPane.columnIndex="2" GridPane.rowIndex="1" alignment="CENTER"/>
+        <Label text="Deadline week" prefWidth="120.0" GridPane.columnIndex="3" GridPane.rowIndex="1"
+               alignment="CENTER"/>
 
-        <Button fx:id="submitButton" onAction="#handleSubmitButton" GridPane.rowIndex="2" GridPane.columnIndex="3"
+        <Button fx:id="submitButton" onAction="#handleSubmitButton" GridPane.rowIndex="2" GridPane.columnIndex="2"
                 GridPane.columnSpan="2" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false"
                 layoutX="350" style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="120.0"
                 stylesheets="@../stylesheets/main.css"/>
-        <Button text="Cancel" onAction="#handleCancelButton" GridPane.rowIndex="2" GridPane.columnIndex="1"
+        <Button text="Cancel" onAction="#handleCancelButton" GridPane.rowIndex="2" GridPane.columnIndex="0"
                 GridPane.columnSpan="2" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false"
                 layoutX="350" style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="120.0"
                 stylesheets="@../stylesheets/main.css"/>
 
         <columnConstraints>
-            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
-            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
-            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
-            <ColumnConstraints hgrow="ALWAYS" percentWidth="20" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="25" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="25" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="25" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="25" halignment="CENTER"/>
         </columnConstraints>
 
         <rowConstraints>
@@ -74,17 +77,18 @@
         </rowConstraints>
     </GridPane>
     <Pane layoutX="20.0" layoutY="159.0" prefHeight="33.0" prefWidth="322.0">
-        <TextField fx:id="searchField" prefHeight="25.0" prefWidth="322.0" style="-fx-border-color: #2D75E8;"/>
+        <TextField fx:id="searchField" onKeyTyped="#handleSearch" prefHeight="25.0" prefWidth="322.0"
+                   style="-fx-border-color: #2D75E8;"/>
         <FontAwesomeIconView fill="#2d75e8" glyphName="SEARCH" layoutX="302.0" layoutY="18.0"/>
-        <Button fx:id="addStudentButton" onAction="#handleButtonsClick" text="Add Assignment" contentDisplay="TOP"
+        <Button fx:id="addAssignmentButton" onAction="#handleAddButton" text="Add Assignment" contentDisplay="TOP"
                 mnemonicParsing="false" layoutX="350" style="-fx-border-color: #2D75E8" prefHeight="25.0"
-                prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
-        <Button fx:id="updateStudentButton" onAction="#handleButtonsClick" text="Update Assignment"
-                contentDisplay="TOP" mnemonicParsing="false" layoutX="475" style="-fx-border-color: #2D75E8"
-                prefHeight="25.0" prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
-        <Button fx:id="removeStudentButton" onAction="#handleButtonsClick" text="Remove Assignment"
-                contentDisplay="TOP" mnemonicParsing="false" layoutX="600" style="-fx-border-color: #2D75E8"
-                prefHeight="25.0" prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
-        <Label fx:id="operationResultLabel" style="-fx-text-fill: green" layoutX="750" prefHeight="25.0"/>
+                prefWidth="130.0" stylesheets="@../stylesheets/main.css"/>
+        <Button fx:id="updateAssignmentButton" onAction="#handleUpdateButton" text="Update Assignment"
+                contentDisplay="TOP" mnemonicParsing="false" layoutX="485" style="-fx-border-color: #2D75E8"
+                prefHeight="25.0" prefWidth="130.0" stylesheets="@../stylesheets/main.css"/>
+        <Button fx:id="removeAssignmentButton" onAction="#handleRemoveButton" text="Remove Assignment"
+                contentDisplay="TOP" mnemonicParsing="false" layoutX="620" style="-fx-border-color: #2D75E8"
+                prefHeight="25.0" prefWidth="130.0" stylesheets="@../stylesheets/main.css"/>
+        <Label fx:id="operationResultLabel" style="-fx-text-fill: green" layoutX="760" prefHeight="25.0"/>
     </Pane>
 </AnchorPane>
