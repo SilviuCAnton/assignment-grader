@@ -12,7 +12,7 @@ Java programming language
 * Java Fx GUI Framework
 * Spring core object instantiation via dependency injection
 * App configuration via config files
-* CRUD operations using memory, text files, xml files and databases
+* CRUD operations using memory, text files, xml files and databases (PostgreSQL)
 * Observer, Adaptaer, Template, Decorator, Factory, Singleton desing patterns
 * Gradle project management
 * Unit testing - JUnit 5
