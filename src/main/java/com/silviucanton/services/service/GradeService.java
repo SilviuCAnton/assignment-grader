@@ -5,7 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonWriter;
+import com.silviucanton.domain.auxiliary.AssignmentGradeDTO;
 import com.silviucanton.domain.auxiliary.FeedbackDTO;
+import com.silviucanton.domain.auxiliary.StudentGradeDTO;
 import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.domain.entities.Grade;
 import com.silviucanton.domain.entities.Student;
@@ -17,6 +19,7 @@ import com.silviucanton.utils.observer.Observable;
 import com.silviucanton.utils.observer.Observer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.expression.spel.ast.Assign;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedWriter;
@@ -26,9 +29,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -254,6 +256,89 @@ public class GradeService implements Service, Observable<GradeService> {
                 .filter(x -> ApplicationContext.getYearStructure().getCurrentWeek(x.getDate()) == weekNumber)
                 .collect(Collectors.toList());
     }
+
+    public Map<Integer, Integer> getFinalGradesStatistics() {
+        Map<Integer, Integer> gradeStatistics = new HashMap<>();
+        for(int i = 1; i < 10; i++) {
+            gradeStatistics.putIfAbsent(i, 0);
+        }
+        getFinalGrades().forEach(studentGradeDTO -> gradeStatistics.replace((int) studentGradeDTO.getFinalGrade(), gradeStatistics.get((int) studentGradeDTO.getFinalGrade()) + 1));
+        return gradeStatistics;
+    }
+
+    public List<StudentGradeDTO> getFinalGrades() {
+        List<StudentGradeDTO> studentGradeDTOS = new ArrayList<>();
+        float gradeSum = 0;
+        int nGrades = 0;
+        for(Student student : getStudents()) {
+            for(Assignment assignment : getAssignments()) {
+                Grade grade = findGrade(student.getId(), assignment.getId());
+                if(grade != null) {
+                    gradeSum+= grade.getValue()*(assignment.getDeadlineWeek()-assignment.getStartWeek());
+                } else {
+                    gradeSum+= (assignment.getDeadlineWeek()-assignment.getStartWeek());
+                }
+                nGrades+= (assignment.getDeadlineWeek()-assignment.getStartWeek());
+            }
+            studentGradeDTOS.add(new StudentGradeDTO(student.getFirstName() + ' ' + student.getLastName(), gradeSum/nGrades));
+            gradeSum = 0;
+            nGrades = 0;
+        }
+
+        return studentGradeDTOS;
+    }
+
+    public List<StudentGradeDTO> getPassedStudents() {
+        return getFinalGrades().stream().filter(x->x.getFinalGrade()>=4).collect(Collectors.toList());
+    }
+
+    public List<StudentGradeDTO> getNeverLateStudents() {
+        List<StudentGradeDTO> studentGradeDTOS = getFinalGrades();
+        List<Student> students = new ArrayList<>();
+        boolean neverLate = true;
+        for(Student student : getStudents()) {
+            for(Assignment assignment : getAssignments()) {
+                Grade grade = findGrade(student.getId(), assignment.getId());
+                if(grade == null || ApplicationContext.getYearStructure().getCurrentWeek(grade.getDate()) > assignment.getDeadlineWeek()) {
+                    neverLate = false;
+                    break;
+                }
+            }
+            if(neverLate) {
+                students.add(student);
+            } else {
+                neverLate = true;
+            }
+        }
+        return studentGradeDTOS.stream()
+                .filter(studentDTO-> students.stream()
+                        .filter(x->(x.getFirstName()+' ' + x.getLastName()).equals(studentDTO.getStudentName()))
+                        .count()==1)
+                .collect(Collectors.toList());
+    }
+
+public AssignmentGradeDTO getHardestAssignment() {
+        AssignmentGradeDTO minAssignment = new AssignmentGradeDTO("tst", 11, LocalDate.now());
+        int sum = 0;
+        float gradeSum = 0, minGrade = 11;
+        for(Assignment assignment : getAssignments()) {
+            for(Student student : getStudents()) {
+                Grade grade = findGrade(student.getId(), assignment.getId());
+                if(grade == null) {
+                    gradeSum += 1;
+                } else {
+                    gradeSum += grade.getValue();
+                }
+                sum++;
+            }
+            if(gradeSum/sum < minGrade) {
+                minAssignment.setAssignmentName(assignment.getDescription());
+                minAssignment.setGrade(gradeSum/sum);
+            }
+        }
+        return minAssignment;
+    }
+
 
     @Override
     public void addObserver(Observer<GradeService> e) {

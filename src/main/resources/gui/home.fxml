@@ -34,7 +34,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         </rowConstraints>
-        <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button onAction="#handleDashboardButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
                 prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Dashboard">
             <graphic>
                 <FontAwesomeIconView fill="#2d75e8" glyphName="HOME" size="50"/>

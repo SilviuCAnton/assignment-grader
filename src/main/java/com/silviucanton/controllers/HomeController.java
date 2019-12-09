@@ -67,4 +67,8 @@ public class HomeController implements ServiceController {
     public void handleGradesButton(ActionEvent actionEvent) {
         loadStage(ApplicationContext.getProperties().getProperty("view.grades"), gradeService);
     }
+
+    public void handleDashboardButton(ActionEvent actionEvent) {
+        loadStage(ApplicationContext.getProperties().getProperty("view.dashboard"), gradeService);
+    }
 }

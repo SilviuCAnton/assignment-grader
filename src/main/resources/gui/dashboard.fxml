@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0"
+            prefWidth="1192.0"
+            fx:controller="com.silviucanton.controllers.DashboardController">
+
+    <Pane prefHeight="139.0" prefWidth="1192.0"
+          style="-fx-background-color: linear-gradient(from 10% 10% to 60% 60%, #2D75E8, #0033cc);"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Label layoutX="73.0" layoutY="30.0" text="Dashboard" textFill="WHITE">
+            <font>
+                <Font size="48.0"/>
+            </font>
+        </Label>
+        <Label layoutX="79.0" layoutY="91.0" text="Assignment Grader " textFill="WHITE">
+            <font>
+                <Font size="13.0"/>
+            </font>
+        </Label>
+    </Pane>
+
+    <GridPane hgap="20.0" layoutX="20.0" layoutY="192.0" prefHeight="349.0" prefWidth="1066.0"
+              AnchorPane.bottomAnchor="40" AnchorPane.topAnchor="192.0" AnchorPane.leftAnchor="20"
+              AnchorPane.rightAnchor="16.0">
+        <BarChart fx:id="averageGradeBarChart" GridPane.columnIndex="0" GridPane.rowIndex="0" title="Final Grades"
+                  legendSide="LEFT">
+            <xAxis>
+                <CategoryAxis side="BOTTOM" fx:id="xAxis"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis fx:id="yAxis" side="LEFT" label="No. of students"/>
+            </yAxis>
+        </BarChart>
+        <Button onAction="#handleShowFinalGrades" text="Show final grades" GridPane.columnIndex="0"
+                GridPane.rowIndex="1" style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="200.0"
+                stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
+                mnemonicParsing="false"/>
+        <PieChart fx:id="passedStudentsPieChart" GridPane.columnIndex="1" GridPane.rowIndex="0" legendSide="LEFT"
+                  clockwise="false" title="Passed students"/>
+        <Button onAction="#handleShowPassed" text="Show passed students" GridPane.columnIndex="1" GridPane.rowIndex="1"
+                style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="200.0"
+                stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
+                mnemonicParsing="false"/>
+        <PieChart fx:id="neverLatePieChart" GridPane.columnIndex="0" GridPane.rowIndex="2" legendSide="LEFT"
+                  clockwise="false" title="Never late students"/>
+        <Button onAction="#handleShowNeverLate" text="Show never late students" GridPane.columnIndex="0"
+                GridPane.rowIndex="3" style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="200.0"
+                stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
+                mnemonicParsing="false"/>
+
+        <VBox alignment="CENTER" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.rowSpan="2"
+              GridPane.valignment="BOTTOM">
+            <Label VBox.vgrow="ALWAYS" text="The hardest Assignment:" style="-fx-font-family: Impact; -fx-font-size: 18"
+                   textFill="#2D75E8"/>
+            <Label VBox.vgrow="ALWAYS" fx:id="hardestLabel" style="-fx-font-family: Impact; -fx-font-size: 18"
+                   textFill="#0033cc"/>
+        </VBox>
+        <TableView fx:id="studentTable"
+                   prefWidth="600.0"
+                   GridPane.columnSpan="1"
+                   GridPane.rowSpan="4"
+                   GridPane.columnIndex="2"
+                   stylesheets="@../stylesheets/main.css">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <columns>
+                <TableColumn prefWidth="75.0" text="Student Name" fx:id="studentNameCol"/>
+                <TableColumn prefWidth="75.0" text="Final Grade" fx:id="studentGradeCol"/>
+            </columns>
+        </TableView>
+
+        <rowConstraints>
+            <RowConstraints percentHeight="40" vgrow="ALWAYS"/>
+            <RowConstraints percentHeight="10" vgrow="ALWAYS"/>
+            <RowConstraints percentHeight="40" vgrow="ALWAYS"/>
+            <RowConstraints percentHeight="10" vgrow="ALWAYS"/>
+        </rowConstraints>
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="40"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="40"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="20"/>
+        </columnConstraints>
+    </GridPane>
+
+</AnchorPane>
