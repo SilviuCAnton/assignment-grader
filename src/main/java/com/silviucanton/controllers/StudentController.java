@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
 
 public class StudentController implements ServiceController, Observer<StudentService> {
 
+    @FXML
+    public Pagination pagination;
     @FXML
     private TableView<Student> studentTable;
     @FXML
@@ -49,10 +52,29 @@ public class StudentController implements ServiceController, Observer<StudentSer
     public StudentController() {
     }
 
+    private Node createPage(int pageIndex) {
+        studentTable.setItems(FXCollections.observableArrayList(studentService.findAllStudentsByPage(pageIndex, rowsPerPage())));
+        return studentTable;
+    }
+
+    int rowsPerPage() {
+        return 5;
+    }
+
     public void initialize(Service studentService) {
         this.studentService = (StudentService) studentService;
         this.studentService.addObserver(this);
         update(this.studentService);
+    }
+
+    private void reloadTable() {
+        studentIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        studentFirstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        studentLastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        studentGroupCol.setCellValueFactory(new PropertyValueFactory<>("group"));
+        studentEmailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        studentCoordinatorCol.setCellValueFactory(new PropertyValueFactory<>("coordinator"));
+        pagination.setPageFactory(this::createPage);
     }
 
     private void loadTable(List<Student> studentList) {
@@ -147,17 +169,21 @@ public class StudentController implements ServiceController, Observer<StudentSer
     }
 
     public void handleSearch(KeyEvent keyEvent) {
-        String text = searchField.getText().toLowerCase();
-        List<Student> students = studentService.findAllStudents();
-        students = students.stream()
-                .filter(x -> x.getFirstName().toLowerCase().contains(text) || x.getLastName().toLowerCase().contains(text))
-                .collect(Collectors.toList());
-        loadTable(students);
+        if (searchField.getText().isEmpty()) {
+            reloadTable();
+        } else {
+            String text = searchField.getText().toLowerCase();
+            List<Student> students = studentService.findAllStudents();
+            students = students.stream()
+                    .filter(x -> x.getFirstName().toLowerCase().contains(text) || x.getLastName().toLowerCase().contains(text))
+                    .collect(Collectors.toList());
+            loadTable(students);
+        }
     }
 
     @Override
     public void update(StudentService studentService) {
-        loadTable(studentService.findAllStudents());
+        reloadTable();
     }
 
     public void handleAddButton(ActionEvent actionEvent) {

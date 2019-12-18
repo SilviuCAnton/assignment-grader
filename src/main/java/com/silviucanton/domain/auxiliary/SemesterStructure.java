@@ -8,10 +8,11 @@ import java.time.LocalDate;
 /**
  * The structure of a semester at a university
  */
-public class SemesterStructure extends Entity<Integer> {
+public class SemesterStructure implements Entity<Integer> {
     private LocalDate startDate;
     private int numberOfWeeks;
     private Pair<LocalDate, LocalDate> holidayWeeks;
+    int id;
 
     public SemesterStructure(int id, LocalDate startDate, int numberOfWeeks, Pair<LocalDate, LocalDate> holidayWeeks) {
         this.setId(id);
@@ -72,5 +73,20 @@ public class SemesterStructure extends Entity<Integer> {
      */
     public void setHolidayWeeks(Pair<LocalDate, LocalDate> holidayWeeks) {
         this.holidayWeeks = holidayWeeks;
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toFileString() {
+        return this.toString();
     }
 }

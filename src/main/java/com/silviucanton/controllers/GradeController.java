@@ -11,11 +11,10 @@ import com.silviucanton.services.config.ApplicationContext;
 import com.silviucanton.services.service.GradeService;
 import com.silviucanton.services.service.Service;
 import com.silviucanton.utils.observer.Observer;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
@@ -52,13 +51,16 @@ public class GradeController implements ServiceController, Observer<GradeService
     public TextArea feedbackTextArea;
     @FXML
     public Label operationResultLabel;
+    @FXML
+    public Pagination studentPagination, gradePagination;
 
 
     private GradeService gradeService;
 
     @Override
     public void update(GradeService gradeService) {
-        loadStudentTable(gradeService.getStudents());
+
+        reloadStudentTable();
     }
 
     private void hideOperationsPane() {
@@ -108,17 +110,40 @@ public class GradeController implements ServiceController, Observer<GradeService
                 noWeeksField.requestFocus();
             }
         });
+        this.gradeService = (GradeService) service;
+
         studentTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Student student = studentTable.getSelectionModel().getSelectedItem();
+            Optional<Assignment> ass = gradeService.findAssignmentByID(gradeService.getAllGrades().get(0).getId().getSecond());
             List<AssignmentGradeDTO> assignmentGradeDTOS = gradeService.getAllGrades().stream()
                     .filter(x -> x.getStudent().equals(student))
                     .map(x -> new AssignmentGradeDTO(x.getAssignment().getDescription(), x.getValue(), x.getDate()))
                     .collect(Collectors.toList());
             loadGradesTable(assignmentGradeDTOS);
         });
-        this.gradeService = (GradeService) service;
+
         this.gradeService.addObserver(this);
         update(this.gradeService);
+    }
+
+    private void reloadStudentTable() {
+        studentIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        studentFirstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        studentLastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        studentGroupCol.setCellValueFactory(new PropertyValueFactory<>("group"));
+        studentEmailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+        studentCoordinatorCol.setCellValueFactory(new PropertyValueFactory<>("coordinator"));
+        studentPagination.setPageFactory(this::createStudentPage);
+    }
+
+    private Node createStudentPage(int pageIndex) {
+        ObservableList<Student> students = FXCollections.observableArrayList(gradeService.findAllStudentsByPage(pageIndex, rowsPerPage()));
+        studentTable.setItems(students);
+        return studentTable;
+    }
+
+    int rowsPerPage() {
+        return 5;
     }
 
     private void loadStudentTable(List<Student> studentList) {
@@ -180,18 +205,18 @@ public class GradeController implements ServiceController, Observer<GradeService
         motivationCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             int penalty = gradeService.getGradePenalty(assignmentsCombo.getSelectionModel().getSelectedItem().getId());
             int noWeeksLate = 0;
-            if(!noWeeksField.getText().isEmpty() && lateCheckBox.isSelected()) {
+            if (!noWeeksField.getText().isEmpty() && lateCheckBox.isSelected()) {
                 noWeeksLate = Integer.parseInt(noWeeksField.getText());
             }
-            if(newValue) {
+            if (newValue) {
                 if (penalty - 1 - noWeeksLate > 0) {
-                    feedbackTextArea.setText("NOTA A FOST DIMINUATA CU " + (penalty-1-noWeeksLate) + " PUNCTE DATORITA INTARZIERILOR");
+                    feedbackTextArea.setText("NOTA A FOST DIMINUATA CU " + (penalty - 1 - noWeeksLate) + " PUNCTE DATORITA INTARZIERILOR");
                 } else {
                     feedbackTextArea.setText("");
                 }
             } else {
                 if (penalty - noWeeksLate > 0) {
-                    feedbackTextArea.setText("NOTA A FOST DIMINUATA CU " + (penalty-noWeeksLate) + " PUNCTE DATORITA INTARZIERILOR");
+                    feedbackTextArea.setText("NOTA A FOST DIMINUATA CU " + (penalty - noWeeksLate) + " PUNCTE DATORITA INTARZIERILOR");
                 } else {
                     feedbackTextArea.setText("");
                 }
@@ -202,13 +227,13 @@ public class GradeController implements ServiceController, Observer<GradeService
             int noWeeksLate = 0;
             int penalty = gradeService.getGradePenalty(assignmentsCombo.getSelectionModel().getSelectedItem().getId());
             int motivation = 0;
-            if(motivationCheckBox.isSelected()) {
+            if (motivationCheckBox.isSelected()) {
                 motivation = 1;
             }
             try {
-                if(newValue && !noWeeksField.getText().isEmpty()) {
+                if (newValue && !noWeeksField.getText().isEmpty()) {
                     noWeeksLate = Integer.parseInt(noWeeksField.getText());
-                    if(noWeeksLate <= 0) {
+                    if (noWeeksLate <= 0) {
                         throw new NumberFormatException();
                     }
                 }
@@ -218,7 +243,7 @@ public class GradeController implements ServiceController, Observer<GradeService
                 return;
             }
             if (penalty - motivation - noWeeksLate > 0) {
-                feedbackTextArea.setText("NOTA A FOST DIMINUATA CU " + (penalty-motivation-noWeeksLate) + " PUNCTE DATORITA INTARZIERILOR");
+                feedbackTextArea.setText("NOTA A FOST DIMINUATA CU " + (penalty - motivation - noWeeksLate) + " PUNCTE DATORITA INTARZIERILOR");
             } else {
                 feedbackTextArea.setText("");
             }
@@ -228,13 +253,13 @@ public class GradeController implements ServiceController, Observer<GradeService
             int noWeeksLate = 0;
             int penalty = gradeService.getGradePenalty(assignmentsCombo.getSelectionModel().getSelectedItem().getId());
             int motivation = 0;
-            if(motivationCheckBox.isSelected()) {
+            if (motivationCheckBox.isSelected()) {
                 motivation = 1;
             }
             try {
-                if(lateCheckBox.isSelected() && !newValue.isEmpty()) {
+                if (lateCheckBox.isSelected() && !newValue.isEmpty()) {
                     noWeeksLate = Integer.parseInt(noWeeksField.getText());
-                    if(noWeeksLate <= 0) {
+                    if (noWeeksLate <= 0) {
                         throw new NumberFormatException();
                     }
                 }
@@ -244,7 +269,7 @@ public class GradeController implements ServiceController, Observer<GradeService
                 return;
             }
             if (penalty - motivation - noWeeksLate > 0) {
-                feedbackTextArea.setText("NOTA A FOST DIMINUATA CU " + (penalty-motivation-noWeeksLate) + " PUNCTE DATORITA INTARZIERILOR");
+                feedbackTextArea.setText("NOTA A FOST DIMINUATA CU " + (penalty - motivation - noWeeksLate) + " PUNCTE DATORITA INTARZIERILOR");
             } else {
                 feedbackTextArea.setText("");
             }
@@ -268,7 +293,7 @@ public class GradeController implements ServiceController, Observer<GradeService
         int noWeeksLate = 0;
         try {
             value = Float.parseFloat(gradeField.getText());
-            if(value < 1 || value > 10) {
+            if (value < 1 || value > 10) {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException ex) {
@@ -278,9 +303,9 @@ public class GradeController implements ServiceController, Observer<GradeService
         }
         if (lateCheckBox.isSelected()) {
             try {
-                if(!noWeeksField.getText().isEmpty()) {
+                if (!noWeeksField.getText().isEmpty()) {
                     noWeeksLate = Integer.parseInt(noWeeksField.getText());
-                    if(noWeeksLate <= 0) {
+                    if (noWeeksLate <= 0) {
                         throw new NumberFormatException();
                     }
                 }
@@ -348,7 +373,7 @@ public class GradeController implements ServiceController, Observer<GradeService
         Assignment assignment = gradeService.getAssignments().stream()
                 .filter(x -> gradeTable.getSelectionModel().getSelectedItem().getAssignmentName().equals(x.getDescription()))
                 .findFirst().orElse(null);
-        professorTextField.setText(String.valueOf(gradeService.findGrade(studentTable.getSelectionModel().getSelectedItem().getId(), Objects.requireNonNull(assignment).getId()).getProfessor()));
+        professorTextField.setText(String.valueOf(gradeService.findGrade(studentTable.getSelectionModel().getSelectedItem().getId(), Objects.requireNonNull(assignment).getId()).get().getProfessor()));
         showUpdatePanel();
     }
 
@@ -426,11 +451,15 @@ public class GradeController implements ServiceController, Observer<GradeService
     }
 
     public void handleSearch(KeyEvent keyEvent) {
-        String text = searchField.getText().toLowerCase();
-        List<Student> students = gradeService.getStudents();
-        students = students.stream()
-                .filter(x -> x.getFirstName().toLowerCase().contains(text) || x.getLastName().toLowerCase().contains(text))
-                .collect(Collectors.toList());
-        loadStudentTable(students);
+        if (searchField.getText().isEmpty()) {
+            reloadStudentTable();
+        } else {
+            String text = searchField.getText().toLowerCase();
+            List<Student> students = gradeService.getStudents();
+            students = students.stream()
+                    .filter(x -> x.getFirstName().toLowerCase().contains(text) || x.getLastName().toLowerCase().contains(text))
+                    .collect(Collectors.toList());
+            loadStudentTable(students);
+        }
     }
 }

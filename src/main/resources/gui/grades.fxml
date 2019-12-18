@@ -28,25 +28,28 @@
     <GridPane hgap="20.0" layoutX="20.0" layoutY="192.0" prefHeight="349.0" prefWidth="1066.0"
               AnchorPane.bottomAnchor="100" AnchorPane.topAnchor="192.0" AnchorPane.leftAnchor="20"
               AnchorPane.rightAnchor="16.0">
-        <TableView fx:id="studentTable"
-                   prefWidth="600.0"
-                   GridPane.columnSpan="2"
-                   stylesheets="@../stylesheets/main.css">
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-            </columnResizePolicy>
-            <columns>
-                <TableColumn prefWidth="75.0" text="Student Id" fx:id="studentIdCol"/>
-                <TableColumn prefWidth="75.0" text="First Name" fx:id="studentFirstNameCol"/>
-                <TableColumn prefWidth="75.0" text="Last Name" fx:id="studentLastNameCol"/>
-                <TableColumn prefWidth="75.0" text="Group" fx:id="studentGroupCol"/>
-                <TableColumn prefWidth="75.0" text="Email" fx:id="studentEmailCol"/>
-                <TableColumn prefWidth="100.0" text="Coordinator" fx:id="studentCoordinatorCol"/>
-            </columns>
-        </TableView>
+        <Pagination fx:id="studentPagination" prefWidth="600.0" GridPane.columnSpan="2">
+            <fx:define>
+                <TableView fx:id="studentTable"
+                           prefWidth="600.0"
+                           stylesheets="@../stylesheets/main.css">
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <columns>
+                        <TableColumn prefWidth="75.0" text="Student Id" fx:id="studentIdCol"/>
+                        <TableColumn prefWidth="75.0" text="First Name" fx:id="studentFirstNameCol"/>
+                        <TableColumn prefWidth="75.0" text="Last Name" fx:id="studentLastNameCol"/>
+                        <TableColumn prefWidth="75.0" text="Group" fx:id="studentGroupCol"/>
+                        <TableColumn prefWidth="75.0" text="Email" fx:id="studentEmailCol"/>
+                        <TableColumn prefWidth="100.0" text="Coordinator" fx:id="studentCoordinatorCol"/>
+                    </columns>
+                </TableView>
+            </fx:define>
+        </Pagination>
 
-        <TableView fx:id="gradeTable"
-                   GridPane.columnIndex="2"
+
+        <TableView fx:id="gradeTable" GridPane.columnIndex="2"
                    AnchorPane.bottomAnchor="100" AnchorPane.leftAnchor="20.0"
                    AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="192.0"
                    stylesheets="@../stylesheets/main.css">
@@ -59,6 +62,7 @@
                 <TableColumn prefWidth="100.0" text="Date" fx:id="dateCol"/>
             </columns>
         </TableView>
+
 
         <GridPane fx:id="operationsPane" visible="false" hgap="10" vgap="3" layoutY="159.0" GridPane.columnIndex="2">
             <ComboBox fx:id="assignmentsCombo" prefWidth="Infinity"/>
@@ -144,7 +148,8 @@
             prefWidth="120.0" stylesheets="@../stylesheets/main.css" AnchorPane.bottomAnchor="60.0"/>
 
     <Pane layoutX="20.0" layoutY="159.0" prefHeight="33.0" prefWidth="322.0">
-        <TextField fx:id="searchField" onKeyTyped="#handleSearch" prefHeight="25.0" prefWidth="322.0" style="-fx-border-color: #2D75E8;"/>
+        <TextField fx:id="searchField" onKeyTyped="#handleSearch" prefHeight="25.0" prefWidth="322.0"
+                   style="-fx-border-color: #2D75E8;"/>
         <FontAwesomeIconView fill="#2d75e8" glyphName="SEARCH" layoutX="302.0" layoutY="18.0"/>
         <Button fx:id="addGradeButton" onAction="#handleAddButton" text="Add Grade" contentDisplay="TOP"
                 mnemonicParsing="false" layoutX="350" style="-fx-border-color: #2D75E8" prefHeight="25.0"

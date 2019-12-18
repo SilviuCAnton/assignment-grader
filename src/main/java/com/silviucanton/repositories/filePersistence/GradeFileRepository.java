@@ -2,29 +2,29 @@ package com.silviucanton.repositories.filePersistence;
 
 import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.domain.entities.Grade;
+import com.silviucanton.domain.entities.GradeId;
 import com.silviucanton.domain.entities.Student;
 import com.silviucanton.domain.validators.Validator;
-import com.silviucanton.repositories.CrudRepository;
+import com.silviucanton.repositories.CrudNoSpringRepo;
 import com.silviucanton.repositories.GradeRepository;
 import com.silviucanton.utils.Constants;
-import com.silviucanton.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 
 /**
  * Repository for grades - file data persistence
  */
-@Component
-public class GradeFileRepository extends AbstractFileRepository<Pair<String, Integer>, Grade> implements GradeRepository {
-    private CrudRepository<String, Student> studentRepo;
-    private CrudRepository<Integer, Assignment> assignmentRepo;
+@Repository
+public class GradeFileRepository extends AbstractFileRepository<Grade, GradeId> implements GradeRepository {
+    private CrudNoSpringRepo<Student, String> studentRepo;
+    private CrudNoSpringRepo<Assignment, Integer> assignmentRepo;
 
     @Autowired
-    public GradeFileRepository(Validator<Grade> validator, @Value("${data.catalog.grades}") String fileName, @Qualifier("studentFileRepository") CrudRepository<String, Student> studentRepo, @Qualifier("assignmentFileRepository") CrudRepository<Integer, Assignment> assignmentRepo) {
+    public GradeFileRepository(Validator<Grade> validator, @Value("${data.catalog.grades}") String fileName, @Qualifier("studentFileRepository") CrudNoSpringRepo<Student, String> studentRepo, @Qualifier("assignmentFileRepository") CrudNoSpringRepo<Assignment, Integer> assignmentRepo) {
         super(validator, fileName, false);
         this.studentRepo = studentRepo;
         this.assignmentRepo = assignmentRepo;
@@ -53,7 +53,7 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String, Int
      * @return studentRepo - Student Crud Repository
      */
     @Override
-    public CrudRepository<String, Student> getStudentRepo() {
+    public CrudNoSpringRepo<Student, String> getStudentRepo() {
         return studentRepo;
     }
 
@@ -62,7 +62,7 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String, Int
      *
      * @param studentRepo - Student Crud Repository
      */
-    public void setStudentRepo(CrudRepository<String, Student> studentRepo) {
+    public void setStudentRepo(CrudNoSpringRepo<Student, String> studentRepo) {
         this.studentRepo = studentRepo;
     }
 
@@ -72,7 +72,7 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String, Int
      * @return assignmentRepo - Assignment Crud Repository
      */
     @Override
-    public CrudRepository<Integer, Assignment> getAssignmentRepo() {
+    public CrudNoSpringRepo<Assignment, Integer> getAssignmentRepo() {
         return assignmentRepo;
     }
 
@@ -81,7 +81,7 @@ public class GradeFileRepository extends AbstractFileRepository<Pair<String, Int
      *
      * @param assignmentRepo - Assignment Crud Repository
      */
-    public void setAssignmentRepo(CrudRepository<Integer, Assignment> assignmentRepo) {
+    public void setAssignmentRepo(CrudNoSpringRepo<Assignment, Integer> assignmentRepo) {
         this.assignmentRepo = assignmentRepo;
     }
 }

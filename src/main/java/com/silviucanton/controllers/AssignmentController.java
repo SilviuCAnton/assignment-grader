@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
@@ -41,6 +42,8 @@ public class AssignmentController implements ServiceController, Observer<Assignm
     public Label operationResultLabel;
     @FXML
     public TableView<Assignment> assignmentTable;
+    @FXML
+    public Pagination pagination;
 
     private AssignmentService assignmentService;
 
@@ -118,6 +121,23 @@ public class AssignmentController implements ServiceController, Observer<Assignm
         }
     }
 
+    private Node createPage(int pageIndex) {
+        assignmentTable.setItems(FXCollections.observableArrayList(assignmentService.findAllAssignmentsByPage(pageIndex, rowsPerPage())));
+        return assignmentTable;
+    }
+
+    int rowsPerPage() {
+        return 5;
+    }
+
+    private void reloadTable() {
+        assignmentIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        assignmentDescriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
+        assignmentStartWeekCol.setCellValueFactory(new PropertyValueFactory<>("startWeek"));
+        assignmentDeadlineWeekCol.setCellValueFactory(new PropertyValueFactory<>("deadlineWeek"));
+        pagination.setPageFactory(this::createPage);
+    }
+
     private void loadTable(List<Assignment> assignmentList) {
         ObservableList<Assignment> assignments = FXCollections.observableArrayList(assignmentList);
         assignmentIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -129,7 +149,7 @@ public class AssignmentController implements ServiceController, Observer<Assignm
 
     @Override
     public void update(AssignmentService assignmentService) {
-        loadTable(assignmentService.findAllAssignments());
+        reloadTable();
     }
 
     @Override
@@ -178,11 +198,16 @@ public class AssignmentController implements ServiceController, Observer<Assignm
     }
 
     public void handleSearch(KeyEvent keyEvent) {
-        String text = searchField.getText().toLowerCase();
-        List<Assignment> assignments = assignmentService.findAllAssignments();
-        assignments = assignments.stream()
-                .filter(x -> x.getDescription().toLowerCase().contains(text))
-                .collect(Collectors.toList());
-        loadTable(assignments);
+        if (searchField.getText().isEmpty()) {
+            reloadTable();
+        } else {
+            String text = searchField.getText().toLowerCase();
+            List<Assignment> assignments = assignmentService.findAllAssignments();
+            assignments = assignments.stream()
+                    .filter(x -> x.getDescription().toLowerCase().contains(text))
+                    .collect(Collectors.toList());
+            loadTable(assignments);
+        }
+
     }
 }

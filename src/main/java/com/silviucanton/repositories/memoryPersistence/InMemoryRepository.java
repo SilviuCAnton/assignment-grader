@@ -3,7 +3,7 @@ package com.silviucanton.repositories.memoryPersistence;
 import com.silviucanton.domain.entities.Entity;
 import com.silviucanton.domain.validators.Validator;
 import com.silviucanton.exceptions.ValidationException;
-import com.silviucanton.repositories.CrudRepository;
+import com.silviucanton.repositories.CrudNoSpringRepo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @param <ID> type of the id of the stored entities
  * @param <E>  type of the stored entities
  */
-public class InMemoryRepository<ID, E extends Entity<ID>> implements CrudRepository<ID, E> {
+public abstract class InMemoryRepository<E extends Entity<ID>, ID> implements CrudNoSpringRepo<E, ID> {
     private Map<ID, E> items;
     private Validator<E> validator;
 

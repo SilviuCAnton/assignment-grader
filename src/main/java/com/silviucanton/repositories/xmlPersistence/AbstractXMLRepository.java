@@ -3,12 +3,12 @@ package com.silviucanton.repositories.xmlPersistence;
 import com.silviucanton.domain.entities.Entity;
 import com.silviucanton.domain.validators.Validator;
 import com.silviucanton.exceptions.ValidationException;
+import com.silviucanton.repositories.memoryPersistence.InMemoryRepository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import com.silviucanton.repositories.memoryPersistence.InMemoryRepository;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -33,7 +33,7 @@ import java.nio.file.StandardOpenOption;
  * @param <ID> - type of the entities' id
  * @param <E>  - type of the entities
  */
-public abstract class AbstractXMLRepository<ID, E extends Entity<ID>> extends InMemoryRepository<ID, E> {
+public abstract class AbstractXMLRepository<E extends Entity<ID>, ID> extends InMemoryRepository<E, ID> {
     private String fileName;
     private String tagName;
 

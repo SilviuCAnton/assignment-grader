@@ -9,10 +9,11 @@ import java.time.temporal.ChronoUnit;
 /**
  * The year structure at an university
  */
-public class YearStructure extends Entity<Integer> {
+public class YearStructure implements Entity<Integer> {
     private int year;
     private SemesterStructure sem1;
     private SemesterStructure sem2;
+    int id;
 
     private static YearStructure instance;
 
@@ -117,5 +118,20 @@ public class YearStructure extends Entity<Integer> {
      */
     public void setSem2(SemesterStructure sem2) {
         this.sem2 = sem2;
+    }
+
+    @Override
+    public Integer getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toFileString() {
+        return this.toString();
     }
 }

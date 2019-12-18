@@ -1,16 +1,32 @@
 package com.silviucanton.domain.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 /**
  * An university student
  */
-public class Student extends Entity<String> {
+@javax.persistence.Entity
+@Table(name = "students")
+public class Student implements Entity<String> {
+    @Id
+    @Column(name = "studentId")
+    private String id;
+    @Column(name = "firstName")
     private String firstName;
+    @Column(name = "lastName")
     private String lastName;
+    @Column(name = "groupId")
     private int group;
+    @Column(name = "email")
     private String email;
+    @Column(name = "coordinator")
     private String coordinator;
+
+    protected Student() {
+    }
 
     public Student(String id, String firstName, String lastName, int group, String email, String coordinator) {
         this.setId(id);
@@ -153,6 +169,16 @@ public class Student extends Entity<String> {
                 "group: " + group + '|' +
                 "email: " + email + '|' +
                 "coordinator: " + coordinator;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

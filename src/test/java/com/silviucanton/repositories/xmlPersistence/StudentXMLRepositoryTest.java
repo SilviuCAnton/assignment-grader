@@ -3,10 +3,10 @@ package com.silviucanton.repositories.xmlPersistence;
 import com.silviucanton.domain.entities.Student;
 import com.silviucanton.domain.validators.StudentValidator;
 import com.silviucanton.exceptions.InvalidStudentException;
+import com.silviucanton.services.config.ApplicationContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.silviucanton.services.config.ApplicationContext;
 
 import java.io.IOException;
 import java.nio.file.Files;

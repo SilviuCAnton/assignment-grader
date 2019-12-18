@@ -22,19 +22,25 @@
             </font>
         </Label>
     </Pane>
-    <TableView layoutX="20.0" layoutY="192.0" prefHeight="349.0" prefWidth="1066.0" fx:id="assignmentTable"
-               stylesheets="@../stylesheets/main.css" AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20.0"
-               AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="192.0">
-        <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-        </columnResizePolicy>
-        <columns>
-            <TableColumn prefWidth="75.0" text="Assignment Id" fx:id="assignmentIdCol"/>
-            <TableColumn prefWidth="75.0" text="Description" fx:id="assignmentDescriptionCol"/>
-            <TableColumn prefWidth="75.0" text="Start week" fx:id="assignmentStartWeekCol"/>
-            <TableColumn prefWidth="75.0" text="Deadline week" fx:id="assignmentDeadlineWeekCol"/>
-        </columns>
-    </TableView>
+    <Pagination fx:id="pagination" pageCount="10" layoutX="20.0" layoutY="192.0" prefHeight="349.0" prefWidth="1066.0"
+                AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20.0"
+                AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="192.0">
+        <fx:define>
+            <TableView layoutX="20.0" layoutY="192.0" prefHeight="349.0" prefWidth="1066.0" fx:id="assignmentTable"
+                       stylesheets="@../stylesheets/main.css">
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <columns>
+                    <TableColumn prefWidth="75.0" text="Assignment Id" fx:id="assignmentIdCol"/>
+                    <TableColumn prefWidth="75.0" text="Description" fx:id="assignmentDescriptionCol"/>
+                    <TableColumn prefWidth="75.0" text="Start week" fx:id="assignmentStartWeekCol"/>
+                    <TableColumn prefWidth="75.0" text="Deadline week" fx:id="assignmentDeadlineWeekCol"/>
+                </columns>
+            </TableView>
+
+        </fx:define>
+    </Pagination>
 
     <GridPane fx:id="operationsPane" visible="false" hgap="3" vgap="3" prefWidth="1066.0" prefHeight="100"
               AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="16.0">

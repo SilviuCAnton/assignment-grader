@@ -10,6 +10,7 @@ import com.silviucanton.services.service.StudentService;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Optional;
 import java.util.Scanner;
 
 /**
@@ -197,8 +198,8 @@ public class Console {
         String id;
         System.out.println("Id = ");
         id = scanner.nextLine();
-        Student st = studentService.findStudent(id);
-        if (st != null) {
+        Optional<Student> st = studentService.findStudent(id);
+        if (st.isPresent()) {
             System.out.println(st.toString());
         } else {
             System.out.println("The student with the given id does not exist.");
@@ -213,9 +214,9 @@ public class Console {
         String id;
         System.out.println("Id = ");
         id = scanner.nextLine();
-        Student st = studentService.deleteStudent(id);
-        if (st != null) {
-            System.out.println(st.getFirstName() + " " + st.getLastName() + " has been removed.");
+        studentService.deleteStudent(id);
+        if (!studentService.findStudent(id).isPresent()) {
+            System.out.println("The student has been removed.");
         } else {
             System.out.println("The student with the given id does not exist.");
         }
@@ -271,8 +272,8 @@ public class Console {
         int id;
         System.out.println("Id = ");
         id = Integer.parseInt(scanner.nextLine());
-        Assignment assignment = assignmentService.findAssignment(id);
-        if (assignment != null) {
+        Optional<Assignment> assignment = assignmentService.findAssignment(id);
+        if (assignment.isPresent()) {
             System.out.println(assignment.toString());
         } else {
             System.out.println("The assignment with the given id does not exist.");
@@ -287,9 +288,9 @@ public class Console {
         int id;
         System.out.println("Id = ");
         id = Integer.parseInt(scanner.nextLine());
-        Assignment assignment = assignmentService.deleteAssignment(id);
-        if (assignment != null) {
-            System.out.println(assignment.getDescription() + " has been removed.");
+        assignmentService.deleteAssignment(id);
+        if (!assignmentService.findAssignment(id).isPresent()) {
+            System.out.println("The assignment has been removed.");
         } else {
             System.out.println("The assignment with the given id does not exist.");
         }
@@ -364,8 +365,8 @@ public class Console {
         studentId = scanner.nextLine();
         System.out.println("Assignment id: ");
         assignmentId = Integer.parseInt(scanner.nextLine());
-        Grade grade = gradeService.findGrade(studentId, assignmentId);
-        if (grade != null) {
+        Optional<Grade> grade = gradeService.findGrade(studentId, assignmentId);
+        if (grade.isPresent()) {
             System.out.println(grade.toString());
         } else {
             System.out.println("The grade with the given id does not exist.");
@@ -384,9 +385,9 @@ public class Console {
         studentId = scanner.nextLine();
         System.out.println("Assignment id = ");
         assignmentId = Integer.parseInt(scanner.nextLine());
-        Grade grade = gradeService.removeGrade(studentId, assignmentId);
-        if (grade != null) {
-            System.out.println(grade.getId() + " has been removed.");
+        gradeService.removeGrade(studentId, assignmentId);
+        if (!gradeService.findGrade(studentId, assignmentId).isPresent()) {
+            System.out.println("The grade has been removed.");
         } else {
             System.out.println("The grade with the given id does not exist.");
         }

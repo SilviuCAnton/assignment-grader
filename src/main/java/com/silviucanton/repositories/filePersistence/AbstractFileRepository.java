@@ -19,8 +19,10 @@ import java.util.stream.Stream;
  * @param <ID> - type of the id of the entity
  * @param <E>  - type of the entity
  */
-public abstract class AbstractFileRepository<ID, E extends Entity<ID>> extends InMemoryRepository<ID, E> {
+
+public abstract class AbstractFileRepository<E extends Entity<ID>, ID> extends InMemoryRepository<E, ID> {
     private String fileName;
+
 
     AbstractFileRepository(Validator<E> validator, String fileName, boolean loadData) {
         super(validator);

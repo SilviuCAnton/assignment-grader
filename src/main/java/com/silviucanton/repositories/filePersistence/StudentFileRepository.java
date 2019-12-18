@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * Repository for student storage - file data persistence
  */
 @Component
-public class StudentFileRepository extends AbstractFileRepository<String, Student> {
+public class StudentFileRepository extends AbstractFileRepository<Student, String> {
     @Autowired
     public StudentFileRepository(Validator<Student> validator, @Value("${data.catalog.students}") String fileName) {
         super(validator, fileName, true);

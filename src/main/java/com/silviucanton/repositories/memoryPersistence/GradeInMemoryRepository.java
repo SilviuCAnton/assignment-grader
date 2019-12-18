@@ -2,20 +2,24 @@ package com.silviucanton.repositories.memoryPersistence;
 
 import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.domain.entities.Grade;
+import com.silviucanton.domain.entities.GradeId;
 import com.silviucanton.domain.entities.Student;
 import com.silviucanton.domain.validators.Validator;
-import com.silviucanton.repositories.CrudRepository;
 import com.silviucanton.repositories.GradeRepository;
-import com.silviucanton.utils.Pair;
+import com.silviucanton.repositories.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * In memory repository for grades
  */
-public class GradeInMemoryRepository extends InMemoryRepository<Pair<String, Integer>, Grade> implements GradeRepository {
-    private CrudRepository<String, Student> studentRepo;
-    private CrudRepository<Integer, Assignment> assignmentRepo;
+@org.springframework.stereotype.Repository
+public class GradeInMemoryRepository extends InMemoryRepository<Grade, GradeId> implements GradeRepository {
+    private Repository<Student, String> studentRepo;
+    private Repository<Assignment, Integer> assignmentRepo;
 
-    public GradeInMemoryRepository(Validator<Grade> validator, CrudRepository<String, Student> studentRepo, CrudRepository<Integer, Assignment> assignmentRepo) {
+    @Autowired
+    public GradeInMemoryRepository(Validator<Grade> validator, @Qualifier("studentInMemoryRepository") Repository<Student, String> studentRepo, @Qualifier("assignmentInMemoryRepository") Repository<Assignment, Integer> assignmentRepo) {
         super(validator);
         this.studentRepo = studentRepo;
         this.assignmentRepo = assignmentRepo;
@@ -27,7 +31,7 @@ public class GradeInMemoryRepository extends InMemoryRepository<Pair<String, Int
      * @return studentRepo - Student Crud Repository
      */
     @Override
-    public CrudRepository<String, Student> getStudentRepo() {
+    public Repository<Student, String> getStudentRepo() {
         return studentRepo;
     }
 
@@ -36,7 +40,7 @@ public class GradeInMemoryRepository extends InMemoryRepository<Pair<String, Int
      *
      * @param studentRepo - Student Crud Repository
      */
-    public void setStudentRepo(CrudRepository<String, Student> studentRepo) {
+    public void setStudentRepo(Repository<Student, String> studentRepo) {
         this.studentRepo = studentRepo;
     }
 
@@ -46,7 +50,7 @@ public class GradeInMemoryRepository extends InMemoryRepository<Pair<String, Int
      * @return assignmentRepo - Assignment Crud Repository
      */
     @Override
-    public CrudRepository<Integer, Assignment> getAssignmentRepo() {
+    public Repository<Assignment, Integer> getAssignmentRepo() {
         return assignmentRepo;
     }
 
@@ -55,7 +59,7 @@ public class GradeInMemoryRepository extends InMemoryRepository<Pair<String, Int
      *
      * @param assignmentRepo - Assignment Crud Repository
      */
-    public void setAssignmentRepo(CrudRepository<Integer, Assignment> assignmentRepo) {
+    public void setAssignmentRepo(Repository<Assignment, Integer> assignmentRepo) {
         this.assignmentRepo = assignmentRepo;
     }
 }

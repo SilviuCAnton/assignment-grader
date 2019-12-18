@@ -2,15 +2,39 @@ package com.silviucanton.domain.entities;
 
 import com.silviucanton.services.config.ApplicationContext;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 /**
  * An assignment at a discipline
  */
-public class Assignment extends Entity<Integer> {
+@javax.persistence.Entity
+@Table(name = "assignments")
+public class Assignment implements Entity<Integer> {
+    @Id
+    @Column(name = "assignmentId")
+    private Integer id;
+    @Column(name = "description")
     private String description;
+    @Column(name = "startWeek")
     private int startWeek;
+    @Column(name = "deadlineWeek")
     private int deadlineWeek;
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    protected Assignment() {
+    }
 
     public Assignment(int id, String description, int deadlineWeek) {
         this.setId(id);

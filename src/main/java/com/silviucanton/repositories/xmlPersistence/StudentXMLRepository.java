@@ -13,7 +13,7 @@ import org.w3c.dom.Node;
  * student repository - XML file data persistence
  */
 @Component
-public class StudentXMLRepository extends AbstractXMLRepository<String, Student> {
+public class StudentXMLRepository extends AbstractXMLRepository<Student, String> {
     @Autowired
     public StudentXMLRepository(Validator<Student> validator, @Value("${data.catalog.xml.students}") String fileName) {
         super(validator, fileName, "student", true);

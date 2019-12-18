@@ -4,13 +4,13 @@ import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.domain.validators.AssignmentValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  * Repository for assignment storage - file data persistence
  */
-@Component
-public class AssignmentFileRepository extends AbstractFileRepository<Integer, Assignment> {
+@Repository
+public class AssignmentFileRepository extends AbstractFileRepository<Assignment, Integer> {
     @Autowired
     public AssignmentFileRepository(AssignmentValidator validator, @Value("${data.catalog.assignments}") String fileName) {
         super(validator, fileName, true);

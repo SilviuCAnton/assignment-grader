@@ -8,14 +8,17 @@ import com.silviucanton.utils.observer.Observer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.chart.XYChart.Series;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,16 +38,55 @@ public class DashboardController implements ServiceController, Observer<GradeSer
     @FXML
     public TableColumn<Object, Object> studentNameCol, studentGradeCol;
     @FXML
-    public Label hardestLabel;
+    public Label hardestLabel, percentLabel;
 
     private GradeService gradeService;
     private List<Series> allSeries = new ArrayList<>();
 
     @Override
     public void update(GradeService gradeService) {
+        List<StudentGradeDTO> finalGrades = gradeService.getFinalGrades();
+        List<StudentGradeDTO> neverLate = gradeService.getNeverLateStudents(finalGrades);
+        List<StudentGradeDTO> passedStudents = gradeService.getPassedStudents();
         createGradesBarChart();
-        passedStudentsPieChart.setData(createPassedChart());
-        neverLatePieChart.setData(createNeverLateChart());
+        passedStudentsPieChart.setData(createPassedChart(passedStudents, finalGrades));
+        percentLabel.toFront();
+        for (final PieChart.Data data : passedStudentsPieChart.getData()) {
+            data.getNode().addEventHandler(MouseEvent.MOUSE_MOVED,
+                    new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent e) {
+                            percentLabel.setTranslateX(e.getSceneX());
+                            percentLabel.setTranslateY(e.getSceneY() - 300);
+                            String str = " student";
+                            if (data.getPieValue() > 1)
+                                str += 's';
+                            percentLabel.setText((int) data.getPieValue() + str);
+                        }
+                    });
+            data.getNode().addEventHandler(MouseEvent.MOUSE_EXITED,
+                    new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent e) {
+                            percentLabel.setText("");
+                        }
+                    });
+        }
+
+        neverLatePieChart.setData(createNeverLateChart(neverLate, finalGrades));
+        for (final PieChart.Data data : neverLatePieChart.getData()) {
+            data.getNode().addEventHandler(MouseEvent.MOUSE_MOVED,
+                    e -> {
+                        percentLabel.setTranslateX(e.getSceneX());
+                        percentLabel.setTranslateY(e.getSceneY() - 300);
+                        String str = " student";
+                        if (data.getPieValue() > 1)
+                            str += 's';
+                        percentLabel.setText((int) data.getPieValue() + str);
+                    });
+            data.getNode().addEventHandler(MouseEvent.MOUSE_EXITED,
+                    e -> percentLabel.setText(""));
+        }
         AssignmentGradeDTO hardestAssignment = gradeService.getHardestAssignment();
         hardestLabel.setText(hardestAssignment.getAssignmentName() + " (Average of " + hardestAssignment.getGrade() + ")");
     }
@@ -53,28 +95,23 @@ public class DashboardController implements ServiceController, Observer<GradeSer
     public void initialize(Service service) {
         this.gradeService = (GradeService) service;
         this.gradeService.addObserver(this);
-        update(this.gradeService);
-        createGradesBarChart();
-        passedStudentsPieChart.setData(createPassedChart());
-        neverLatePieChart.setData(createNeverLateChart());
-        AssignmentGradeDTO hardestAssignment = gradeService.getHardestAssignment();
-        hardestLabel.setText(hardestAssignment.getAssignmentName() + " (Average of " + hardestAssignment.getGrade() + ")");
+        update(gradeService);
     }
 
-    private ObservableList<PieChart.Data> createPassedChart() {
+    private ObservableList<PieChart.Data> createPassedChart(List<StudentGradeDTO> passedStd, List<StudentGradeDTO> finalGrades) {
         ObservableList<PieChart.Data> list = FXCollections.observableArrayList();
-        long passed = gradeService.getPassedStudents().size();
-        long failed = gradeService.getFinalGrades().size() - passed;
+        long passed = passedStd.size();
+        long failed = finalGrades.size() - passed;
         list.addAll(new PieChart.Data("Passed", passed),
                 new PieChart.Data("Failed", failed)
         );
         return list;
     }
 
-    private ObservableList<PieChart.Data> createNeverLateChart() {
+    private ObservableList<PieChart.Data> createNeverLateChart(List<StudentGradeDTO> neverLateStd, List<StudentGradeDTO> finalGrades) {
         ObservableList<PieChart.Data> list = FXCollections.observableArrayList();
-        long neverLate = gradeService.getNeverLateStudents().size();
-        long late = gradeService.getFinalGrades().size() - neverLate;
+        long neverLate = neverLateStd.size();
+        long late = finalGrades.size() - neverLate;
         list.addAll(new PieChart.Data("Never late", neverLate),
                 new PieChart.Data("Late at least once", late)
         );
@@ -112,6 +149,45 @@ public class DashboardController implements ServiceController, Observer<GradeSer
     }
 
     public void handleShowNeverLate(ActionEvent actionEvent) {
-        loadStudentTable(gradeService.getNeverLateStudents());
+        loadStudentTable(gradeService.getNeverLateStudents(gradeService.getFinalGrades()));
+    }
+
+    public void handleExportFinalGrades(ActionEvent actionEvent) {
+        final FileChooser fileChooser = new FileChooser();
+        configureFileChooser(fileChooser);
+        File file = fileChooser.showSaveDialog(new Stage());
+        if (file != null) {
+            gradeService.exportPdfFinalGrades(file.getPath());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Final grades exported successfully.", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+
+    public void handleExportPassed(ActionEvent actionEvent) {
+        final FileChooser fileChooser = new FileChooser();
+        configureFileChooser(fileChooser);
+        File file = fileChooser.showSaveDialog(new Stage());
+        if (file != null) {
+            gradeService.exportPdfPassedStudents(file.getPath());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Passed students exported successfully.", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+
+    public void handleExportNeverLate(ActionEvent actionEvent) {
+        final FileChooser fileChooser = new FileChooser();
+        configureFileChooser(fileChooser);
+        File file = fileChooser.showSaveDialog(new Stage());
+        if (file != null) {
+            gradeService.exportPdfNeverLateStudents(file.getPath());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Never late students exported successfully.", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+
+    private void configureFileChooser(final FileChooser fileChooser) {
+        fileChooser.setTitle("Select pdf location");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home") + "/Desktop"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF", "*.pdf"));
     }
 }

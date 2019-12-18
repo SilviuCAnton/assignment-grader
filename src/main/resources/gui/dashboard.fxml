@@ -29,6 +29,7 @@
     <GridPane hgap="20.0" layoutX="20.0" layoutY="192.0" prefHeight="349.0" prefWidth="1066.0"
               AnchorPane.bottomAnchor="40" AnchorPane.topAnchor="192.0" AnchorPane.leftAnchor="20"
               AnchorPane.rightAnchor="16.0">
+        <Label fx:id="percentLabel"/>
         <BarChart fx:id="averageGradeBarChart" GridPane.columnIndex="0" GridPane.rowIndex="0" title="Final Grades"
                   legendSide="LEFT">
             <xAxis>
@@ -38,22 +39,46 @@
                 <NumberAxis fx:id="yAxis" side="LEFT" label="No. of students"/>
             </yAxis>
         </BarChart>
-        <Button onAction="#handleShowFinalGrades" text="Show final grades" GridPane.columnIndex="0"
-                GridPane.rowIndex="1" style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="200.0"
-                stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
-                mnemonicParsing="false"/>
+        <HBox spacing="10" GridPane.columnIndex="0"
+              GridPane.rowIndex="1">
+            <Button onAction="#handleShowFinalGrades" text="Show final grades" style="-fx-border-color: #2D75E8"
+                    prefHeight="25.0" prefWidth="200.0"
+                    stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
+                    mnemonicParsing="false"/>
+            <Button onAction="#handleExportFinalGrades" text="Export final grades" style="-fx-border-color: #2D75E8"
+                    prefHeight="25.0" prefWidth="200.0"
+                    stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
+                    mnemonicParsing="false"/>
+        </HBox>
+
         <PieChart fx:id="passedStudentsPieChart" GridPane.columnIndex="1" GridPane.rowIndex="0" legendSide="LEFT"
                   clockwise="false" title="Passed students"/>
-        <Button onAction="#handleShowPassed" text="Show passed students" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="200.0"
-                stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
-                mnemonicParsing="false"/>
+
+        <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Button onAction="#handleShowPassed" text="Show passed students"
+                    style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="200.0"
+                    stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
+                    mnemonicParsing="false"/>
+            <Button onAction="#handleExportPassed" text="Export passed students"
+                    style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="200.0"
+                    stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
+                    mnemonicParsing="false"/>
+        </HBox>
+
         <PieChart fx:id="neverLatePieChart" GridPane.columnIndex="0" GridPane.rowIndex="2" legendSide="LEFT"
                   clockwise="false" title="Never late students"/>
-        <Button onAction="#handleShowNeverLate" text="Show never late students" GridPane.columnIndex="0"
-                GridPane.rowIndex="3" style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="200.0"
-                stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
-                mnemonicParsing="false"/>
+
+        <HBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="3">
+            <Button onAction="#handleShowNeverLate" text="Show never late students" style="-fx-border-color: #2D75E8"
+                    prefHeight="25.0" prefWidth="200.0"
+                    stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
+                    mnemonicParsing="false"/>
+            <Button onAction="#handleExportNeverLate" text="Export never late students"
+                    style="-fx-border-color: #2D75E8" prefHeight="25.0" prefWidth="200.0"
+                    stylesheets="@../stylesheets/main.css" alignment="CENTER" contentDisplay="TOP"
+                    mnemonicParsing="false"/>
+        </HBox>
+
 
         <VBox alignment="CENTER" GridPane.rowIndex="2" GridPane.columnIndex="1" GridPane.rowSpan="2"
               GridPane.valignment="BOTTOM">

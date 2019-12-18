@@ -13,7 +13,7 @@ import org.w3c.dom.Node;
  * Assignment repository - XML file data persistence
  */
 @Component
-public class AssignmentXMLRepository extends AbstractXMLRepository<Integer, Assignment> {
+public class AssignmentXMLRepository extends AbstractXMLRepository<Assignment, Integer> {
     @Autowired
     public AssignmentXMLRepository(Validator<Assignment> validator, @Value("${data.catalog.xml.assignments}") String fileName) {
         super(validator, fileName, "assignment", true);

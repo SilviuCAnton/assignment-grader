@@ -1,30 +1,32 @@
 package com.silviucanton.services.service;
 
 import com.silviucanton.domain.entities.Assignment;
+import com.silviucanton.domain.validators.Validator;
 import com.silviucanton.exceptions.InvalidAssignmentException;
 import com.silviucanton.exceptions.ValidationException;
 import com.silviucanton.repositories.CrudRepository;
 import com.silviucanton.services.config.ApplicationContext;
 import com.silviucanton.utils.observer.Observable;
 import com.silviucanton.utils.observer.Observer;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * service for assignment operations
  */
-@Component
+@org.springframework.stereotype.Service
 public class AssignmentService implements Service, Observable<AssignmentService> {
-    private CrudRepository<Integer, Assignment> assignmentRepository;
+    private CrudRepository<Assignment, Integer> assignmentRepository;
+    private Validator<Assignment> validator;
     private List<Observer<AssignmentService>> observers = new ArrayList<>();
 
-    @Autowired
-    public AssignmentService(@Qualifier("assignmentDatabaseRepository") CrudRepository<Integer, Assignment> assignmentRepository) {
+    public AssignmentService(@Qualifier("assignmentDatabaseRepository") CrudRepository<Assignment, Integer> assignmentRepository, Validator<Assignment> validator) {
         this.assignmentRepository = assignmentRepository;
+        this.validator = validator;
     }
 
     /**
@@ -35,6 +37,7 @@ public class AssignmentService implements Service, Observable<AssignmentService>
      * @throws IllegalArgumentException if the assignment is null
      */
     public Assignment addAssignment(Assignment assignment) throws ValidationException, IllegalArgumentException {
+        validator.validate(assignment);
         Assignment res = assignmentRepository.save(assignment);
         notifyObservers();
         return res;
@@ -51,7 +54,8 @@ public class AssignmentService implements Service, Observable<AssignmentService>
     public Assignment updateAssignment(Assignment assignment) throws ValidationException, IllegalArgumentException {
         if (assignment.getDeadlineWeek() < ApplicationContext.getYearStructure().getCurrentWeek(ApplicationContext.getCurrentLocalDate()))
             throw new InvalidAssignmentException("Deadline date cannot precede current date!");
-        Assignment res = assignmentRepository.update(assignment);
+        validator.validate(assignment);
+        Assignment res = assignmentRepository.save(assignment);
         notifyObservers();
         return res;
     }
@@ -62,8 +66,8 @@ public class AssignmentService implements Service, Observable<AssignmentService>
      * @param id - the id of the assignment - int
      * @return the result of the search operation - Assignment
      */
-    public Assignment findAssignment(int id) {
-        return assignmentRepository.findOne(id);
+    public Optional<Assignment> findAssignment(int id) {
+        return assignmentRepository.findById(id);
     }
 
     /**
@@ -81,12 +85,10 @@ public class AssignmentService implements Service, Observable<AssignmentService>
      * deletes an assignment from the repository
      *
      * @param id - id of the assignment - int
-     * @return the result of the deletion operation - Assignment
      */
-    public Assignment deleteAssignment(int id) {
-        Assignment res = assignmentRepository.delete(id);
+    public void deleteAssignment(int id) {
+        assignmentRepository.deleteById(id);
         notifyObservers();
-        return res;
     }
 
     @Override
@@ -102,5 +104,11 @@ public class AssignmentService implements Service, Observable<AssignmentService>
     @Override
     public void notifyObservers() {
         observers.forEach(x -> x.update(this));
+    }
+
+    public List<Assignment> findAllAssignmentsByPage(int pageIndex, int rowsPerPage) {
+        List<Assignment> assignmentList = new ArrayList<>();
+        assignmentRepository.findAll(PageRequest.of(pageIndex, rowsPerPage)).forEach(assignmentList::add);
+        return assignmentList;
     }
 }

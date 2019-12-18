@@ -1,20 +1,37 @@
 package com.silviucanton.domain.entities;
 
 import com.silviucanton.services.config.ApplicationContext;
-import com.silviucanton.utils.Pair;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
 /**
  * Assignment grade entity
  */
-public class Grade extends Entity<Pair<String, Integer>> {
-    private Student student;
-    private Assignment assignment;
+@javax.persistence.Entity
+@Table(name = "grades")
+public class Grade implements Entity<GradeId> {
+
+    @Id
+    private GradeId id;
+    @Column(name = "date")
     private LocalDate date;
+    @Column(name = "value")
     private float value;
+    @Column(name = "professor")
     private String professor;
+
+    @ManyToOne
+    @JoinColumn(name = "studentId", insertable = false, updatable = false)
+    private Student student;
+
+    @ManyToOne
+    @JoinColumn(name = "assignmentId", insertable = false, updatable = false)
+    private Assignment assignment;
+
+    protected Grade() {
+    }
 
     public Grade(Student student, Assignment assignment, float value, String professor) {
         this.student = student;
@@ -22,7 +39,7 @@ public class Grade extends Entity<Pair<String, Integer>> {
         this.date = ApplicationContext.getCurrentLocalDate();
         this.value = value;
         this.professor = professor;
-        this.setId(new Pair<>(student.getId(), assignment.getId()));
+        this.setId(new GradeId(student.getId(), assignment.getId()));
     }
 
     /**
@@ -139,6 +156,16 @@ public class Grade extends Entity<Pair<String, Integer>> {
     @Override
     public int hashCode() {
         return Objects.hash(date, value, professor);
+    }
+
+    @Override
+    public GradeId getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(GradeId stringIntegerPair) {
+        this.id = stringIntegerPair;
     }
 
     /**

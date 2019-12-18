@@ -1,51 +1,36 @@
 package com.silviucanton.services.service;
 
 import com.silviucanton.domain.entities.Student;
+import com.silviucanton.domain.validators.Validator;
 import com.silviucanton.exceptions.ValidationException;
 import com.silviucanton.repositories.CrudRepository;
-import com.silviucanton.repositories.filePersistence.StudentFileRepository;
 import com.silviucanton.services.config.ApplicationContext;
 import com.silviucanton.utils.observer.Observable;
 import com.silviucanton.utils.observer.Observer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
+import org.springframework.data.domain.PageRequest;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * Service for student operations
  */
-@Component
+@org.springframework.stereotype.Service
 public class StudentService implements Service, Observable<StudentService> {
-    private CrudRepository<String, Student> studentRepo;
+    private CrudRepository<Student, String> studentRepo;
+    Validator<Student> validator;
     private List<Observer<StudentService>> observers = new ArrayList<>();
 
     @Autowired
-    public StudentService(@Qualifier("studentDatabaseRepository") CrudRepository<String, Student> studentRepo) {
+    public StudentService(@Qualifier("studentDatabaseRepository") CrudRepository<Student, String> studentRepo, Validator<Student> validator) {
         this.studentRepo = studentRepo;
-    }
-
-    /**
-     * returns the student repository
-     *
-     * @return studentRepo - StudentFileRepository
-     */
-    public CrudRepository<String, Student> getStudentRepo() {
-        return studentRepo;
-    }
-
-    /**
-     * sets the student repository
-     *
-     * @param studentRepo - StudentFileRepository
-     */
-    public void setStudentRepo(StudentFileRepository studentRepo) {
-        this.studentRepo = studentRepo;
+        this.validator = validator;
     }
 
     /**
@@ -57,10 +42,12 @@ public class StudentService implements Service, Observable<StudentService> {
      * @throws ValidationException      - if the student is not valid
      */
     public Student saveStudent(Student student) throws IllegalArgumentException, ValidationException {
-        Student st = studentRepo.save(student);
+        validator.validate(student);
+        studentRepo.save(student);
+        Optional<Student> result = studentRepo.findById(student.getId());
 
         //Create json file with student id
-        if (st == null) {
+        if (!result.isPresent()) {
             File file = new File(ApplicationContext.getProperties().getProperty("data.catalog.feedbackPath") + student.getId() + ".json");
             try {
                 if (!file.exists() && !file.createNewFile()) {
@@ -72,7 +59,9 @@ public class StudentService implements Service, Observable<StudentService> {
         }
 
         notifyObservers();
-        return st;
+        if (result.isPresent())
+            return null;
+        return student;
     }
 
     /**
@@ -83,7 +72,8 @@ public class StudentService implements Service, Observable<StudentService> {
      * @throws ValidationException      if the student is not valid
      */
     public Student updateStudent(Student student) throws IllegalArgumentException, ValidationException {
-        Student st = studentRepo.update(student);
+        validator.validate(student);
+        Student st = studentRepo.save(student);
         notifyObservers();
         return st;
     }
@@ -95,8 +85,8 @@ public class StudentService implements Service, Observable<StudentService> {
      * @return the result of searchind the student - Student
      * @throws IllegalArgumentException if the id is null
      */
-    public Student findStudent(String id) throws IllegalArgumentException {
-        return studentRepo.findOne(id);
+    public Optional<Student> findStudent(String id) throws IllegalArgumentException {
+        return studentRepo.findById(id);
     }
 
     /**
@@ -110,17 +100,21 @@ public class StudentService implements Service, Observable<StudentService> {
         return studentList;
     }
 
+    public List<Student> findAllStudentsByPage(int pageIndex, int numberOfStudentPerPage) {
+        List<Student> studentList = new ArrayList<>();
+        studentRepo.findAll(PageRequest.of(pageIndex, numberOfStudentPerPage)).forEach(studentList::add);
+        return studentList;
+    }
+
     /**
      * deletes a student from the repository
      *
      * @param id - id of the student to be deleted - int
-     * @return the result of the deletion operation - Student
      * @throws IllegalArgumentException if the id is null
      */
-    public Student deleteStudent(String id) throws IllegalArgumentException {
-        Student student = studentRepo.delete(id);
+    public void deleteStudent(String id) throws IllegalArgumentException {
+        studentRepo.deleteById(id);
         notifyObservers();
-        return student;
     }
 
     /**

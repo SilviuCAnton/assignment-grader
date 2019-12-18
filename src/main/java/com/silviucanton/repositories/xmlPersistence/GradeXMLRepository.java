@@ -2,8 +2,12 @@ package com.silviucanton.repositories.xmlPersistence;
 
 import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.domain.entities.Grade;
+import com.silviucanton.domain.entities.GradeId;
 import com.silviucanton.domain.entities.Student;
 import com.silviucanton.domain.validators.Validator;
+import com.silviucanton.repositories.CrudNoSpringRepo;
+import com.silviucanton.repositories.GradeRepository;
+import com.silviucanton.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,10 +15,6 @@ import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import com.silviucanton.repositories.CrudRepository;
-import com.silviucanton.repositories.GradeRepository;
-import com.silviucanton.utils.Constants;
-import com.silviucanton.utils.Pair;
 
 import java.time.LocalDate;
 
@@ -22,12 +22,12 @@ import java.time.LocalDate;
  * Grade repository - XML file data persistence
  */
 @Component
-public class GradeXMLRepository extends AbstractXMLRepository<Pair<String, Integer>, Grade> implements GradeRepository {
-    private CrudRepository<String, Student> studentRepo;
-    private CrudRepository<Integer, Assignment> assignmentRepo;
+public class GradeXMLRepository extends AbstractXMLRepository<Grade, GradeId> implements GradeRepository {
+    private CrudNoSpringRepo<Student, String> studentRepo;
+    private CrudNoSpringRepo<Assignment, Integer> assignmentRepo;
 
     @Autowired
-    public GradeXMLRepository(Validator<Grade> validator, @Value("${data.catalog.xml.grades}") String fileName, @Qualifier("studentXMLRepository") CrudRepository<String, Student> studentRepo, @Qualifier("assignmentXMLRepository") CrudRepository<Integer, Assignment> assignmentRepo) {
+    public GradeXMLRepository(Validator<Grade> validator, @Value("${data.catalog.xml.grades}") String fileName, @Qualifier("studentXMLRepository") CrudNoSpringRepo<Student, String> studentRepo, @Qualifier("assignmentXMLRepository") CrudNoSpringRepo<Assignment, Integer> assignmentRepo) {
         super(validator, fileName, "grade", false);
         this.studentRepo = studentRepo;
         this.assignmentRepo = assignmentRepo;
@@ -87,12 +87,12 @@ public class GradeXMLRepository extends AbstractXMLRepository<Pair<String, Integ
     }
 
     @Override
-    public CrudRepository<String, Student> getStudentRepo() {
+    public CrudNoSpringRepo<Student, String> getStudentRepo() {
         return studentRepo;
     }
 
     @Override
-    public CrudRepository<Integer, Assignment> getAssignmentRepo() {
+    public CrudNoSpringRepo<Assignment, Integer> getAssignmentRepo() {
         return assignmentRepo;
     }
 }

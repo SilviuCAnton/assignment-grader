@@ -1,10 +1,11 @@
 package com.silviucanton.domain.auxiliary;
 
+import com.silviucanton.utils.Constants;
+import com.silviucanton.utils.Pair;
+import com.silviucanton.utils.observer.MyPair;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.silviucanton.utils.Constants;
-import com.silviucanton.utils.Pair;
 
 import java.time.LocalDate;
 
@@ -14,7 +15,7 @@ class SemesterStructureTest {
 
     private static SemesterStructure sem;
     private static LocalDate startDate = LocalDate.parse("30.09.2019", Constants.DATE_TIME_FORMATTER);
-    private static Pair<LocalDate, LocalDate> holiday = new Pair<>(LocalDate.parse("23.12.2019", Constants.DATE_TIME_FORMATTER), LocalDate.parse("05.01.2020", Constants.DATE_TIME_FORMATTER));
+    private static Pair<LocalDate, LocalDate> holiday = new MyPair<>(LocalDate.parse("23.12.2019", Constants.DATE_TIME_FORMATTER), LocalDate.parse("05.01.2020", Constants.DATE_TIME_FORMATTER));
 
     @BeforeEach
     void setUp() {
@@ -67,7 +68,7 @@ class SemesterStructureTest {
 
     @Test
     void setHolidayWeeks() {
-        Pair<LocalDate, LocalDate> newHolidays = new Pair<>(LocalDate.parse("10.10.2010", Constants.DATE_TIME_FORMATTER), LocalDate.parse("20.10.2010", Constants.DATE_TIME_FORMATTER));
+        Pair<LocalDate, LocalDate> newHolidays = new MyPair<>(LocalDate.parse("10.10.2010", Constants.DATE_TIME_FORMATTER), LocalDate.parse("20.10.2010", Constants.DATE_TIME_FORMATTER));
         sem.setHolidayWeeks(newHolidays);
         assertEquals(newHolidays, sem.getHolidayWeeks());
     }

@@ -1,11 +1,11 @@
 package com.silviucanton.domain.auxiliary;
 
+import com.silviucanton.services.config.ApplicationContext;
+import com.silviucanton.utils.Constants;
+import com.silviucanton.utils.observer.MyPair;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.silviucanton.services.config.ApplicationContext;
-import com.silviucanton.utils.Constants;
-import com.silviucanton.utils.Pair;
 
 import java.time.LocalDate;
 
@@ -22,12 +22,12 @@ class YearStructureTest {
         sem1 = new SemesterStructure(1,
                 LocalDate.parse("30.09.2019", Constants.DATE_TIME_FORMATTER),
                 14,
-                new Pair<>(LocalDate.parse("23.12.2019", Constants.DATE_TIME_FORMATTER), LocalDate.parse("05.01.2020", Constants.DATE_TIME_FORMATTER)));
+                new MyPair<>(LocalDate.parse("23.12.2019", Constants.DATE_TIME_FORMATTER), LocalDate.parse("05.01.2020", Constants.DATE_TIME_FORMATTER)));
 
         sem2 = new SemesterStructure(2,
                 LocalDate.parse("24.02.2020", Constants.DATE_TIME_FORMATTER),
                 14,
-                new Pair<>(LocalDate.parse("20.04.2019", Constants.DATE_TIME_FORMATTER), LocalDate.parse("26.04.2020", Constants.DATE_TIME_FORMATTER)));
+                new MyPair<>(LocalDate.parse("20.04.2019", Constants.DATE_TIME_FORMATTER), LocalDate.parse("26.04.2020", Constants.DATE_TIME_FORMATTER)));
 
         yearStructure = YearStructure.getInstance(sem1, sem2);
     }
@@ -39,7 +39,7 @@ class YearStructureTest {
 
     @Test
     void getId() {
-        assertNull(yearStructure.getId());
+        assertEquals(yearStructure.getId(), 0);
     }
 
     @Test

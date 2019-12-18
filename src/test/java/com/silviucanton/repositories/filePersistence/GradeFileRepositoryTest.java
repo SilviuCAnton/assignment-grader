@@ -2,17 +2,19 @@ package com.silviucanton.repositories.filePersistence;
 
 import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.domain.entities.Grade;
+import com.silviucanton.domain.entities.GradeId;
 import com.silviucanton.domain.entities.Student;
 import com.silviucanton.domain.validators.AssignmentValidator;
 import com.silviucanton.domain.validators.GradeValidator;
 import com.silviucanton.domain.validators.StudentValidator;
 import com.silviucanton.exceptions.InvalidGradeException;
+import com.silviucanton.repositories.memoryPersistence.AssignmentInMemoryRepository;
+import com.silviucanton.repositories.memoryPersistence.InMemoryRepository;
+import com.silviucanton.repositories.memoryPersistence.StudentInMemoryRepository;
+import com.silviucanton.services.config.ApplicationContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import com.silviucanton.repositories.memoryPersistence.InMemoryRepository;
-import com.silviucanton.services.config.ApplicationContext;
-import com.silviucanton.utils.Pair;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -31,13 +33,13 @@ class GradeFileRepositoryTest {
     private Grade gr1, gr2;
     private Student st1;
     private Assignment as1, as2;
-    private InMemoryRepository<String, Student> studentRepo;
-    private InMemoryRepository<Integer, Assignment> assignmentRepo;
+    private InMemoryRepository<Student, String> studentRepo;
+    private InMemoryRepository<Assignment, Integer> assignmentRepo;
 
     @BeforeEach
     void setUp() {
-        studentRepo = new InMemoryRepository<>(new StudentValidator());
-        assignmentRepo = new InMemoryRepository<>(new AssignmentValidator());
+        studentRepo = new StudentInMemoryRepository(new StudentValidator());
+        assignmentRepo = new AssignmentInMemoryRepository(new AssignmentValidator());
         gradeFileRepository = new GradeFileRepository(new GradeValidator(), ApplicationContext.getProperties().getProperty("data.test.catalog.grades"), studentRepo, assignmentRepo);
         path = Paths.get(ApplicationContext.getProperties().getProperty("data.test.catalog.grades"));
         st1 = new Student("asir2446", "Silviu", "Anton", 221, "asir2446@scs.ubbcluj.ro", "Camelia Serban");
@@ -112,23 +114,23 @@ class GradeFileRepositoryTest {
 
     @Test
     void delete() {
-        assertEquals(gr1, gradeFileRepository.delete(new Pair<>("asir2446", 1)));
-        assertNull(gradeFileRepository.delete(new Pair<>("abcd1238", 3)));
+        assertEquals(gr1, gradeFileRepository.delete(new GradeId("asir2446", 1)));
+        assertNull(gradeFileRepository.delete(new GradeId("abcd1238", 3)));
     }
 
     @Test
     void update() {
         gradeFileRepository.update(new Grade(st1, as1, 6.5f, "newProf"));
-        assertEquals(new Grade(st1, as1, 6.5f, "newProf"), gradeFileRepository.findOne(new Pair<>("asir2446", 1)));
+        assertEquals(new Grade(st1, as1, 6.5f, "newProf"), gradeFileRepository.findOne(new GradeId("asir2446", 1)));
         assertNull(gradeFileRepository.update(new Grade(st1, as2, 6.5f, "newProf")));
     }
 
     @Test
     void findOne() {
         gradeFileRepository.save(gr2);
-        assertEquals(gr1, gradeFileRepository.findOne(new Pair<>("asir2446", 1)));
-        assertEquals(gr2, gradeFileRepository.findOne(new Pair<>("abcd1235", 2)));
-        assertNull(gradeFileRepository.findOne(new Pair<>("abcd1235", 1)));
+        assertEquals(gr1, gradeFileRepository.findOne(new GradeId("asir2446", 1)));
+        assertEquals(gr2, gradeFileRepository.findOne(new GradeId("abcd1235", 2)));
+        assertNull(gradeFileRepository.findOne(new GradeId("abcd1235", 1)));
     }
 
     @Test
@@ -151,7 +153,7 @@ class GradeFileRepositoryTest {
 
     @Test
     void setStudentRepo() {
-        InMemoryRepository<String, Student> newRepo = new InMemoryRepository<>(new StudentValidator());
+        InMemoryRepository<Student, String> newRepo = new StudentInMemoryRepository(new StudentValidator());
         gradeFileRepository.setStudentRepo(newRepo);
         assertEquals(newRepo, gradeFileRepository.getStudentRepo());
     }
@@ -163,7 +165,7 @@ class GradeFileRepositoryTest {
 
     @Test
     void setAssignmentRepo() {
-        InMemoryRepository<Integer, Assignment> newRepo = new InMemoryRepository<>(new AssignmentValidator());
+        InMemoryRepository<Assignment, Integer> newRepo = new AssignmentInMemoryRepository(new AssignmentValidator());
         gradeFileRepository.setAssignmentRepo(newRepo);
         assertEquals(newRepo, gradeFileRepository.getAssignmentRepo());
     }

@@ -43,7 +43,7 @@ class GradeTest {
 
     @Test
     void setId() {
-        g1.setId(new Pair<>("aaaa1234", 1));
+        g1.setId(new GradeId("aaaa1234", 1));
         assertEquals("aaaa1234", g1.getId().getFirst());
         assertEquals(1, g1.getId().getSecond());
     }
