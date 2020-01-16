@@ -99,13 +99,13 @@
         <FontAwesomeIconView fill="#2d75e8" glyphName="SEARCH" layoutX="302.0" layoutY="18.0"/>
         <Button fx:id="addStudentButton" onAction="#handleAddButton" text="Add Student" contentDisplay="TOP"
                 mnemonicParsing="false" layoutX="350" style="-fx-border-color: #2D75E8" prefHeight="25.0"
-                prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
+                prefWidth="140.0" stylesheets="@../stylesheets/main.css"/>
         <Button fx:id="updateStudentButton" onAction="#handleUpdateButton" text="Update Student"
-                contentDisplay="TOP" mnemonicParsing="false" layoutX="475" style="-fx-border-color: #2D75E8"
-                prefHeight="25.0" prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
+                contentDisplay="TOP" mnemonicParsing="false" layoutX="495" style="-fx-border-color: #2D75E8"
+                prefHeight="25.0" prefWidth="140.0" stylesheets="@../stylesheets/main.css"/>
         <Button fx:id="removeStudentButton" onAction="#handleRemoveButton" text="Remove Student"
-                contentDisplay="TOP" mnemonicParsing="false" layoutX="600" style="-fx-border-color: #2D75E8"
-                prefHeight="25.0" prefWidth="120.0" stylesheets="@../stylesheets/main.css"/>
+                contentDisplay="TOP" mnemonicParsing="false" layoutX="640" style="-fx-border-color: #2D75E8"
+                prefHeight="25.0" prefWidth="140.0" stylesheets="@../stylesheets/main.css"/>
         <Label fx:id="operationResultLabel" style="-fx-text-fill: green" layoutX="750" prefHeight="25.0"/>
     </Pane>
 </AnchorPane>

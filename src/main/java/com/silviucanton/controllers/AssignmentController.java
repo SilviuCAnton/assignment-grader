@@ -161,8 +161,8 @@ public class AssignmentController implements ServiceController, Observer<Assignm
 
     private void displayOperationsPane() {
         RubberBand slideOutUp = new RubberBand();
-        slideOutUp.setNode(assignmentTable);
-        AnchorPane.setBottomAnchor(assignmentTable, 120.0);
+        slideOutUp.setNode(pagination);
+        AnchorPane.setBottomAnchor(pagination, 120.0);
         slideOutUp.play();
 
         FadeInUp fadeIn = new FadeInUp();
@@ -192,8 +192,8 @@ public class AssignmentController implements ServiceController, Observer<Assignm
         fadeOutDown.play();
 
         RubberBand slideOutUp = new RubberBand();
-        slideOutUp.setNode(assignmentTable);
-        AnchorPane.setBottomAnchor(assignmentTable, 20.0);
+        slideOutUp.setNode(pagination);
+        AnchorPane.setBottomAnchor(pagination, 20.0);
         slideOutUp.play();
     }
 

@@ -38,6 +38,10 @@ public class User implements Entity<Integer> {
         return this.id;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public void setId(Integer id) {
         this.id = id;

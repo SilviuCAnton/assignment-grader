@@ -52,7 +52,7 @@ public class GradeController implements ServiceController, Observer<GradeService
     @FXML
     public Label operationResultLabel;
     @FXML
-    public Pagination studentPagination, gradePagination;
+    public Pagination studentPagination;
 
 
     private GradeService gradeService;

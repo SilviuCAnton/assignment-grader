@@ -130,8 +130,8 @@ public class StudentController implements ServiceController, Observer<StudentSer
 
     private void displayOperationsPane() {
         RubberBand slideOutUp = new RubberBand();
-        slideOutUp.setNode(studentTable);
-        AnchorPane.setBottomAnchor(studentTable, 120.0);
+        slideOutUp.setNode(pagination);
+        AnchorPane.setBottomAnchor(pagination, 120.0);
         slideOutUp.play();
 
         FadeInUp fadeIn = new FadeInUp();
@@ -163,8 +163,8 @@ public class StudentController implements ServiceController, Observer<StudentSer
         fadeOutDown.play();
 
         RubberBand slideOutUp = new RubberBand();
-        slideOutUp.setNode(studentTable);
-        AnchorPane.setBottomAnchor(studentTable, 20.0);
+        slideOutUp.setNode(pagination);
+        AnchorPane.setBottomAnchor(pagination, 20.0);
         slideOutUp.play();
     }
 

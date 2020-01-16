@@ -20,7 +20,7 @@ public class App extends Application {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource(ApplicationContext.getProperties().getProperty("view.home")));
+        loader.setLocation(getClass().getResource(ApplicationContext.getProperties().getProperty("view.login")));
         loader.setControllerFactory(context::getBean);
         Parent root = loader.load();
 
