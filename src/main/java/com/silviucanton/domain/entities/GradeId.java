@@ -11,9 +11,9 @@ import java.util.Objects;
 @Table(name = "grades")
 public class GradeId implements Pair<String, Integer> {
 
-    @Column(name = "studentId")
+    @Column(name = "studentid")
     private String studentId;
-    @Column(name = "assignmentId")
+    @Column(name = "assignmentid")
     private Integer assignmentId;
 
     public GradeId(String studentId, Integer assignmentId) {

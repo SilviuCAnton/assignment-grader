@@ -15,27 +15,27 @@ public interface Pair<T, E> extends Serializable {
      *
      * @return first - T
      */
-    public T getFirst();
+    T getFirst();
 
     /**
      * sets the first element of the pair
      *
      * @param first - T
      */
-    public void setFirst(T first);
+    void setFirst(T first);
 
     /**
      * returns the second element of the pair
      *
      * @return second - E
      */
-    public E getSecond();
+    E getSecond();
 
     /**
      * sets the second element of the pair
      *
      * @param second - E
      */
-    public void setSecond(E second);
+    void setSecond(E second);
 }
 
