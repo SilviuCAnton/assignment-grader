@@ -33,6 +33,14 @@ public class User implements Entity<Integer> {
         this.role = role;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
     @Override
     public Integer getId() {
         return this.id;
@@ -40,6 +48,10 @@ public class User implements Entity<Integer> {
 
     public String getPassword() {
         return password;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.silviucanton.controllers;
 
+import com.silviucanton.domain.auxiliary.Role;
 import com.silviucanton.domain.entities.User;
 import com.silviucanton.services.config.ApplicationContext;
 import com.silviucanton.services.service.StudentService;
@@ -42,6 +43,8 @@ public class LoginController {
         Optional<User> foundUser = userService.findUserByUsername(userNameField.getText());
         if(foundUser.isPresent()){
             if(passwordField.getText().equals(foundUser.get().getPassword())){
+                ApplicationContext.setCurrentRole(foundUser.get().getRole());
+                ApplicationContext.setCurrentUsername(userNameField.getText());
                 ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/gui/home.fxml"));
@@ -55,6 +58,8 @@ public class LoginController {
                 Stage stage = new Stage();
                 assert root != null;
                 stage.setScene(new Scene(root));
+                HomeController controller = loader.getController();
+                controller.setUpAppForUserType();
                 stage.getIcons().add(new Image(ApplicationContext.getProperties().getProperty("icons.grad_cap")));
                 stage.initModality(Modality.APPLICATION_MODAL);
                 stage.show();

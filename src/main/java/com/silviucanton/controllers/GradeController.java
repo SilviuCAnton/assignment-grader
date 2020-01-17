@@ -2,6 +2,7 @@ package com.silviucanton.controllers;
 
 import animatefx.animation.*;
 import com.silviucanton.domain.auxiliary.AssignmentGradeDTO;
+import com.silviucanton.domain.auxiliary.Role;
 import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.domain.entities.Grade;
 import com.silviucanton.domain.entities.Student;
@@ -34,7 +35,7 @@ public class GradeController implements ServiceController, Observer<GradeService
     @FXML
     public GridPane operationsPane, updatePane;
     @FXML
-    public Button addGradeButton, updateGradeButton, removeGradeButton, filtersButton;
+    public Button addGradeButton, updateGradeButton, removeGradeButton;
     @FXML
     public TableView<AssignmentGradeDTO> gradeTable;
     @FXML
@@ -50,7 +51,7 @@ public class GradeController implements ServiceController, Observer<GradeService
     @FXML
     public TextArea feedbackTextArea;
     @FXML
-    public Label operationResultLabel;
+    public Label operationResultLabel, titleLabel;
     @FXML
     public Pagination studentPagination;
 
@@ -59,7 +60,6 @@ public class GradeController implements ServiceController, Observer<GradeService
 
     @Override
     public void update(GradeService gradeService) {
-
         reloadStudentTable();
     }
 
@@ -112,18 +112,36 @@ public class GradeController implements ServiceController, Observer<GradeService
         });
         this.gradeService = (GradeService) service;
 
-        studentTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Student student = studentTable.getSelectionModel().getSelectedItem();
-            Optional<Assignment> ass = gradeService.findAssignmentByID(gradeService.getAllGrades().get(0).getId().getSecond());
+        if(ApplicationContext.getCurrentRole().equals(Role.STUDENT)){
+            titleLabel.setText(ApplicationContext.getCurrentUsername() + "'s grades");
+            updateGradeButton.setDisable(true);
+            removeGradeButton.setDisable(true);
+            addGradeButton.setDisable(true);
+            searchField.setDisable(true);
+            studentPagination.setVisible(false);
+            GridPane.setColumnSpan(gradeTable, 3);
+            GridPane.setColumnIndex(gradeTable, 0);
+            Student student = gradeService.getStudents().stream().filter(x->x.getId().equals(ApplicationContext.getCurrentUsername())).findFirst().get();
             List<AssignmentGradeDTO> assignmentGradeDTOS = gradeService.getAllGrades().stream()
                     .filter(x -> x.getStudent().equals(student))
                     .map(x -> new AssignmentGradeDTO(x.getAssignment().getDescription(), x.getValue(), x.getDate()))
                     .collect(Collectors.toList());
             loadGradesTable(assignmentGradeDTOS);
-        });
+            this.gradeService.addObserver(this);
+            update(this.gradeService);
+        }
 
-        this.gradeService.addObserver(this);
-        update(this.gradeService);
+
+        studentTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Student student = studentTable.getSelectionModel().getSelectedItem();
+            List<AssignmentGradeDTO> assignmentGradeDTOS = gradeService.getAllGrades().stream()
+                    .filter(x -> x.getStudent().equals(student))
+                    .map(x -> new AssignmentGradeDTO(x.getAssignment().getDescription(), x.getValue(), x.getDate()))
+                    .collect(Collectors.toList());
+            loadGradesTable(assignmentGradeDTOS);
+            this.gradeService.addObserver(this);
+            update(this.gradeService);
+        });
     }
 
     private void reloadStudentTable() {
@@ -410,9 +428,6 @@ public class GradeController implements ServiceController, Observer<GradeService
         rubberBand.setNode(studentTable.getParent());
         AnchorPane.setBottomAnchor(studentTable.getParent(), 160.0);
         rubberBand.play();
-        RubberBand rubberBand2 = new RubberBand(filtersButton);
-        AnchorPane.setBottomAnchor(filtersButton, 120.0);
-        rubberBand2.play();
 
         FadeInUp fadeIn = new FadeInUp();
         updatePane.setVisible(true);
@@ -445,9 +460,6 @@ public class GradeController implements ServiceController, Observer<GradeService
         slideOutUp.setNode(studentTable.getParent());
         AnchorPane.setBottomAnchor(studentTable.getParent(), 100.0);
         slideOutUp.play();
-        RubberBand rubberBand = new RubberBand(filtersButton);
-        AnchorPane.setBottomAnchor(filtersButton, 60.0);
-        rubberBand.play();
     }
 
     public void handleSearch(KeyEvent keyEvent) {

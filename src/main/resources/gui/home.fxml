@@ -34,40 +34,40 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         </rowConstraints>
-        <Button onAction="#handleDashboardButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button fx:id="dashboardButton" onAction="#handleDashboardButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
                 prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Dashboard">
             <graphic>
                 <FontAwesomeIconView fill="#2d75e8" glyphName="HOME" size="50"/>
             </graphic>
         </Button>
-        <Button onAction="#handleStudentsButton" contentDisplay="TOP" mnemonicParsing="false"
+        <Button fx:id="studentsButton" onAction="#handleStudentsButton" contentDisplay="TOP" mnemonicParsing="false"
                 prefHeight="181.0" prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Students"
                 GridPane.columnIndex="1">
             <graphic>
                 <FontAwesomeIconView fill="#2d75e8" glyphName="GROUP" size="50"/>
             </graphic>
         </Button>
-        <Button onAction="#handleAssignmentsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button fx:id="assignmentsButton" onAction="#handleAssignmentsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
                 prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Assignments"
                 GridPane.columnIndex="2">
             <graphic>
                 <FontAwesomeIconView fill="#2d75e8" glyphName="CALENDAR_CHECK_ALT" size="50"/>
             </graphic>
         </Button>
-        <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button fx:id="settingsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
                 prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Settings" GridPane.columnIndex="2"
                 GridPane.rowIndex="1">
             <graphic>
                 <FontAwesomeIconView fill="#2d75e8" glyphName="SLIDERS" size="50"/>
             </graphic>
         </Button>
-        <Button contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0" prefWidth="242.0"
-                stylesheets="@../stylesheets/main.css" text="Update" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <Button fx:id="usersButton" onAction="#handleUsersButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0" prefWidth="242.0"
+                stylesheets="@../stylesheets/main.css" text="Users" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <graphic>
                 <FontAwesomeIconView fill="#2d75e8" glyphName="EXCHANGE" size="50"/>
             </graphic>
         </Button>
-        <Button onAction="#handleGradesButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button fx:id="gradesButton" onAction="#handleGradesButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
                 prefWidth="242.0"
                 stylesheets="@../stylesheets/main.css" text="Grades" GridPane.rowIndex="1">
             <graphic>

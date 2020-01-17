@@ -1,5 +1,6 @@
 package com.silviucanton.services.config;
 
+import com.silviucanton.domain.auxiliary.Role;
 import com.silviucanton.domain.auxiliary.SemesterStructure;
 import com.silviucanton.domain.auxiliary.YearStructure;
 import com.silviucanton.utils.Constants;
@@ -11,6 +12,8 @@ import java.util.Properties;
 public class ApplicationContext {
     private static final Properties PROPERTIES = Config.getProperties();
     private static final Properties YEAR_STRUCTURE_PROPERTIES = Config.getYearStructureProperties();
+    private static Role currentRole = Role.ADMIN;
+    private static String currentUsername = "";
 
     private static YearStructure yearStructure = YearStructure.getInstance(new SemesterStructure(Integer.parseInt(YEAR_STRUCTURE_PROPERTIES.getProperty("idSem1")),
                     LocalDate.parse(YEAR_STRUCTURE_PROPERTIES.getProperty("startDateSem1"), Constants.DATE_TIME_FORMATTER),
@@ -22,6 +25,22 @@ public class ApplicationContext {
                     Integer.parseInt(YEAR_STRUCTURE_PROPERTIES.getProperty("nrWeeksSem2")),
                     new MyPair<>(LocalDate.parse(YEAR_STRUCTURE_PROPERTIES.getProperty("holidayStartSem2"), Constants.DATE_TIME_FORMATTER),
                             LocalDate.parse(YEAR_STRUCTURE_PROPERTIES.getProperty("holidayEndSem2"), Constants.DATE_TIME_FORMATTER))));
+
+    public static void setCurrentRole(Role r){
+        currentRole = r;
+    }
+
+    public static void setCurrentUsername(String username){
+        currentUsername = username;
+    }
+
+    public static String getCurrentUsername(){
+        return currentUsername;
+    }
+
+    public static Role getCurrentRole() {
+        return  currentRole;
+    }
 
     public static Properties getProperties() {
         return PROPERTIES;

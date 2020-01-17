@@ -1,14 +1,14 @@
 package com.silviucanton.controllers;
 
+import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.services.config.ApplicationContext;
-import com.silviucanton.services.service.AssignmentService;
-import com.silviucanton.services.service.GradeService;
-import com.silviucanton.services.service.Service;
-import com.silviucanton.services.service.StudentService;
+import com.silviucanton.services.service.*;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -20,23 +20,40 @@ import java.io.IOException;
 @Component
 public class HomeController implements ServiceController {
 
+    @FXML
+    public Button dashboardButton, studentsButton, assignmentsButton, usersButton, settingsButton, gradesButton;
     private StudentService studentService;
     private AssignmentService assignmentService;
     private GradeService gradeService;
+    private UserService userService;
 
     @Autowired
-    public void setStudentService(StudentService studentService) {
+    public HomeController(StudentService studentService, AssignmentService assignmentService, GradeService gradeService, UserService userService){
         this.studentService = studentService;
-    }
-
-    @Autowired
-    public void setAssignmentService(AssignmentService assignmentService) {
         this.assignmentService = assignmentService;
+        this.gradeService = gradeService;
+        this.userService = userService;
     }
 
-    @Autowired
-    public void setGradeService(GradeService gradeService) {
-        this.gradeService = gradeService;
+    public void setUpAppForUserType() {
+        switch (ApplicationContext.getCurrentRole()){
+            case STUDENT:
+                studentsButton.setDisable(true);
+                settingsButton.setDisable(true);
+                usersButton.setDisable(true);
+                assignmentsButton.setDisable(true);
+                dashboardButton.setDisable(true);
+                break;
+            case PROFESSOR:
+                usersButton.setDisable(true);
+                settingsButton.setDisable(true);
+                break;
+            case ADMIN:
+                dashboardButton.setDisable(true);
+                gradesButton.setDisable(true);
+                assignmentsButton.setDisable(true);
+                break;
+        }
     }
 
     private void loadStage(String fxml, Service service) {
@@ -70,5 +87,9 @@ public class HomeController implements ServiceController {
 
     public void handleDashboardButton(ActionEvent actionEvent) {
         loadStage(ApplicationContext.getProperties().getProperty("view.dashboard"), gradeService);
+    }
+
+    public void handleUsersButton(ActionEvent actionEvent) {
+        loadStage(ApplicationContext.getProperties().getProperty("view.users"), userService);
     }
 }
