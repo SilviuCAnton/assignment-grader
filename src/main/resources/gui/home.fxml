@@ -56,7 +56,7 @@
                 <FontAwesomeIconView fill="#2d75e8" glyphName="CALENDAR_CHECK_ALT" size="50"/>
             </graphic>
         </Button>
-        <Button fx:id="settingsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button fx:id="settingsButton" onAction="#handleSettingsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
                 prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Settings" GridPane.columnIndex="2"
                 GridPane.rowIndex="1">
             <graphic>

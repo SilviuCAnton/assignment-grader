@@ -92,4 +92,8 @@ public class HomeController implements ServiceController {
     public void handleUsersButton(ActionEvent actionEvent) {
         loadStage(ApplicationContext.getProperties().getProperty("view.users"), userService);
     }
+
+    public void handleSettingsButton(ActionEvent actionEvent) {
+        loadStage(ApplicationContext.getProperties().getProperty("view.settings"), userService);
+    }
 }

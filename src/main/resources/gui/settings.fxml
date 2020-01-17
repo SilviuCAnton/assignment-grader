@@ -8,7 +8,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="1192.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.silviucanton.controllers.StudentController">
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0" prefWidth="1192.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.silviucanton.controllers.SettingsController">
 
     <Pane prefHeight="139.0" prefWidth="1102.0" style="-fx-background-color: linear-gradient(from 10% 10% to 60% 60%, #2D75E8, #0033cc);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label layoutX="73.0" layoutY="30.0" text="Settings" textFill="WHITE">
@@ -32,27 +34,42 @@
         </columnConstraints>
 
         <rowConstraints>
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-            <RowConstraints valignment="CENTER" />
-         <RowConstraints valignment="CENTER" />
-         <RowConstraints valignment="CENTER" />
-         <RowConstraints valignment="CENTER" />
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="9"/>
+            <RowConstraints valignment="CENTER" percentHeight="10"/>
         </rowConstraints>
-      <children>
-         <Label text="Label" />
-         <Label text="Label" GridPane.rowIndex="1" />
-         <Label layoutX="281.0" layoutY="26.0" text="Label" GridPane.rowIndex="2" />
-         <Label layoutX="281.0" layoutY="10.0" text="Label" GridPane.rowIndex="3" />
-         <Label layoutX="281.0" layoutY="10.0" text="Label" GridPane.rowIndex="4" />
-      </children>
+
+         <Label text="idSem1: " />
+         <Label text="startDateSem1: " GridPane.rowIndex="1" />
+         <Label text="nrWeeksSem1: " GridPane.rowIndex="2" />
+         <Label text="holidayStartSem1: " GridPane.rowIndex="3" />
+         <Label text="holidayEndSem1: " GridPane.rowIndex="4" />
+         <Label text="idSem2: " GridPane.rowIndex="5" />
+         <Label text="startDateSem2: " GridPane.rowIndex="6" />
+         <Label text="nrWeeksSem2: " GridPane.rowIndex="7" />
+         <Label text="holidayStartSem2: " GridPane.rowIndex="8" />
+         <Label text="holidayEndSem2: " GridPane.rowIndex="9" />
+
+        <TextField fx:id="idSem1" prefWidth="300.0" maxWidth="300.0" GridPane.columnIndex="1"/>
+        <TextField fx:id="startDateSem1" prefWidth="300.0" maxWidth="300.0" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <TextField fx:id="nrWeeksSem1" prefWidth="300.0" maxWidth="300.0" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <TextField fx:id="holidayStartSem1" prefWidth="300.0" maxWidth="300.0" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <TextField fx:id="holidayEndSem1" prefWidth="300.0" maxWidth="300.0" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        <TextField fx:id="idSem2" prefWidth="300.0" maxWidth="300.0" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+        <TextField fx:id="startDateSem2" prefWidth="300.0" maxWidth="300.0" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+        <TextField fx:id="nrWeeksSem2" prefWidth="300.0" maxWidth="300.0" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+        <TextField fx:id="holidayStartSem2" prefWidth="300.0" maxWidth="300.0" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+        <TextField fx:id="holidayEndSem2" prefWidth="300.0" maxWidth="300.0" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+        <Button fx:id="saveSettingsButton" GridPane.columnSpan="2" GridPane.rowIndex="10" text="Save Settings" onAction="#handleSaveSettings" prefHeight="25.0" prefWidth="200.0" style="-fx-border-color: #2D75E8" stylesheets="@../stylesheets/main.css"/>
+
     </GridPane>
 </AnchorPane>

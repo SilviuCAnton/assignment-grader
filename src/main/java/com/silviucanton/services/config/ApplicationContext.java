@@ -46,6 +46,10 @@ public class ApplicationContext {
         return PROPERTIES;
     }
 
+    public static Properties getYearStructureProperties() {
+        return YEAR_STRUCTURE_PROPERTIES;
+    }
+
     public static YearStructure getYearStructure() {
         return yearStructure;
     }
