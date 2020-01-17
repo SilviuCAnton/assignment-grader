@@ -40,6 +40,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -55,8 +56,8 @@ public class GradeService implements Service, Observable<GradeService> {
     private List<Observer<GradeService>> observers = new ArrayList<>();
 
     @Autowired
-    public GradeService(GradeDatabaseRepository gradeRepository, @Qualifier("studentDatabaseRepository") Repository<Student, String> studentRepository, @Qualifier("assignmentDatabaseRepository") Repository<Assignment, Integer> assignmentRepository, @Qualifier("gradeValidator") Validator<Grade> validator) {
-        this.gradeRepository = gradeRepository;
+    public GradeService( GradeDatabaseRepository gradeRepository, @Qualifier("studentDatabaseRepository") Repository<Student, String> studentRepository, @Qualifier("assignmentDatabaseRepository") Repository<Assignment, Integer> assignmentRepository, @Qualifier("gradeValidator") Validator<Grade> validator) {
+        this.gradeRepository =  gradeRepository;
         this.studentRepository = (CrudRepository<Student, String>) studentRepository;
         this.assignmentRepository = (CrudRepository<Assignment, Integer>) assignmentRepository;
         this.validator = validator;

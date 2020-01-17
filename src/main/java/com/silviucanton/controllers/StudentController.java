@@ -58,7 +58,7 @@ public class StudentController implements ServiceController, Observer<StudentSer
     }
 
     int rowsPerPage() {
-        return 5;
+        return 10;
     }
 
     public void initialize(Service studentService) {

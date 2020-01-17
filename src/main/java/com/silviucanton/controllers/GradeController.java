@@ -137,7 +137,6 @@ public class GradeController implements ServiceController, Observer<GradeService
                     .collect(Collectors.toList());
             loadGradesTable(assignmentGradeDTOS);
             this.gradeService.addObserver(this);
-            update(this.gradeService);
         });
 
         update(this.gradeService);
@@ -160,7 +159,7 @@ public class GradeController implements ServiceController, Observer<GradeService
     }
 
     int rowsPerPage() {
-        return 5;
+        return 10;
     }
 
     private void loadStudentTable(List<Student> studentList) {

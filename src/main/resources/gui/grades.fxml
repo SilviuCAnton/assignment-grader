@@ -28,7 +28,7 @@
     <GridPane hgap="20.0" layoutX="20.0" layoutY="192.0" prefHeight="349.0" prefWidth="1066.0"
               AnchorPane.bottomAnchor="100" AnchorPane.topAnchor="192.0" AnchorPane.leftAnchor="20"
               AnchorPane.rightAnchor="16.0">
-        <Pagination fx:id="studentPagination" prefWidth="600.0" GridPane.columnSpan="2">
+        <Pagination fx:id="studentPagination" prefWidth="600.0" GridPane.columnSpan="2" pageCount="40">
             <fx:define>
                 <TableView fx:id="studentTable"
                            prefWidth="600.0"

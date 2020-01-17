@@ -1,9 +1,8 @@
 package com.silviucanton.controllers;
 
-import com.silviucanton.domain.auxiliary.Role;
+import com.google.common.hash.Hashing;
 import com.silviucanton.domain.entities.User;
 import com.silviucanton.services.config.ApplicationContext;
-import com.silviucanton.services.service.StudentService;
 import com.silviucanton.services.service.UserService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +21,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 @Component
@@ -41,8 +41,12 @@ public class LoginController {
     public void handleLogin(ActionEvent actionEvent) {
 
         Optional<User> foundUser = userService.findUserByUsername(userNameField.getText());
-        if(foundUser.isPresent()){
-            if(passwordField.getText().equals(foundUser.get().getPassword())){
+        if (foundUser.isPresent()) {
+            String sha256hex = Hashing.sha256()
+                    .hashString(passwordField.getText(), StandardCharsets.UTF_8)
+                    .toString();
+            System.out.println(sha256hex);
+            if (sha256hex.equals(foundUser.get().getPassword())) {
                 ApplicationContext.setCurrentRole(foundUser.get().getRole());
                 ApplicationContext.setCurrentUsername(userNameField.getText());
                 ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");

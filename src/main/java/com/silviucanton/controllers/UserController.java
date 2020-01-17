@@ -3,12 +3,11 @@ package com.silviucanton.controllers;
 import animatefx.animation.FadeInUp;
 import animatefx.animation.FadeOutDown;
 import animatefx.animation.RubberBand;
+import com.google.common.hash.Hashing;
 import com.silviucanton.domain.auxiliary.Role;
-import com.silviucanton.domain.entities.Student;
 import com.silviucanton.domain.entities.User;
 import com.silviucanton.exceptions.ValidationException;
 import com.silviucanton.services.service.Service;
-import com.silviucanton.services.service.StudentService;
 import com.silviucanton.services.service.UserService;
 import com.silviucanton.utils.observer.Observer;
 import javafx.collections.FXCollections;
@@ -22,7 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,9 +96,12 @@ public class UserController implements ServiceController, Observer<UserService> 
     public void handleSubmitButton(ActionEvent actionEvent) {
         if (submitButton.getText().equals("Add")) {
             try {
+                String sha256hex = Hashing.sha256()
+                        .hashString(passwordTextField.getText(), StandardCharsets.UTF_8)
+                        .toString();
                 User user = new User(Integer.parseInt(idTextField.getText()),
                         usernameTextField.getText(),
-                        passwordTextField.getText(),
+                        sha256hex,
                         emailTextField.getText(),
                         roleCombo.getValue());
                 userService.saveUser(user);
@@ -112,9 +114,12 @@ public class UserController implements ServiceController, Observer<UserService> 
             }
         } else if (submitButton.getText().equals("Update")) {
             try {
+                String sha256hex = Hashing.sha256()
+                        .hashString(passwordTextField.getText(), StandardCharsets.UTF_8)
+                        .toString();
                 User user = new User(Integer.parseInt(idTextField.getText()),
                         usernameTextField.getText(),
-                        passwordTextField.getText(),
+                        sha256hex,
                         emailTextField.getText(),
                         roleCombo.getValue());
                 userService.updateUser(user);

@@ -127,7 +127,7 @@ public class AssignmentController implements ServiceController, Observer<Assignm
     }
 
     int rowsPerPage() {
-        return 5;
+        return 10;
     }
 
     private void reloadTable() {
