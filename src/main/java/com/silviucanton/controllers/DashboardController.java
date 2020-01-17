@@ -1,7 +1,7 @@
 package com.silviucanton.controllers;
 
 import com.silviucanton.domain.auxiliary.AssignmentGradeDTO;
-import com.silviucanton.domain.auxiliary.StudentGradeDTO;
+import com.silviucanton.domain.auxiliary.StudentFinalGradeDto;
 import com.silviucanton.services.service.GradeService;
 import com.silviucanton.services.service.Service;
 import com.silviucanton.utils.observer.Observer;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class DashboardController implements ServiceController, Observer<GradeService> {
 
     @FXML
-    public TableView<StudentGradeDTO> studentTable;
+    public TableView<StudentFinalGradeDto> studentTable;
     @FXML
     public PieChart passedStudentsPieChart, neverLatePieChart;
     @FXML
@@ -45,9 +45,9 @@ public class DashboardController implements ServiceController, Observer<GradeSer
 
     @Override
     public void update(GradeService gradeService) {
-        List<StudentGradeDTO> finalGrades = gradeService.getFinalGrades();
-        List<StudentGradeDTO> neverLate = gradeService.getNeverLateStudents(finalGrades);
-        List<StudentGradeDTO> passedStudents = gradeService.getPassedStudents();
+        List<StudentFinalGradeDto> finalGrades = gradeService.getFinalGrades();
+        List<StudentFinalGradeDto> neverLate = gradeService.getNeverLateStudents(finalGrades);
+        List<StudentFinalGradeDto> passedStudents = gradeService.getPassedStudents();
         createGradesBarChart();
         passedStudentsPieChart.setData(createPassedChart(passedStudents, finalGrades));
         percentLabel.toFront();
@@ -98,7 +98,7 @@ public class DashboardController implements ServiceController, Observer<GradeSer
         update(gradeService);
     }
 
-    private ObservableList<PieChart.Data> createPassedChart(List<StudentGradeDTO> passedStd, List<StudentGradeDTO> finalGrades) {
+    private ObservableList<PieChart.Data> createPassedChart(List<StudentFinalGradeDto> passedStd, List<StudentFinalGradeDto> finalGrades) {
         ObservableList<PieChart.Data> list = FXCollections.observableArrayList();
         long passed = passedStd.size();
         long failed = finalGrades.size() - passed;
@@ -108,7 +108,7 @@ public class DashboardController implements ServiceController, Observer<GradeSer
         return list;
     }
 
-    private ObservableList<PieChart.Data> createNeverLateChart(List<StudentGradeDTO> neverLateStd, List<StudentGradeDTO> finalGrades) {
+    private ObservableList<PieChart.Data> createNeverLateChart(List<StudentFinalGradeDto> neverLateStd, List<StudentFinalGradeDto> finalGrades) {
         ObservableList<PieChart.Data> list = FXCollections.observableArrayList();
         long neverLate = neverLateStd.size();
         long late = finalGrades.size() - neverLate;
@@ -133,8 +133,8 @@ public class DashboardController implements ServiceController, Observer<GradeSer
         }
     }
 
-    private void loadStudentTable(List<StudentGradeDTO> studentList) {
-        ObservableList<StudentGradeDTO> students = FXCollections.observableArrayList(studentList);
+    private void loadStudentTable(List<StudentFinalGradeDto> studentList) {
+        ObservableList<StudentFinalGradeDto> students = FXCollections.observableArrayList(studentList);
         studentNameCol.setCellValueFactory(new PropertyValueFactory<>("studentName"));
         studentGradeCol.setCellValueFactory(new PropertyValueFactory<>("finalGrade"));
         studentTable.setItems(students);

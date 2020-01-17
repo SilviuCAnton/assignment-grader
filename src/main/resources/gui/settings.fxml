@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="690.0"
+            prefWidth="1192.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.silviucanton.controllers.StudentController">
+
+    <Pane prefHeight="139.0" prefWidth="1102.0"
+          style="-fx-background-color: linear-gradient(from 10% 10% to 60% 60%, #2D75E8, #0033cc);"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Label layoutX="73.0" layoutY="30.0" text="Settings" textFill="WHITE">
+            <font>
+                <Font size="48.0"/>
+            </font>
+        </Label>
+        <Label layoutX="79.0" layoutY="91.0" text="Assignment Grader" textFill="WHITE">
+            <font>
+                <Font size="13.0"/>
+            </font>
+        </Label>
+    </Pane>
+
+    <GridPane layoutY="192.0" prefHeight="349.0" prefWidth="1066.0"
+              AnchorPane.bottomAnchor="20" AnchorPane.leftAnchor="20.0"
+              AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="192.0">
+
+
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" halignment="CENTER"/>
+            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" halignment="CENTER"/>
+        </columnConstraints>
+
+        <rowConstraints>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+            <RowConstraints valignment="CENTER"/>
+        </rowConstraints>
+    </GridPane>
+</AnchorPane>

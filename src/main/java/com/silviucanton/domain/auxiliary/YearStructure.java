@@ -2,6 +2,7 @@ package com.silviucanton.domain.auxiliary;
 
 import com.silviucanton.domain.entities.Entity;
 import com.silviucanton.utils.Pair;
+import org.springframework.data.jpa.repository.query.Procedure;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -45,6 +46,7 @@ public class YearStructure implements Entity<Integer> {
      *
      * @return currentWeekNumber - int
      */
+    @Procedure(name = "getWeekNumber")
     public Integer getCurrentWeek(LocalDate current) {
         int currentWeekNumber;
         SemesterStructure sem;

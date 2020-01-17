@@ -34,7 +34,8 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         </rowConstraints>
-        <Button fx:id="dashboardButton" onAction="#handleDashboardButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button fx:id="dashboardButton" onAction="#handleDashboardButton" contentDisplay="TOP" mnemonicParsing="false"
+                prefHeight="181.0"
                 prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Dashboard">
             <graphic>
                 <FontAwesomeIconView fill="#2d75e8" glyphName="HOME" size="50"/>
@@ -44,10 +45,11 @@
                 prefHeight="181.0" prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Students"
                 GridPane.columnIndex="1">
             <graphic>
-                <FontAwesomeIconView fill="#2d75e8" glyphName="GROUP" size="50"/>
+                <FontAwesomeIconView fill="#2d75e8" glyphName="GRADUATION_CAP" size="50"/>
             </graphic>
         </Button>
-        <Button fx:id="assignmentsButton" onAction="#handleAssignmentsButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button fx:id="assignmentsButton" onAction="#handleAssignmentsButton" contentDisplay="TOP"
+                mnemonicParsing="false" prefHeight="181.0"
                 prefWidth="242.0" stylesheets="@../stylesheets/main.css" text="Assignments"
                 GridPane.columnIndex="2">
             <graphic>
@@ -61,13 +63,15 @@
                 <FontAwesomeIconView fill="#2d75e8" glyphName="SLIDERS" size="50"/>
             </graphic>
         </Button>
-        <Button fx:id="usersButton" onAction="#handleUsersButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0" prefWidth="242.0"
+        <Button fx:id="usersButton" onAction="#handleUsersButton" contentDisplay="TOP" mnemonicParsing="false"
+                prefHeight="181.0" prefWidth="242.0"
                 stylesheets="@../stylesheets/main.css" text="Users" GridPane.columnIndex="1" GridPane.rowIndex="1">
             <graphic>
-                <FontAwesomeIconView fill="#2d75e8" glyphName="EXCHANGE" size="50"/>
+                <FontAwesomeIconView fill="#2d75e8" glyphName="GROUP" size="50"/>
             </graphic>
         </Button>
-        <Button fx:id="gradesButton" onAction="#handleGradesButton" contentDisplay="TOP" mnemonicParsing="false" prefHeight="181.0"
+        <Button fx:id="gradesButton" onAction="#handleGradesButton" contentDisplay="TOP" mnemonicParsing="false"
+                prefHeight="181.0"
                 prefWidth="242.0"
                 stylesheets="@../stylesheets/main.css" text="Grades" GridPane.rowIndex="1">
             <graphic>

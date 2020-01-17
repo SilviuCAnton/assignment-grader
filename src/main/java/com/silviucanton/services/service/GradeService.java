@@ -14,7 +14,7 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.silviucanton.domain.auxiliary.AssignmentGradeDTO;
 import com.silviucanton.domain.auxiliary.FeedbackDTO;
-import com.silviucanton.domain.auxiliary.StudentGradeDTO;
+import com.silviucanton.domain.auxiliary.StudentFinalGradeDto;
 import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.domain.entities.Grade;
 import com.silviucanton.domain.entities.GradeId;
@@ -23,6 +23,7 @@ import com.silviucanton.domain.validators.Validator;
 import com.silviucanton.exceptions.InvalidGradeException;
 import com.silviucanton.repositories.CrudRepository;
 import com.silviucanton.repositories.Repository;
+import com.silviucanton.repositories.databasePersistence.GradeDatabaseRepository;
 import com.silviucanton.services.config.ApplicationContext;
 import com.silviucanton.utils.observer.Observable;
 import com.silviucanton.utils.observer.Observer;
@@ -39,7 +40,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,14 +49,14 @@ import java.util.stream.Collectors;
 @org.springframework.stereotype.Service
 public class GradeService implements Service, Observable<GradeService> {
     private Validator<Grade> validator;
-    private CrudRepository<Grade, GradeId> gradeRepository;
+    private GradeDatabaseRepository gradeRepository;
     private CrudRepository<Student, String> studentRepository;
     private CrudRepository<Assignment, Integer> assignmentRepository;
     private List<Observer<GradeService>> observers = new ArrayList<>();
 
     @Autowired
-    public GradeService(@Qualifier("gradeDatabaseRepository") Repository<Grade, GradeId> gradeRepository, @Qualifier("studentDatabaseRepository") Repository<Student, String> studentRepository, @Qualifier("assignmentDatabaseRepository") Repository<Assignment, Integer> assignmentRepository, @Qualifier("gradeValidator") Validator<Grade> validator) {
-        this.gradeRepository = (CrudRepository<Grade, GradeId>) gradeRepository;
+    public GradeService(GradeDatabaseRepository gradeRepository, @Qualifier("studentDatabaseRepository") Repository<Student, String> studentRepository, @Qualifier("assignmentDatabaseRepository") Repository<Assignment, Integer> assignmentRepository, @Qualifier("gradeValidator") Validator<Grade> validator) {
+        this.gradeRepository = gradeRepository;
         this.studentRepository = (CrudRepository<Student, String>) studentRepository;
         this.assignmentRepository = (CrudRepository<Assignment, Integer>) assignmentRepository;
         this.validator = validator;
@@ -293,81 +293,64 @@ public class GradeService implements Service, Observable<GradeService> {
         return gradeStatistics;
     }
 
-    public List<StudentGradeDTO> getFinalGrades() {
-        List<StudentGradeDTO> studentGradeDTOS = new ArrayList<>();
-        float gradeSum = 0;
-        int nGrades = 0;
-        List<Assignment> assignments = getAssignments();
-        for (Student student : getStudents()) {
-            for (Assignment assignment : assignments) {
-                Optional<Grade> grade = findGrade(student.getId(), assignment.getId());
-                if (grade.isPresent()) {
-                    gradeSum += grade.get().getValue() * (assignment.getDeadlineWeek() - assignment.getStartWeek());
-                } else {
-                    gradeSum += (assignment.getDeadlineWeek() - assignment.getStartWeek());
-                }
-                nGrades += (assignment.getDeadlineWeek() - assignment.getStartWeek());
-            }
-            studentGradeDTOS.add(new StudentGradeDTO(student.getFirstName() + ' ' + student.getLastName(), gradeSum / nGrades));
-            gradeSum = 0;
-            nGrades = 0;
-        }
-
-        return studentGradeDTOS;
+    public List<StudentFinalGradeDto> getFinalGrades() {
+        return gradeRepository.getFinalGrades();
     }
 
-    public List<StudentGradeDTO> getPassedStudents() {
-        return getFinalGrades().stream().filter(x -> x.getFinalGrade() >= 4).collect(Collectors.toList());
+    public List<StudentFinalGradeDto> getPassedStudents() {
+        return gradeRepository.getPassedStudents();
     }
 
-    public List<StudentGradeDTO> getNeverLateStudents(List<StudentGradeDTO> finalGrades) {
-        List<Student> students = new ArrayList<>();
-        boolean neverLate = true;
-        List<Assignment> assignments = getAssignments();
-        List<Student> allStudents = getStudents();
-        for (Student student : allStudents) {
-            for (Assignment assignment : assignments) {
-                Optional<Grade> grade = findGrade(student.getId(), assignment.getId());
-                if (!grade.isPresent() || ApplicationContext.getYearStructure().getCurrentWeek(grade.get().getDate()) > assignment.getDeadlineWeek()) {
-                    neverLate = false;
-                    break;
-                }
-            }
-            if (neverLate) {
-                students.add(student);
-            } else {
-                neverLate = true;
-            }
-        }
-        return finalGrades.stream()
-                .filter(studentDTO -> students.stream()
-                        .filter(x -> (x.getFirstName() + ' ' + x.getLastName()).equals(studentDTO.getStudentName()))
-                        .count() == 1)
-                .collect(Collectors.toList());
+    public List<StudentFinalGradeDto> getNeverLateStudents(List<StudentFinalGradeDto> finalGrades) {
+//        List<Student> students = new ArrayList<>();
+//        boolean neverLate = true;
+//        List<Assignment> assignments = getAssignments();
+//        List<Student> allStudents = getStudents();
+//        for (Student student : allStudents) {
+//            for (Assignment assignment : assignments) {
+//                Optional<Grade> grade = findGrade(student.getId(), assignment.getId());
+//                if (!grade.isPresent() || ApplicationContext.getYearStructure().getCurrentWeek(grade.get().getDate()) > assignment.getDeadlineWeek()) {
+//                    neverLate = false;
+//                    break;
+//                }
+//            }
+//            if (neverLate) {
+//                students.add(student);
+//            } else {
+//                neverLate = true;
+//            }
+//        }
+//        return finalGrades.stream()
+//                .filter(studentDTO -> students.stream()
+//                        .filter(x -> (x.getFirstName() + ' ' + x.getLastName()).equals(studentDTO.getStudentName()))
+//                        .count() == 1)
+//                .collect(Collectors.toList());
+        return gradeRepository.getNeverLateStudents();
     }
 
     public AssignmentGradeDTO getHardestAssignment() {
-        AssignmentGradeDTO minAssignment = new AssignmentGradeDTO("tst", 11, LocalDate.now());
-        int sum = 0;
-        float gradeSum = 0, minGrade = 11;
-        List<Student> students = getStudents();
-        List<Assignment> assignments = getAssignments();
-        for (Assignment assignment : assignments) {
-            for (Student student : students) {
-                Optional<Grade> grade = findGrade(student.getId(), assignment.getId());
-                if (!grade.isPresent()) {
-                    gradeSum += 1;
-                } else {
-                    gradeSum += grade.get().getValue();
-                }
-                sum++;
-            }
-            if (gradeSum / sum < minGrade) {
-                minAssignment.setAssignmentName(assignment.getDescription());
-                minAssignment.setGrade(gradeSum / sum);
-            }
-        }
-        return minAssignment;
+//        AssignmentGradeDTO minAssignment = new AssignmentGradeDTO("tst", 11, LocalDate.now());
+//        int sum = 0;
+//        float gradeSum = 0, minGrade = 11;
+//        List<Student> students = getStudents();
+//        List<Assignment> assignments = getAssignments();
+//        for (Assignment assignment : assignments) {
+//            for (Student student : students) {
+//                Optional<Grade> grade = findGrade(student.getId(), assignment.getId());
+//                if (!grade.isPresent()) {
+//                    gradeSum += 1;
+//                } else {
+//                    gradeSum += grade.get().getValue();
+//                }
+//                sum++;
+//            }
+//            if (gradeSum / sum < minGrade) {
+//                minAssignment.setAssignmentName(assignment.getDescription());
+//                minAssignment.setGrade(gradeSum / sum);
+//            }
+//        }
+//        return minAssignment;
+        return gradeRepository.getHardestAssignment();
     }
 
     private void addTableHeader(PdfPTable table, String h1, String h2) {
@@ -398,7 +381,7 @@ public class GradeService implements Service, Observable<GradeService> {
         }
     }
 
-    private void addFinalGradesRows(PdfPTable table, List<StudentGradeDTO> aList) {
+    private void addFinalGradesRows(PdfPTable table, List<StudentFinalGradeDto> aList) {
         aList.forEach(x -> {
             PdfPCell cell1 = new PdfPCell();
             cell1.setPhrase(new Phrase(x.getStudentName()));

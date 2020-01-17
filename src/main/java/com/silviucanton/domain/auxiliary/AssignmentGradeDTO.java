@@ -2,38 +2,12 @@ package com.silviucanton.domain.auxiliary;
 
 import java.time.LocalDate;
 
-public class AssignmentGradeDTO {
-    private String assignmentName;
-    private float grade;
-    private LocalDate date;
+public interface AssignmentGradeDTO {
 
-    public AssignmentGradeDTO(String assignmentName, float grade, LocalDate date) {
-        this.assignmentName = assignmentName;
-        this.grade = grade;
-        this.date = date;
-    }
+    String getAssignmentName();
 
-    public String getAssignmentName() {
-        return assignmentName;
-    }
+    float getGrade();
 
-    public void setAssignmentName(String assignmentName) {
-        this.assignmentName = assignmentName;
-    }
+    LocalDate getDate();
 
-    public float getGrade() {
-        return grade;
-    }
-
-    public void setGrade(float grade) {
-        this.grade = grade;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
 }

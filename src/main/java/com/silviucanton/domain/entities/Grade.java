@@ -17,6 +17,8 @@ public class Grade implements Entity<GradeId> {
     private GradeId id;
     @Column(name = "date")
     private LocalDate date;
+    @Column(name = "weeknumber")
+    private int weekNumber;
     @Column(name = "value")
     private float value;
     @Column(name = "professor")
@@ -33,10 +35,19 @@ public class Grade implements Entity<GradeId> {
     protected Grade() {
     }
 
+    public int getWeekNumber() {
+        return weekNumber;
+    }
+
+    public void setWeekNumber(int weekNumber) {
+        this.weekNumber = weekNumber;
+    }
+
     public Grade(Student student, Assignment assignment, float value, String professor) {
         this.student = student;
         this.assignment = assignment;
         this.date = ApplicationContext.getCurrentLocalDate();
+        this.weekNumber = ApplicationContext.getYearStructure().getCurrentWeek(this.date);
         this.value = value;
         this.professor = professor;
         this.setId(new GradeId(student.getId(), assignment.getId()));

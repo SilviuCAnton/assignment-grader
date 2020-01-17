@@ -1,7 +1,7 @@
 package com.silviucanton.controllers;
 
 import animatefx.animation.*;
-import com.silviucanton.domain.auxiliary.AssignmentGradeDTO;
+import com.silviucanton.domain.auxiliary.AssignGrDTOImpl;
 import com.silviucanton.domain.auxiliary.Role;
 import com.silviucanton.domain.entities.Assignment;
 import com.silviucanton.domain.entities.Grade;
@@ -37,7 +37,7 @@ public class GradeController implements ServiceController, Observer<GradeService
     @FXML
     public Button addGradeButton, updateGradeButton, removeGradeButton;
     @FXML
-    public TableView<AssignmentGradeDTO> gradeTable;
+    public TableView<AssignGrDTOImpl> gradeTable;
     @FXML
     public TableView<Student> studentTable;
     @FXML
@@ -112,7 +112,7 @@ public class GradeController implements ServiceController, Observer<GradeService
         });
         this.gradeService = (GradeService) service;
 
-        if(ApplicationContext.getCurrentRole().equals(Role.STUDENT)){
+        if (ApplicationContext.getCurrentRole().equals(Role.STUDENT)) {
             titleLabel.setText(ApplicationContext.getCurrentUsername() + "'s grades");
             updateGradeButton.setDisable(true);
             removeGradeButton.setDisable(true);
@@ -121,27 +121,26 @@ public class GradeController implements ServiceController, Observer<GradeService
             studentPagination.setVisible(false);
             GridPane.setColumnSpan(gradeTable, 3);
             GridPane.setColumnIndex(gradeTable, 0);
-            Student student = gradeService.getStudents().stream().filter(x->x.getId().equals(ApplicationContext.getCurrentUsername())).findFirst().get();
-            List<AssignmentGradeDTO> assignmentGradeDTOS = gradeService.getAllGrades().stream()
+            Student student = gradeService.getStudents().stream().filter(x -> x.getId().equals(ApplicationContext.getCurrentUsername())).findFirst().get();
+            List<AssignGrDTOImpl> assignmentGradeDTOS = gradeService.getAllGrades().stream()
                     .filter(x -> x.getStudent().equals(student))
-                    .map(x -> new AssignmentGradeDTO(x.getAssignment().getDescription(), x.getValue(), x.getDate()))
+                    .map(x -> new AssignGrDTOImpl(x.getAssignment().getDescription(), x.getValue(), x.getDate()))
                     .collect(Collectors.toList());
             loadGradesTable(assignmentGradeDTOS);
             this.gradeService.addObserver(this);
-            update(this.gradeService);
         }
-
-
         studentTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Student student = studentTable.getSelectionModel().getSelectedItem();
-            List<AssignmentGradeDTO> assignmentGradeDTOS = gradeService.getAllGrades().stream()
+            List<AssignGrDTOImpl> assignmentGradeDTOS = gradeService.getAllGrades().stream()
                     .filter(x -> x.getStudent().equals(student))
-                    .map(x -> new AssignmentGradeDTO(x.getAssignment().getDescription(), x.getValue(), x.getDate()))
+                    .map(x -> new AssignGrDTOImpl(x.getAssignment().getDescription(), x.getValue(), x.getDate()))
                     .collect(Collectors.toList());
             loadGradesTable(assignmentGradeDTOS);
             this.gradeService.addObserver(this);
             update(this.gradeService);
         });
+
+        update(this.gradeService);
     }
 
     private void reloadStudentTable() {
@@ -175,8 +174,8 @@ public class GradeController implements ServiceController, Observer<GradeService
         studentTable.setItems(students);
     }
 
-    private void loadGradesTable(List<AssignmentGradeDTO> gradeDTOList) {
-        ObservableList<AssignmentGradeDTO> gradeDTOS = FXCollections.observableArrayList(gradeDTOList);
+    private void loadGradesTable(List<AssignGrDTOImpl> gradeDTOList) {
+        ObservableList<AssignGrDTOImpl> gradeDTOS = FXCollections.observableArrayList(gradeDTOList);
         assignmentCol.setCellValueFactory(new PropertyValueFactory<>("assignmentName"));
         gradeCol.setCellValueFactory(new PropertyValueFactory<>("grade"));
         dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
