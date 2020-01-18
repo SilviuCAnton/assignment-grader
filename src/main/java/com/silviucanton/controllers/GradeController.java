@@ -72,11 +72,11 @@ public class GradeController implements ServiceController, Observer<GradeService
         gradeTable.setMouseTransparent(false);
         gradeField.setText("");
         noWeeksField.setText("");
-        GridPane.setColumnSpan(studentTable, 2);
+        GridPane.setColumnSpan(studentPagination, 2);
         GridPane.setColumnIndex(gradeTable, 2);
         FadeOutRight fadeOutRight = new FadeOutRight(operationsPane);
         fadeOutRight.play();
-        RubberBand rubberBand = new RubberBand(studentTable.getParent());
+        RubberBand rubberBand = new RubberBand(studentPagination);
         rubberBand.play();
     }
 
@@ -88,9 +88,9 @@ public class GradeController implements ServiceController, Observer<GradeService
         studentTable.setMouseTransparent(true);
         gradeTable.setMouseTransparent(true);
 
-        AnimationFX anim1 = new RubberBand(studentTable);
+        AnimationFX anim1 = new RubberBand(studentPagination);
         AnimationFX anim2 = new RubberBand(gradeTable);
-        GridPane.setColumnSpan(studentTable, 1);
+        GridPane.setColumnSpan(studentPagination, 1);
         GridPane.setColumnIndex(gradeTable, 1);
         anim1.play();
         anim2.play();
@@ -423,9 +423,14 @@ public class GradeController implements ServiceController, Observer<GradeService
 
     private void showUpdatePanel() {
         RubberBand rubberBand = new RubberBand();
-        rubberBand.setNode(studentTable.getParent());
-        AnchorPane.setBottomAnchor(studentTable.getParent(), 160.0);
+        rubberBand.setNode(studentPagination);
+        AnchorPane.setBottomAnchor(studentPagination, 180.0);
         rubberBand.play();
+
+        RubberBand rubberBand2 = new RubberBand();
+        rubberBand2.setNode(gradeTable);
+        AnchorPane.setBottomAnchor(gradeTable, 180.0);
+        rubberBand2.play();
 
         FadeInUp fadeIn = new FadeInUp();
         updatePane.setVisible(true);
@@ -455,9 +460,14 @@ public class GradeController implements ServiceController, Observer<GradeService
         fadeOutDown.play();
 
         RubberBand slideOutUp = new RubberBand();
-        slideOutUp.setNode(studentTable.getParent());
-        AnchorPane.setBottomAnchor(studentTable.getParent(), 100.0);
+        slideOutUp.setNode(studentPagination);
+        AnchorPane.setBottomAnchor(studentPagination, 100.0);
         slideOutUp.play();
+
+        RubberBand rubberBand = new RubberBand();
+        rubberBand.setNode(gradeTable);
+        AnchorPane.setBottomAnchor(gradeTable, 100.0);
+        rubberBand.play();
     }
 
     public void handleSearch(KeyEvent keyEvent) {
