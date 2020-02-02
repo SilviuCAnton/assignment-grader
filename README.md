@@ -11,8 +11,11 @@ Java programming language
 * Java streams
 * Java Fx GUI Framework
 * Spring core object instantiation via dependency injection
+* Spring CRUD Repository with Spring ORM
 * App configuration via config files
 * CRUD operations using memory, text files, xml files and databases (PostgreSQL)
 * Observer, Adapter, Template, Decorator, Factory, Singleton design patterns
 * Gradle project management
+* PDF generation export via PDFWriter class
+* Aplication security via different user types, password hashing (SHA256)
 * Unit testing - JUnit 5
