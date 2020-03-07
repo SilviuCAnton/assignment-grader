@@ -11,7 +11,7 @@ Java programming language
 * Java streams
 * Java Fx GUI Framework
 * Spring core object instantiation via dependency injection
-* Spring CRUD Repository with Spring ORM
+* Spring CRUD Repository with Hibarnate and Spring JPA
 * App configuration via config files
 * CRUD operations using memory, text files, xml files and databases (PostgreSQL)
 * Observer, Adapter, Template, Decorator, Factory, Singleton design patterns
